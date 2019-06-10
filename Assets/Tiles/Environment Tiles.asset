@@ -10,9 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
-  m_Name: New Rule Tile
+  m_Name: Environment Tiles
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: 0}
-  m_DefaultGameObject: {fileID: 0}
+  m_DefaultSprite: {fileID: 21300000, guid: 6a6720f0feee52f4ba85abacc24ed36f, type: 3}
+  m_DefaultGameObject: {fileID: 1900636305738336604, guid: f30b2782352c74aa387ef1ce1aa5b145,
+    type: 3}
   m_DefaultColliderType: 1
-  m_TilingRules: []
+  m_TilingRules:
+  - m_Neighbors: 0000000002000000000000000100000001000000000000000000000000000000
+    m_Sprites:
+    - {fileID: 21300000, guid: 6a6720f0feee52f4ba85abacc24ed36f, type: 3}
+    m_GameObject: {fileID: 1900636305738336604, guid: f30b2782352c74aa387ef1ce1aa5b145,
+      type: 3}
+    m_AnimationSpeed: 1
+    m_PerlinScale: 0.5
+    m_RuleTransform: 0
+    m_Output: 0
+    m_ColliderType: 1
+    m_RandomTransform: 0
+  - m_Neighbors: 0000000000000000000000000000000000000000000000000000000000000000
+    m_Sprites:
+    - {fileID: 21300000, guid: a160669ef327fa045a0b0c7205984dcd, type: 3}
+    m_GameObject: {fileID: 1900636305738336604, guid: f30b2782352c74aa387ef1ce1aa5b145,
+      type: 3}
+    m_AnimationSpeed: 1
+    m_PerlinScale: 0.5
+    m_RuleTransform: 0
+    m_Output: 0
+    m_ColliderType: 1
+    m_RandomTransform: 0
