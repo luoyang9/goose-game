@@ -16,6 +16,9 @@ public class RopeSystem : MonoBehaviour {
     private float ropeMaxCastDistance = 20f;
     private List<Vector2> ropePositions = new List<Vector2>();
     private bool distanceSet;
+    public PlayerMovement playerMovement;
+    public float climbSpeed = 30f;
+    private bool isColliding;
 
     void Awake() {
         // 2
@@ -40,11 +43,15 @@ public class RopeSystem : MonoBehaviour {
         playerPosition = transform.position;
 
         // 6
-        if (!ropeAttached) {
+        if (ropeAttached) {
+            playerMovement.isSwinging = true;
+            playerMovement.ropeHook = ropePositions.Last();
         } else {
+            playerMovement.isSwinging = false;
         }
         HandleInput(aimDirection);
         UpdateRopePositions();
+        HandleRopeLength();
 
     }
 
@@ -91,6 +98,7 @@ public class RopeSystem : MonoBehaviour {
         ropeRenderer.SetPosition(1, transform.position);
         ropePositions.Clear();
         ropeHingeAnchorSprite.enabled = false;
+        playerMovement.isSwinging = false;
     }
 
     private void UpdateRopePositions() {
@@ -140,4 +148,24 @@ public class RopeSystem : MonoBehaviour {
             }
         }
     }
+
+    private void HandleRopeLength() {
+        // 1
+        float verticalInput = Input.GetAxis("Vertical");
+        if (verticalInput > 0 && ropeAttached) {
+            float newRopeDistance = ropeJoint.distance - Time.deltaTime * climbSpeed;
+            ropeJoint.distance = Mathf.Max(newRopeDistance, 0.5f);
+        } else if (verticalInput < 0 && ropeAttached) {
+            ropeJoint.distance += Time.deltaTime * climbSpeed;
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D colliderStay) {
+        isColliding = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D colliderOnExit) {
+        isColliding = false;
+    }
+
 }
