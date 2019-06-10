@@ -528,6 +528,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1251003353}
   - component: {fileID: 1251003352}
+  - component: {fileID: 1251003355}
   - component: {fileID: 1251003354}
   m_Layer: 0
   m_Name: ladybug
@@ -598,7 +599,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &1251003354
+--- !u!114 &1251003354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251003351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4c86ec18637f4dafb0cf6a624c52b4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!50 &1251003355
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
@@ -606,7 +619,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1251003351}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
