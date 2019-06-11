@@ -17,7 +17,7 @@ public class RopeSystem : MonoBehaviour {
     private List<Vector2> ropePositions = new List<Vector2>();
     private bool distanceSet;
     public PlayerMovement playerMovement;
-    public float climbSpeed = 30f;
+    public float climbSpeed = 10f;
     private bool isColliding;
 
     void Awake() {
