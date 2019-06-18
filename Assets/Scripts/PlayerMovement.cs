@@ -3,13 +3,13 @@ using System.Collections;
 
 
 public class PlayerMovement : MonoBehaviour {
-    public Vector2 ropeHook;
+    public Vector2 hookPosition;
     public float swingForce = 10f;
     public bool isSwinging = false;
     public Rigidbody2D rBody;
     private bool grounded = false;
     public Transform groundCheck;
-    public BoxCollider2D collider;
+    public new BoxCollider2D collider;
     public LayerMask groundLayerMask;
 
     public const float GRAVITY_ACCELERATION = 3;
@@ -61,18 +61,14 @@ public class PlayerMovement : MonoBehaviour {
         if (horizontalInput < 0f || horizontalInput > 0f) {
             if (isSwinging) {
                 // 1 - Get a normalized direction vector from the player to the hook point
-                var playerToHookDirection = (ropeHook - (Vector2)transform.position).normalized;
-
+                var playerToHookDirection = (hookPosition - (Vector2)transform.position).normalized;
                 // 2 - Inverse the direction to get a perpendicular direction
+                //Quaternion.AngleAxis
                 Vector2 perpendicularDirection;
                 if (horizontalInput < 0) {
                     perpendicularDirection = new Vector2(-playerToHookDirection.y, playerToHookDirection.x);
-                    var leftPerpPos = (Vector2)transform.position - perpendicularDirection * -2f;
-                    Debug.DrawLine(transform.position, leftPerpPos, Color.green, 0f);
                 } else {
                     perpendicularDirection = new Vector2(playerToHookDirection.y, -playerToHookDirection.x);
-                    var rightPerpPos = (Vector2)transform.position + perpendicularDirection * 2f;
-                    Debug.DrawLine(transform.position, rightPerpPos, Color.green, 0f);
                 }
 
                 var force = perpendicularDirection * swingForce;
