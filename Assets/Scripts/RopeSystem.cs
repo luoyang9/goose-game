@@ -11,7 +11,7 @@ public class RopeSystem : MonoBehaviour {
     private float ropeMaxCastDistance = 20f;
     private List<Vector2> ropePositions = new List<Vector2>();
     public PlayerMovement playerMovement;
-    public float climbSpeed = 10f;
+    public float climbSpeed = 40f;
     
     public Transform grapplingHookTransform;
     public GrapplingHook grapplingHookPrefab;
@@ -24,7 +24,6 @@ public class RopeSystem : MonoBehaviour {
         UpdateRope();
         HandleInput();
         HandleRopeLength();
-
     }
 
     /**

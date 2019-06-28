@@ -5,7 +5,7 @@ public class GrapplingHook : MonoBehaviour {
     const int LAYER_DEFAULT = 0;
     public bool hooked;
     public Rigidbody2D rbody;
-    public float HOOK_SPEED = 30f;
+    public float HOOK_SPEED = 120f;
     public Vector2 direction;
     public RopeSystem ropeSystem;
 

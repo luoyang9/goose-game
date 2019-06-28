@@ -4,7 +4,7 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour {
     public Vector2 hookPosition;
-    public float swingForce = 10f;
+    public float swingForce = 80f;
     public bool isSwinging = false;
     public Rigidbody2D rBody;
     private bool grounded = false;
@@ -12,11 +12,11 @@ public class PlayerMovement : MonoBehaviour {
     public new BoxCollider2D collider;
     public LayerMask groundLayerMask;
 
-    public const float GRAVITY_ACCELERATION = 3;
+    public const float GRAVITY_ACCELERATION = 15;
     public const float JUMP_VELOCITY = 40;
-    public const float MOVEMENT_ACCELERATION = 5;
-    public const float MAX_MOVEMENT_SPEED = 15;
-    public const float MAX_FALL = 40;
+    public const float MOVEMENT_ACCELERATION = 15;
+    public const float MAX_MOVEMENT_SPEED = 15f;
+    public const float MAX_FALL = 90f;
 
     void Start() {
         collider = gameObject.GetComponent<BoxCollider2D>();
