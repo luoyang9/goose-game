@@ -12,11 +12,11 @@ public class PlayerMovement : MonoBehaviour {
     public new BoxCollider2D collider;
     public LayerMask groundLayerMask;
 
-    public const float GRAVITY_ACCELERATION = 15;
-    public const float JUMP_VELOCITY = 40;
+    public const float GRAVITY_ACCELERATION = 1.5f;
+    public const float JUMP_VELOCITY = 30f;
     public const float MOVEMENT_ACCELERATION = 15;
     public const float MAX_MOVEMENT_SPEED = 15f;
-    public const float MAX_FALL = 90f;
+    public const float MAX_FALL = 40f;
 
     void Start() {
         collider = gameObject.GetComponent<BoxCollider2D>();
@@ -29,67 +29,56 @@ public class PlayerMovement : MonoBehaviour {
 
     // physics update
     void FixedUpdate() {
-        // moving on ground
-        // Default acceleration (with gravity)
-        //Vector2 acceleration = new Vector2(0, -GRAVITY_ACCELERATION);
-        float horizontalInput = Input.GetAxis("Horizontal");
         Vector2 velocity = rBody.velocity;
-        if (grounded && !isSwinging) {
-            if (horizontalInput < 0) {
+        // Horizontal accelerations
+        float horizontalInput = Input.GetAxis("Horizontal");
+        if (grounded && !isSwinging)
+        {
+            if (horizontalInput < 0)
+            {
                 velocity.x = -MAX_MOVEMENT_SPEED;
-            } else if (horizontalInput > 0) {
+            }
+            else if (horizontalInput > 0)
+            {
                 velocity.x = MAX_MOVEMENT_SPEED;
-            } else {
+            }
+            else
+            {
                 velocity.x = 0;
             }
-            rBody.velocity = velocity;
         }
-        // TODO: jumping?
-        //if (Input.GetKey(KeyCode.S)) {
-        //    acceleration += Vector2.down * MOVEMENT_ACCELERATION;
-        //}
-        //Vector2 velocity = rBody.velocity + acceleration;
-        //velocity.x = Mathf.Min(Mathf.Max(velocity.x, -MAX_MOVEMENT_SPEED), MAX_MOVEMENT_SPEED);
-        //velocity.y = Mathf.Max(velocity.y, -MAX_FALL);
-        //if (Input.GetKey(KeyCode.W) && onGround) // Jump
-        //{
-        //    velocity.y = JUMP_VELOCITY;
-        //}
-        //rBody.velocity = velocity;
-
+        // Gravity
+        if (!grounded)
+        {
+            velocity.y -= GRAVITY_ACCELERATION;
+            velocity.y = Mathf.Max(-MAX_FALL, velocity.y);
+        }
+        // Jumping
+        if (Input.GetKey(KeyCode.W) && grounded)
+        {
+            velocity.y = JUMP_VELOCITY;
+        }
+        // Hard Fall
+        if (Input.GetKey(KeyCode.S) && !grounded)
+        {
+            velocity.y = -MAX_FALL;
+        }
+        rBody.velocity = velocity;
         // on grappling hook in air
-        if (horizontalInput < 0f || horizontalInput > 0f) {
-            if (isSwinging) {
-                // 1 - Get a normalized direction vector from the player to the hook point
-                var playerToHookDirection = (hookPosition - (Vector2)transform.position).normalized;
-                // 2 - Inverse the direction to get a perpendicular direction
-                //Quaternion.AngleAxis
-                Vector2 perpendicularDirection;
-                if (horizontalInput < 0) {
-                    perpendicularDirection = new Vector2(-playerToHookDirection.y, playerToHookDirection.x);
-                } else {
-                    perpendicularDirection = new Vector2(playerToHookDirection.y, -playerToHookDirection.x);
-                }
-
-                var force = perpendicularDirection * swingForce;
-                rBody.AddForce(force, ForceMode2D.Force);
+        if (horizontalInput != 0f & isSwinging) {
+            // 1 - Get a normalized direction vector from the player to the hook point
+            var playerToHookDirection = (hookPosition - (Vector2)transform.position).normalized;
+            // 2 - Inverse the direction to get a perpendicular direction
+            //Quaternion.AngleAxis
+            Vector2 perpendicularDirection;
+            if (horizontalInput < 0) {
+                perpendicularDirection = new Vector2(-playerToHookDirection.y, playerToHookDirection.x);
             } else {
-                //if (grounded) {
-                //    // hit ground, stop velocity
-                //    var groundForce = speed * 2f;
-                //    rBody.AddForce(new Vector2((horizontalInput * groundForce - rBody.velocity.x) * groundForce, 0));
-                //    rBody.velocity = new Vector2(rBody.velocity.x, rBody.velocity.y);
-                //}
+                perpendicularDirection = new Vector2(playerToHookDirection.y, -playerToHookDirection.x);
             }
+
+            var force = perpendicularDirection * swingForce;
+            rBody.AddForce(force, ForceMode2D.Force);
         }
-
-        //if (!isSwinging) {
-        //    if (!grounded) return;
-
-        //    isJumping = jumpInput > 0f;
-        //    if (isJumping) {
-        //        rBody.velocity = new Vector2(rBody.velocity.x, jumpSpeed);
-        //    }
-        //}
     }
 }
