@@ -12,11 +12,11 @@ public class PlayerMovement : MonoBehaviour {
     public new BoxCollider2D collider;
     public LayerMask groundLayerMask;
 
-    public const float GRAVITY_ACCELERATION = 1.5f;
+    public const float GRAVITY_ACCELERATION = 50f;
     public const float JUMP_VELOCITY = 30f;
     public const float MOVEMENT_ACCELERATION = 15;
     public const float MAX_MOVEMENT_SPEED = 15f;
-    public const float MAX_FALL = 40f;
+    public const float MAX_FALL = 30f;
 
     void Start() {
         collider = gameObject.GetComponent<BoxCollider2D>();
@@ -50,7 +50,7 @@ public class PlayerMovement : MonoBehaviour {
         // Gravity
         if (!grounded)
         {
-            velocity.y -= GRAVITY_ACCELERATION;
+            velocity.y -= GRAVITY_ACCELERATION * Time.deltaTime;
             velocity.y = Mathf.Max(-MAX_FALL, velocity.y);
         }
         // Jumping

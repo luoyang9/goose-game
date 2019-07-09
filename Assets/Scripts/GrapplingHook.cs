@@ -5,7 +5,8 @@ public class GrapplingHook : MonoBehaviour {
     const int LAYER_DEFAULT = 0;
     public bool hooked;
     public Rigidbody2D rbody;
-    public float HOOK_SPEED = 120f;
+    public float HOOK_ACCELERATION = 25f;
+    public float MAX_HOOK_SPEED = 120f;
     public Vector2 direction;
     public RopeSystem ropeSystem;
 
@@ -26,7 +27,8 @@ public class GrapplingHook : MonoBehaviour {
     void FixedUpdate() {
         // TODO: rewrite with state machine
         if (!hooked) {
-            rbody.MovePosition((Vector2)transform.position + direction * HOOK_SPEED * Time.deltaTime);
+            rbody.velocity += direction * HOOK_ACCELERATION * Time.deltaTime;
         }
+        rbody.velocity = Mathf.Max(MAX_HOOK_SPEED, rbody.velocity.magnitude) * direction;
     }
 }
