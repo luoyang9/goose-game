@@ -5,6 +5,7 @@ using System.Collections;
 public class PlayerMovement : MonoBehaviour {
     public Vector2 hookPosition;
     public float swingForce = 80f;
+    public float pullForce = 60f;
     public bool isSwinging = false;
     public Rigidbody2D rBody;
     private bool grounded = false;
@@ -47,9 +48,12 @@ public class PlayerMovement : MonoBehaviour {
                 velocity.x = Mathf.Min(MAX_MOVEMENT_SPEED, velocity.x);
             }
         }
+
+        var playerToHookDirection = (hookPosition - (Vector2)transform.position).normalized;
+        AutoRappel(playerToHookDirection);
+
         // Swinging movement
         if (horizontalInput != 0f && isSwinging) {
-            // 1 - Get a normalized direction vector from the player to the hook point
             var playerToHookDirection = (hookPosition - (Vector2)transform.position).normalized;
             // 2 - Inverse the direction to get a perpendicular direction
             Vector2 perpendicularDirection;
@@ -74,5 +78,12 @@ public class PlayerMovement : MonoBehaviour {
             velocity.y = -MAX_FALL;
         }
         rBody.velocity = velocity;
+    }
+
+    void AutoRappel(Vector2 direction) {
+        if (isSwinging) {
+            // force-based
+            rBody.AddForce(pullForce * direction);
+        }
     }
 }

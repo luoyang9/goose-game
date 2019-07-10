@@ -23,6 +23,9 @@ public class RopeSystem : MonoBehaviour {
     void Update() {
         UpdateRope();
         HandleInput();
+    }
+
+    void FixedUpdate() {
         HandleRopeLength();
     }
 
@@ -86,12 +89,10 @@ public class RopeSystem : MonoBehaviour {
     }
 
     private void HandleRopeLength() {
-        float verticalInput = Input.GetAxis("Vertical");
-        if (verticalInput > 0 && ropeAttached) {
-            float newRopeDistance = ropeJoint.distance - Time.deltaTime * climbSpeed;
+        if (ropeAttached) {
+            var playerDistance = Vector2.Distance(ropeJoint.connectedAnchor, transform.position);
+            float newRopeDistance = Mathf.Min(playerDistance, ropeJoint.distance);
             ropeJoint.distance = Mathf.Max(newRopeDistance, 0.5f);
-        } else if (verticalInput < 0 && ropeAttached) {
-            ropeJoint.distance += Time.deltaTime * climbSpeed;
         }
     }
 
