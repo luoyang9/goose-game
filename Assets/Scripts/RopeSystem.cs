@@ -8,13 +8,15 @@ public class RopeSystem : MonoBehaviour {
     public DistanceJoint2D ropeJoint;
     private bool ropeAttached;
     public LineRenderer ropeRenderer;
-    private float ropeMaxCastDistance = 20f;
     private List<Vector2> ropePositions = new List<Vector2>();
     public PlayerMovement playerMovement;
     public float climbSpeed = 40f;
+    public const float MIN_ROPE_LENGTH = 1f;
     
     public Transform grapplingHookTransform;
     public GrapplingHook grapplingHookPrefab;
+
+    public float RopeDistance { get { return Vector2.Distance(grapplingHookTransform.position, transform.position); } }
 
     void Awake() {
         ropeRenderer.positionCount = 2;
@@ -32,7 +34,7 @@ public class RopeSystem : MonoBehaviour {
     /**
      * returns unit vector of aimed direction from player
      */
-    private Vector2 calculateAim() {
+    private Vector2 CalculateAim() {
         var worldMousePosition =
             Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f));
         var aimDirection = (Vector2)(worldMousePosition - transform.position).normalized;
@@ -42,7 +44,7 @@ public class RopeSystem : MonoBehaviour {
 
     private void HandleInput() {
         if (Input.GetButtonDown("Fire1")) {
-            var aimDirection = calculateAim();
+            var aimDirection = CalculateAim();
             ShootHook(aimDirection);
         }
 
@@ -65,6 +67,7 @@ public class RopeSystem : MonoBehaviour {
         var grapplingHookScript = Instantiate(grapplingHookPrefab, transform.position, hookRotation);
         grapplingHookScript.direction = aimDirection;
         grapplingHookScript.ropeSystem = this;
+        grapplingHookScript.playerTransform = transform;
         grapplingHookTransform = grapplingHookScript.transform;
         ropeRenderer.enabled = true;
     }
@@ -78,7 +81,7 @@ public class RopeSystem : MonoBehaviour {
         playerMovement.isSwinging = true;
     }
 
-    private void ResetRope() {
+    public void ResetRope() {
         if (grapplingHookTransform == null) return;
         Destroy(grapplingHookTransform.gameObject);
         ropeJoint.enabled = false;
@@ -90,9 +93,8 @@ public class RopeSystem : MonoBehaviour {
 
     private void HandleRopeLength() {
         if (ropeAttached) {
-            var playerDistance = Vector2.Distance(ropeJoint.connectedAnchor, transform.position);
-            float newRopeDistance = Mathf.Min(playerDistance, ropeJoint.distance);
-            ropeJoint.distance = Mathf.Max(newRopeDistance, 0.5f);
+            float newRopeDistance = Mathf.Min(RopeDistance, ropeJoint.distance);
+            ropeJoint.distance = Mathf.Max(newRopeDistance, MIN_ROPE_LENGTH);
         }
     }
 
