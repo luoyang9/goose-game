@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour {
             if (horizontalInput < 0) {
                 velocity.x -= MOVEMENT_ACCELERATION * Time.deltaTime;
                 velocity.x = Mathf.Max(-MAX_MOVEMENT_SPEED, velocity.x);
-            } else {
+            } else if (horizontalInput > 0) {
                 velocity.x += MOVEMENT_ACCELERATION * Time.deltaTime;
                 velocity.x = Mathf.Min(MAX_MOVEMENT_SPEED, velocity.x);
             }
