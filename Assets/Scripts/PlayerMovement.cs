@@ -4,8 +4,6 @@ using System.Collections;
 
 public class PlayerMovement : MonoBehaviour {
     public Vector2 hookPosition;
-    public float swingForce = 80f;
-    public float pullForce = 60f;
     public bool isSwinging = false;
     public Rigidbody2D rBody;
     private bool grounded = false;
@@ -13,10 +11,9 @@ public class PlayerMovement : MonoBehaviour {
     public new BoxCollider2D collider;
     public LayerMask groundLayerMask;
 
-    public const float GRAVITY_ACCELERATION = 50f;
-    public const float JUMP_VELOCITY = 30f;
-    public const float MOVEMENT_ACCELERATION = 500f;
-    public const float MAX_MOVEMENT_SPEED = 20f;
+    public const float PULL_FORCE = 180f;
+    public const float JUMP_VELOCITY = 20f;
+    public const float MAX_MOVEMENT_SPEED = 15f;
     public const float MAX_FALL = 30f;
 
     void Start() {
@@ -41,49 +38,36 @@ public class PlayerMovement : MonoBehaviour {
         // Non-grounded non-swinging horizontal movement: Acceleration
         if (!grounded && !isSwinging) {
             if (horizontalInput < 0) {
-                velocity.x -= MOVEMENT_ACCELERATION * Time.deltaTime;
+                velocity.x = -MAX_MOVEMENT_SPEED;
                 velocity.x = Mathf.Max(-MAX_MOVEMENT_SPEED, velocity.x);
             } else if (horizontalInput > 0) {
-                velocity.x += MOVEMENT_ACCELERATION * Time.deltaTime;
+                velocity.x = MAX_MOVEMENT_SPEED;
                 velocity.x = Mathf.Min(MAX_MOVEMENT_SPEED, velocity.x);
             }
         }
 
-        var playerToHookDirection = (hookPosition - (Vector2)transform.position).normalized;
-        AutoRappel(playerToHookDirection);
-
-        // Swinging movement
-        if (horizontalInput != 0f && isSwinging) {
-            var playerToHookDirection = (hookPosition - (Vector2)transform.position).normalized;
-            // 2 - Inverse the direction to get a perpendicular direction
-            Vector2 perpendicularDirection;
-            if (horizontalInput < 0) {
-                perpendicularDirection = new Vector2(-playerToHookDirection.y, playerToHookDirection.x);
-            } else {
-                perpendicularDirection = new Vector2(playerToHookDirection.y, -playerToHookDirection.x);
-            }
-            rBody.AddForce(perpendicularDirection * swingForce, ForceMode2D.Force);
-        }
-        // Gravity
+        // terminal speed
         if (!grounded) {
-            velocity.y -= GRAVITY_ACCELERATION * Time.deltaTime;
             velocity.y = Mathf.Max(-MAX_FALL, velocity.y);
         }
         // Jumping
-        if (Input.GetKey(KeyCode.W) && grounded) {
+        if (Input.GetKey(KeyCode.W) && grounded && !isSwinging) {
             velocity.y = JUMP_VELOCITY;
         }
         // Hard Fall
-        if (Input.GetKey(KeyCode.S) && !grounded) {
+        if (Input.GetKey(KeyCode.S) && !grounded && !isSwinging) {
             velocity.y = -MAX_FALL;
         }
         rBody.velocity = velocity;
+
+        AutoRappel();
     }
 
-    void AutoRappel(Vector2 direction) {
+    void AutoRappel() {
+        var playerToHookDirection = (hookPosition - (Vector2)transform.position).normalized;
         if (isSwinging) {
             // force-based
-            rBody.AddForce(pullForce * direction);
+            rBody.AddForce(PULL_FORCE * playerToHookDirection);
         }
     }
 }

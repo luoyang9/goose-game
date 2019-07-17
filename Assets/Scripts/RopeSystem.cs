@@ -10,7 +10,6 @@ public class RopeSystem : MonoBehaviour {
     public LineRenderer ropeRenderer;
     private List<Vector2> ropePositions = new List<Vector2>();
     public PlayerMovement playerMovement;
-    public float climbSpeed = 40f;
     public const float MIN_ROPE_LENGTH = 1f;
     
     public Transform grapplingHookTransform;
