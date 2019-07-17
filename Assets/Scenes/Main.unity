@@ -120,12 +120,42 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!4 &343490034 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 745586560689639101, guid: 160a2afa7e933b44da859c8e19d261a6,
+--- !u!1 &301479569 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4443951294556298772, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
     type: 3}
-  m_PrefabInstance: {fileID: 646977652810766594}
+  m_PrefabInstance: {fileID: 8792271715018500488}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &301479570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301479569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ca4e969be5ab5b4ca862fbe73aa7e34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!61 &301479571 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 8693690227528506847, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
+    type: 3}
+  m_PrefabInstance: {fileID: 8792271715018500488}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &301479572 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4443951294556298780, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
+    type: 3}
+  m_PrefabInstance: {fileID: 8792271715018500488}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 301479569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 758018da1319d214abcfdf12976d9772, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &468789140
 GameObject:
   m_ObjectHideFlags: 0
@@ -2247,6 +2277,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5715908080788106900, guid: 160a2afa7e933b44da859c8e19d261a6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
+        type: 3}
+      propertyPath: rBody
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
+        type: 3}
+      propertyPath: groundCheck
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
+        type: 3}
+      propertyPath: collider
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
+        type: 3}
+      propertyPath: groundLayerMask.m_Bits
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4443951294556298772, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
         type: 3}
       propertyPath: m_Name
@@ -2307,30 +2362,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5715908080788106900, guid: 160a2afa7e933b44da859c8e19d261a6,
+    - target: {fileID: 4443951294556298769, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
         type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
-        type: 3}
-      propertyPath: rBody
+      propertyPath: playerController
       value: 
-      objectReference: {fileID: 1906194596}
-    - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
+      objectReference: {fileID: 301479572}
+    - target: {fileID: 4443951294556298780, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
         type: 3}
-      propertyPath: groundCheck
+      propertyPath: playerCollider
       value: 
-      objectReference: {fileID: 343490034}
-    - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
-        type: 3}
-      propertyPath: collider
-      value: 
-      objectReference: {fileID: 646977652810766595}
-    - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
-        type: 3}
-      propertyPath: groundLayerMask.m_Bits
-      value: 1
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 301479571}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5518bcfb4dcaa454fb3a77ddf9839234, type: 3}

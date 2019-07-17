@@ -48,12 +48,12 @@ public class RopeSystem : MonoBehaviour {
 
     private void HandleInput() {
         if (Input.GetButtonDown("Fire1")) {
-            var aimDirection = CalculateAim();
-            ShootHook(aimDirection);
-        }
-
-        if (Input.GetButtonDown("Fire2")) {
-            ResetRope();
+            if(grapplingHookTransform != null) {
+                if(ropeAttached) ResetRope();
+            } else {
+                var aimDirection = CalculateAim();
+                ShootHook(aimDirection);
+            }
         }
     }
 

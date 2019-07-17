@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEditor;
 
 public class GrapplingHookState : State {
@@ -6,7 +6,7 @@ public class GrapplingHookState : State {
     public GrapplingHookState() { }
 
     public override void Update() {
-        player.Swing();
+        player.AutoRappel();
     }
 
     public override void OnStateEnter() {
