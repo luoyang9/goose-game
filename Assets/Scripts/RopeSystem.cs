@@ -5,15 +5,20 @@ using System.Linq;
 
 
 public class RopeSystem : MonoBehaviour {
+    private StateMachine machine;
     public DistanceJoint2D ropeJoint;
     private bool ropeAttached;
     public LineRenderer ropeRenderer;
     private List<Vector2> ropePositions = new List<Vector2>();
-    public PlayerMovement playerMovement;
+    public PlayerController playerController;
     public const float MIN_ROPE_LENGTH = 1f;
     
     public Transform grapplingHookTransform;
     public GrapplingHook grapplingHookPrefab;
+
+    private void Start() {
+        machine = gameObject.GetComponent<StateMachine>();
+    }
 
     public float RopeDistance { get { return Vector2.Distance(grapplingHookTransform.position, transform.position); } }
 
@@ -43,12 +48,12 @@ public class RopeSystem : MonoBehaviour {
 
     private void HandleInput() {
         if (Input.GetButtonDown("Fire1")) {
-            var aimDirection = CalculateAim();
-            ShootHook(aimDirection);
-        }
-
-        if (Input.GetButtonDown("Fire2")) {
-            ResetRope();
+            if(grapplingHookTransform != null) {
+                if(ropeAttached) ResetRope();
+            } else {
+                var aimDirection = CalculateAim();
+                ShootHook(aimDirection);
+            }
         }
     }
 
@@ -76,8 +81,8 @@ public class RopeSystem : MonoBehaviour {
         ropeJoint.distance = Vector2.Distance(transform.position, hookPoint);
         ropeJoint.connectedAnchor = hookPoint;
         ropeJoint.enabled = true;
-        playerMovement.hookPosition = hookPoint;
-        playerMovement.isSwinging = true;
+        playerController.hookPosition = hookPoint;
+        machine.SwitchState<GrapplingHookState>();
     }
 
     public void ResetRope() {
@@ -87,7 +92,7 @@ public class RopeSystem : MonoBehaviour {
         ropeAttached = false;
         ropeRenderer.enabled = false;
         ropeRenderer.SetPositions(new Vector3[2]);
-        playerMovement.isSwinging = false;
+        machine.SwitchState<FallState>();
     }
 
     private void HandleRopeLength() {
