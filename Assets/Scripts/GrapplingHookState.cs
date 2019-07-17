@@ -7,6 +7,10 @@ public class GrapplingHookState : State {
 
     public override void Update() {
         player.AutoRappel();
+        if(player.reachedHook()) {
+            machine.gameObject.GetComponent<RopeSystem>().ResetRope();
+            machine.SwitchState<FallState>();
+        }
     }
 
     public override void OnStateEnter() {

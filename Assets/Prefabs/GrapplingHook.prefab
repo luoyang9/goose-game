@@ -135,7 +135,7 @@ MonoBehaviour:
   hooked: 0
   rbody: {fileID: 3155290924371631456}
   HOOK_SPEED: 40
-  MAX_ROPE_DISTANCE: 10
+  MAX_ROPE_DISTANCE: 20
   direction: {x: 0, y: 0}
   ropeSystem: {fileID: 0}
   playerTransform: {fileID: 0}

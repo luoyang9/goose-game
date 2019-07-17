@@ -10,7 +10,7 @@ public class JumpState : State {
         } else {
             player.Airborne();
         }
-        if(player.rBody.velocity.y <= 0) {
+        if(player.rBody.velocity.y < 0) {
             machine.SwitchState<FallState>();
         }
     }

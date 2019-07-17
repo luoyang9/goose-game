@@ -6,7 +6,7 @@ public class RunState : State {
 
     public override void Update() {
         player.Run();
-        if(System.Math.Abs(player.rBody.velocity.x) < 0.001) {
+        if(Mathf.Abs(player.rBody.velocity.x) < 0.001) {
             machine.SwitchState<IdleState>();
         }
         if(Input.GetKeyDown(KeyCode.W)) {

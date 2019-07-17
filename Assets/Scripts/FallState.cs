@@ -6,7 +6,7 @@ public class FallState : State {
     public FallState() { }
 
 	public override void Update() {;
-        if (player.isGrounded()) {
+        if (Mathf.Abs(player.rBody.velocity.y) < 0.001) {
             machine.SwitchState<IdleState>();
             return;
         }

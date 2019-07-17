@@ -7,6 +7,7 @@ public class IdleState : State
 
 	public override void Update()
 	{
+        player.Idle();
 		if(player.direction != 0) {
             machine.SwitchState<RunState>();
         }

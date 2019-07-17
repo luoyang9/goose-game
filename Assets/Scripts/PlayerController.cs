@@ -8,11 +8,9 @@ public class PlayerController : MonoBehaviour {
 
     public Vector2 hookPosition;
     public Rigidbody2D rBody;
-    public BoxCollider2D playerCollider;
-    public Transform groundCheck;
-    public LayerMask groundLayerMask;
 
-    public const float PULL_FORCE = 140f;
+    public const float FRICTION = 0.2f;
+    public const float PULL_SPEED = 60f;
     public const float GRAVITY_ACCELERATION = 250;
     public const float JUMP_VELOCITY = 60f;
     public const float MAX_MOVEMENT_SPEED = 20f;
@@ -34,8 +32,17 @@ public class PlayerController : MonoBehaviour {
     void Update() {
     }
 
-    public bool isGrounded() {
-        return Physics2D.OverlapBox(groundCheck.position, playerCollider.size, 0, groundLayerMask);
+    public bool reachedHook() {
+        return Vector2.Distance(transform.position, hookPosition) < 1;
+    }
+
+    public void Idle() {
+        // friction
+        Vector2 velocity = rBody.velocity;
+        if(velocity.x != 0) {
+            velocity.x -= FRICTION * velocity.x;
+        }
+        rBody.velocity = velocity;
     }
 
     public void Run() {
@@ -69,7 +76,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void AutoRappel() {
-        var playerToHookDirection = (hookPosition - (Vector2)transform.position).normalized;
-        rBody.AddForce(PULL_FORCE * playerToHookDirection);
+        var hookVelocity = (hookPosition - (Vector2)transform.position).normalized * PULL_SPEED;
+        rBody.velocity = hookVelocity;
     }
 }
