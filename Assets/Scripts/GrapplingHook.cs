@@ -5,30 +5,55 @@ public class GrapplingHook : MonoBehaviour {
     const int LAYER_DEFAULT = 0;
     public bool hooked;
     public Rigidbody2D rbody;
-    public float HOOK_ACCELERATION = 25f;
-    public float MAX_HOOK_SPEED = 120f;
+    public float HOOK_SPEED;
+    public float MAX_ROPE_DISTANCE;
     public Vector2 direction;
     public RopeSystem ropeSystem;
+    public Transform playerTransform;
 
+    public int currentState;
+    public const int ST_SHOOT = 0;
+    public const int ST_HOOKED = 1;
+    public const int ST_RETURN = 2;
+    
     void Awake() {
-        hooked = false;
+        currentState = ST_SHOOT;
         rbody = GetComponent<Rigidbody2D>();
     }
 
     void OnTriggerEnter2D(Collider2D collider) {
         // if it's environment, latch on
         if (collider.gameObject.layer == LAYER_DEFAULT) {
-            hooked = true;
+            currentState = ST_HOOKED;
             direction = Vector2.zero;
             ropeSystem.LatchHook(transform.position);
         }
     }
+    
+    void UpdateHookPosition() {
+        var currentPos = (Vector2)transform.position;
+        switch (currentState) {
+            case ST_SHOOT:
+                rbody.MovePosition(currentPos + direction * HOOK_SPEED * Time.deltaTime);
+                if (ropeSystem.RopeDistance > MAX_ROPE_DISTANCE && currentState == ST_SHOOT) {
+                    currentState = ST_RETURN;
+                }
+                break;
+            case ST_RETURN:
+                direction = ((Vector2)playerTransform.position - currentPos).normalized;
+                rbody.MovePosition(currentPos + direction * HOOK_SPEED * Time.deltaTime);
+                break;
+        }
+    }
+
+    void HandleReturn() {
+        if (currentState == ST_RETURN && ropeSystem.RopeDistance < RopeSystem.MIN_ROPE_LENGTH) {
+            ropeSystem.ResetRope();
+        }
+    }
 
     void FixedUpdate() {
-        // TODO: rewrite with state machine
-        if (!hooked) {
-            rbody.velocity += direction * HOOK_ACCELERATION * Time.deltaTime;
-        }
-        rbody.velocity = Mathf.Max(MAX_HOOK_SPEED, rbody.velocity.magnitude) * direction;
+        UpdateHookPosition();
+        HandleReturn();
     }
 }
