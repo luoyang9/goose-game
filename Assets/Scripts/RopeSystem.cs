@@ -9,7 +9,7 @@ public class RopeSystem : MonoBehaviour {
     private bool ropeAttached;
     public LineRenderer ropeRenderer;
     private List<Vector2> ropePositions = new List<Vector2>();
-    public PlayerMovement playerMovement;
+    public PlayerController playerController;
     public const float MIN_ROPE_LENGTH = 1f;
     
     public Transform grapplingHookTransform;
@@ -76,8 +76,8 @@ public class RopeSystem : MonoBehaviour {
         ropeJoint.distance = Vector2.Distance(transform.position, hookPoint);
         ropeJoint.connectedAnchor = hookPoint;
         ropeJoint.enabled = true;
-        playerMovement.hookPosition = hookPoint;
-        playerMovement.isSwinging = true;
+        playerController.hookPosition = hookPoint;
+        playerController.isSwinging = true;
     }
 
     public void ResetRope() {
@@ -87,7 +87,7 @@ public class RopeSystem : MonoBehaviour {
         ropeAttached = false;
         ropeRenderer.enabled = false;
         ropeRenderer.SetPositions(new Vector3[2]);
-        playerMovement.isSwinging = false;
+        playerController.isSwinging = false;
     }
 
     private void HandleRopeLength() {
