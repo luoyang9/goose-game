@@ -92,7 +92,7 @@ public class RopeSystem : MonoBehaviour {
         ropeAttached = false;
         ropeRenderer.enabled = false;
         ropeRenderer.SetPositions(new Vector3[2]);
-        machine.SwitchState<IdleState>();
+        machine.SwitchState<FallState>();
     }
 
     private void HandleRopeLength() {
