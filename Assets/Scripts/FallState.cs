@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-public class FallState : State
-{
-	public FallState() { }
+public class FallState : State {
 
-	public override void Update() {
-        if(player.grounded) {
+    public FallState() { }
+
+	public override void Update() {;
+        if (player.isGrounded()) {
             machine.SwitchState<IdleState>();
             return;
         }

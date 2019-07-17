@@ -5,6 +5,7 @@ using System.Linq;
 
 
 public class RopeSystem : MonoBehaviour {
+    private StateMachine machine;
     public DistanceJoint2D ropeJoint;
     private bool ropeAttached;
     public LineRenderer ropeRenderer;
@@ -14,6 +15,10 @@ public class RopeSystem : MonoBehaviour {
     
     public Transform grapplingHookTransform;
     public GrapplingHook grapplingHookPrefab;
+
+    private void Start() {
+        machine = gameObject.GetComponent<StateMachine>();
+    }
 
     public float RopeDistance { get { return Vector2.Distance(grapplingHookTransform.position, transform.position); } }
 
@@ -77,7 +82,7 @@ public class RopeSystem : MonoBehaviour {
         ropeJoint.connectedAnchor = hookPoint;
         ropeJoint.enabled = true;
         playerController.hookPosition = hookPoint;
-        playerController.isSwinging = true;
+        machine.SwitchState<GrapplingHookState>();
     }
 
     public void ResetRope() {
@@ -87,7 +92,7 @@ public class RopeSystem : MonoBehaviour {
         ropeAttached = false;
         ropeRenderer.enabled = false;
         ropeRenderer.SetPositions(new Vector3[2]);
-        playerController.isSwinging = false;
+        machine.SwitchState<IdleState>();
     }
 
     private void HandleRopeLength() {

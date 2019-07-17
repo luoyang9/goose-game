@@ -4,32 +4,27 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
     private StateMachine machine;
-    public bool grounded = false;
     public int direction = 0;
 
     public Vector2 hookPosition;
-    public float swingForce = 80f;
-    public bool isSwinging = false;
     public Rigidbody2D rBody;
+    public BoxCollider2D playerCollider;
     public Transform groundCheck;
-    public new BoxCollider2D collider;
     public LayerMask groundLayerMask;
 
-    public const float GRAVITY_ACCELERATION = 50f;
-    public const float JUMP_VELOCITY = 30f;
+    public const float SWING_FORCE = 80f;
+    public const float GRAVITY_ACCELERATION = 250;
+    public const float JUMP_VELOCITY = 60f;
     public const float MOVEMENT_ACCELERATION = 500f;
     public const float MAX_MOVEMENT_SPEED = 20f;
     public const float MAX_FALL = 30f;
 
     void Start() {
-        collider = gameObject.GetComponent<BoxCollider2D>();
         machine = gameObject.GetComponent<StateMachine>();
-        machine.SwitchState<IdleState>();
+        machine.SwitchState<FallState>();
     }
     
     void FixedUpdate() {
-        grounded = Physics2D.OverlapBox(groundCheck.position, collider.size, 0, groundLayerMask);
-
         // update direction
         float horizontalInput = Input.GetAxis("Horizontal");
         if (horizontalInput < 0) direction = -1;
@@ -38,6 +33,10 @@ public class PlayerController : MonoBehaviour {
     }
     
     void Update() {
+    }
+
+    public bool isGrounded() {
+        return Physics2D.OverlapBox(groundCheck.position, playerCollider.size, 0, groundLayerMask);
     }
 
     public void Run() {
@@ -96,6 +95,6 @@ public class PlayerController : MonoBehaviour {
         var playerToHookDirection = (hookPosition - (Vector2)transform.position).normalized;
         // 2 - Inverse the direction to get a perpendicular direction
         Vector2 perpendicularDirection = new Vector2(direction * playerToHookDirection.y, -1 * direction * playerToHookDirection.x);
-        rBody.AddForce(perpendicularDirection * swingForce, ForceMode2D.Force);
+        rBody.AddForce(perpendicularDirection * SWING_FORCE, ForceMode2D.Force);
     }
 }
