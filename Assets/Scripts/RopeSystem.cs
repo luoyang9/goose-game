@@ -11,7 +11,7 @@ public class RopeSystem : MonoBehaviour {
     public LineRenderer ropeRenderer;
     private List<Vector2> ropePositions = new List<Vector2>();
     public PlayerController playerController;
-    public const float MIN_ROPE_LENGTH = 1f;
+    public const float MIN_ROPE_LENGTH = 0.75f;
     
     public Transform grapplingHookTransform;
     public GrapplingHook grapplingHookPrefab;
@@ -82,7 +82,7 @@ public class RopeSystem : MonoBehaviour {
         ropeJoint.connectedAnchor = hookPoint;
         ropeJoint.enabled = true;
         playerController.hookPosition = hookPoint;
-        machine.SwitchState<GrapplingHookState>();
+        machine.SwitchState<HookPullState>();
     }
 
     public void ResetRope() {

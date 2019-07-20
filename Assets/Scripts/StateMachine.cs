@@ -6,10 +6,10 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour {
     private List<State> statesList = new List<State>();
-    private State currentState;
+    public State CurrentState { get; private set; }
 
     private void Update() {
-        currentState.Update();
+        CurrentState.Update();
     }
 
     /// <summary>
@@ -19,13 +19,13 @@ public class StateMachine : MonoBehaviour {
     /// The state object to set as the currentState</param>
     /// <returns>Whether the state was changed</returns>
     protected virtual bool SwitchState(State state) {
-        if (state != null && state != currentState) {
-            if (currentState != null) {
-                currentState.OnStateExit();
+        if (state != null && state != CurrentState) {
+            if (CurrentState != null) {
+                CurrentState.OnStateExit();
             }
-            currentState = state;
+            CurrentState = state;
             gameObject.name = "Player - " + state.GetType().Name;
-            currentState.OnStateEnter();
+            CurrentState.OnStateEnter();
             return true;
         }
         return false;
