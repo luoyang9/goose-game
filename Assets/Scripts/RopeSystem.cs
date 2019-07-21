@@ -41,15 +41,14 @@ public class RopeSystem : MonoBehaviour {
     private Vector2 CalculateAim() {
         var worldMousePosition =
             Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f));
-        var aimDirection = (Vector2)(worldMousePosition - transform.position).normalized;
-        
+        var aimDirection = ((Vector2)worldMousePosition - (Vector2)transform.position).normalized;
         return aimDirection;
     }
 
     private void HandleInput() {
         if (Input.GetButtonDown("Fire1")) {
-            if(grapplingHookTransform != null) {
-                if(ropeAttached) ResetRope();
+            if (grapplingHookTransform != null) {
+                if (ropeAttached) ResetRope();
             } else {
                 var aimDirection = CalculateAim();
                 ShootHook(aimDirection);
