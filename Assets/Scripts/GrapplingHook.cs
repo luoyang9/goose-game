@@ -2,31 +2,41 @@
 using System.Collections;
 
 public class GrapplingHook : MonoBehaviour {
-    const int LAYER_DEFAULT = 0;
-    public bool hooked;
-    public Rigidbody2D rbody;
     public float HOOK_SPEED;
     public float MAX_ROPE_DISTANCE;
+
+    private const int ST_SHOOT = 0;
+    private const int ST_HOOKED = 1;
+    private const int ST_RETURN = 2;
+
+    private int defaultLayer;
+    private int playerLayer;
+
+    private int currentState;
+    public bool hooked;
+    public Rigidbody2D rbody;
     public Vector2 direction;
     public RopeSystem ropeSystem;
     public Transform playerTransform;
 
-    public int currentState;
-    public const int ST_SHOOT = 0;
-    public const int ST_HOOKED = 1;
-    public const int ST_RETURN = 2;
-    
     void Awake() {
         currentState = ST_SHOOT;
-        rbody = GetComponent<Rigidbody2D>();
+        defaultLayer = LayerMask.NameToLayer("Default");
+        playerLayer = LayerMask.NameToLayer("Player");
     }
 
     void OnTriggerEnter2D(Collider2D collider) {
-        // if it's environment, latch on
-        if (collider.gameObject.layer == LAYER_DEFAULT) {
+        var collideLayer = collider.gameObject.layer;
+        if (collideLayer == defaultLayer) {
+            // if it's environment, latch on
             currentState = ST_HOOKED;
             direction = Vector2.zero;
             ropeSystem.LatchHook(transform.position);
+        } else if (collideLayer == playerLayer) {
+            if (playerTransform.gameObject != collider.gameObject) {
+                // hit someone
+                Destroy(collider.gameObject);
+            }
         }
     }
     

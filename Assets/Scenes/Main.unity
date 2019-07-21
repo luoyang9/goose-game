@@ -136,8 +136,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ca4e969be5ab5b4ca862fbe73aa7e34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!61 &9865025 stripped
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 8693690227528506847, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
@@ -154,8 +154,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 758018da1319d214abcfdf12976d9772, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!1 &301479569 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4443951294556298772, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
@@ -172,8 +172,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ca4e969be5ab5b4ca862fbe73aa7e34, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!61 &301479571 stripped
 BoxCollider2D:
   m_CorrespondingSourceObject: {fileID: 8693690227528506847, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
@@ -190,8 +190,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 758018da1319d214abcfdf12976d9772, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Name:
+  m_EditorClassIdentifier:
 --- !u!1 &562222173
 GameObject:
   m_ObjectHideFlags: 0
@@ -1423,17 +1423,17 @@ PrefabInstance:
     - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
         type: 3}
       propertyPath: rBody
-      value: 
+      value:
       objectReference: {fileID: 0}
     - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
         type: 3}
       propertyPath: groundCheck
-      value: 
+      value:
       objectReference: {fileID: 0}
     - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
         type: 3}
       propertyPath: collider
-      value: 
+      value:
       objectReference: {fileID: 0}
     - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
         type: 3}
@@ -1453,12 +1453,12 @@ PrefabInstance:
     - target: {fileID: 4443951294556298780, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
         type: 3}
       propertyPath: playerCollider
-      value: 
+      value:
       objectReference: {fileID: 9865025}
     - target: {fileID: 4443951294556298780, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
         type: 3}
       propertyPath: groundCheck
-      value: 
+      value:
       objectReference: {fileID: 1449094799}
     - target: {fileID: 4443951294556298780, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
         type: 3}
@@ -1523,7 +1523,7 @@ PrefabInstance:
     - target: {fileID: 4443951294556298769, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
         type: 3}
       propertyPath: playerController
-      value: 
+      value:
       objectReference: {fileID: 9865026}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5518bcfb4dcaa454fb3a77ddf9839234, type: 3}
@@ -1670,18 +1670,18 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
         type: 3}
-      propertyPath: rBody
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
+      propertyPath: playerCollider
+      value:
+      objectReference: {fileID: 301479571}
+    - target: {fileID: 4443951294556298780, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
         type: 3}
       propertyPath: groundCheck
-      value: 
+      value:
       objectReference: {fileID: 0}
     - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
         type: 3}
       propertyPath: collider
-      value: 
+      value:
       objectReference: {fileID: 0}
     - target: {fileID: 5715908080788106902, guid: 160a2afa7e933b44da859c8e19d261a6,
         type: 3}
@@ -1701,12 +1701,12 @@ PrefabInstance:
     - target: {fileID: 4443951294556298780, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
         type: 3}
       propertyPath: playerCollider
-      value: 
+      value:
       objectReference: {fileID: 301479571}
     - target: {fileID: 4443951294556298780, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
         type: 3}
       propertyPath: groundCheck
-      value: 
+      value:
       objectReference: {fileID: 564647370}
     - target: {fileID: 4443951294556298768, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
         type: 3}
@@ -1766,7 +1766,7 @@ PrefabInstance:
     - target: {fileID: 4443951294556298769, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
         type: 3}
       propertyPath: playerController
-      value: 
+      value:
       objectReference: {fileID: 301479572}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5518bcfb4dcaa454fb3a77ddf9839234, type: 3}

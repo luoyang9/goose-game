@@ -132,11 +132,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6a2f9d4005e7d4abd37ecc46ddb701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hooked: 0
-  rbody: {fileID: 3155290924371631456}
   HOOK_SPEED: 40
   MAX_ROPE_DISTANCE: 10
+  hooked: 0
+  rbody: {fileID: 3155290924371631456}
   direction: {x: 0, y: 0}
   ropeSystem: {fileID: 0}
   playerTransform: {fileID: 0}
-  currentState: 0

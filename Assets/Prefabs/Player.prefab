@@ -171,7 +171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ropeJoint: {fileID: 4443951294556298782}
   ropeRenderer: {fileID: 4443951294556298783}
-  playerController: {fileID: 0}
+  playerController: {fileID: 4443951294556298780}
   grapplingHookTransform: {fileID: 0}
   grapplingHookPrefab: {fileID: 3155290924371631459, guid: 1150edfdf748c574f841c80c6d1a512b,
     type: 3}
@@ -285,11 +285,6 @@ MonoBehaviour:
   direction: 0
   hookPosition: {x: 0, y: 0}
   rBody: {fileID: 4443951294556298770}
-  playerCollider: {fileID: 0}
-  groundCheck: {fileID: 0}
-  groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 1
 --- !u!61 &8693690227528506847
 BoxCollider2D:
   m_ObjectHideFlags: 0

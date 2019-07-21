@@ -36,6 +36,12 @@ public class RopeSystem : MonoBehaviour {
         HandleRopeLength();
     }
 
+    void OnDestroy() {
+        if (grapplingHookTransform != null) {
+            Destroy(grapplingHookTransform.gameObject);
+        }
+    }
+
     /**
      * returns unit vector of aimed direction from player
      */
