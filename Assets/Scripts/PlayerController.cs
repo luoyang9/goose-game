@@ -10,9 +10,8 @@ public class PlayerController : MonoBehaviour {
     public Rigidbody2D rBody;
 
     public const float FRICTION = 0.2f;
-    public const float PULL_SPEED = 60f;
-    public const float GRAVITY_ACCELERATION = 250;
-    public const float JUMP_VELOCITY = 60f;
+    public const float PULL_SPEED = 30f;
+    public const float JUMP_VELOCITY = 20f;
     public const float MAX_MOVEMENT_SPEED = 20f;
     public const float MAX_FALL = 30f;
 
@@ -22,18 +21,21 @@ public class PlayerController : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        // update direction
+    }
+
+    void Update() {
+        HandleDirection();
+    }
+
+    private void HandleDirection() {
         float horizontalInput = Input.GetAxis("Horizontal");
         if (horizontalInput < 0) direction = -1;
         else if (horizontalInput > 0) direction = 1;
         else direction = 0;
     }
-
-    void Update() {
-    }
-
-    public bool reachedHook() {
-        return Vector2.Distance(transform.position, hookPosition) < 1;
+    
+    public bool ReachedHook() {
+        return Vector2.Distance(transform.position, hookPosition) < RopeSystem.MIN_ROPE_LENGTH;
     }
 
     public void Idle() {
@@ -70,7 +72,6 @@ public class PlayerController : MonoBehaviour {
             velocity.x = direction * MAX_MOVEMENT_SPEED;
         }
         // Gravity
-        velocity.y -= GRAVITY_ACCELERATION * Time.deltaTime;
         velocity.y = Mathf.Max(-MAX_FALL, velocity.y);
         rBody.velocity = velocity;
     }

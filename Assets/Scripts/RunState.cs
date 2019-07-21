@@ -13,12 +13,4 @@ public class RunState : State {
             machine.SwitchState<JumpState>();
         }
     }
-
-    public override void OnStateEnter() {
-        base.OnStateEnter();
-    }
-
-    public override void OnStateExit() {
-        base.OnStateExit();
-    }
 }
