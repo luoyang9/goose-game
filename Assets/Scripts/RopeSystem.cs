@@ -6,13 +6,14 @@ using System.Linq;
 
 public class RopeSystem : MonoBehaviour {
     private StateMachine machine;
+    private float nextFire = 0;
     public DistanceJoint2D ropeJoint;
     private bool ropeAttached;
     public LineRenderer ropeRenderer;
     private List<Vector2> ropePositions = new List<Vector2>();
     public PlayerController playerController;
     public const float MIN_ROPE_LENGTH = 0.75f;
-    
+    public const float FIRE_RATE = 0.15f;
     public Transform grapplingHookTransform;
     public GrapplingHook grapplingHookPrefab;
 
@@ -39,16 +40,28 @@ public class RopeSystem : MonoBehaviour {
      * returns unit vector of aimed direction from player
      */
     private Vector2 CalculateAim() {
-        var worldMousePosition =
+        Vector2 aimDirection;
+        if (playerController.controller == "K") {
+            var worldMousePosition =
             Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f));
-        var aimDirection = ((Vector2)worldMousePosition - (Vector2)transform.position).normalized;
+            aimDirection = ((Vector2)worldMousePosition - (Vector2)transform.position).normalized;
+        } else {
+            var horizontalAxis = Input.GetAxisRaw(playerController.controller + "_X");
+            var verticalAxis = Input.GetAxisRaw(playerController.controller + "_Y");
+            if (horizontalAxis == 0f && verticalAxis == 0f) {
+                aimDirection = new Vector2(0, 1).normalized;
+            } else {
+                aimDirection = new Vector2(horizontalAxis, -verticalAxis).normalized;
+            }
+        }
         return aimDirection;
     }
 
     private void HandleInput() {
-        if (Input.GetButtonDown("Fire1")) {
-            if (grapplingHookTransform != null) {
-                if (ropeAttached) ResetRope();
+        if (Input.GetAxis(playerController.controller + "_Fire1") > 0.50 && Time.time > nextFire) {
+            nextFire = Time.time + FIRE_RATE;
+            if(grapplingHookTransform != null) {
+                if(ropeAttached) ResetRope();
             } else {
                 var aimDirection = CalculateAim();
                 ShootHook(aimDirection);

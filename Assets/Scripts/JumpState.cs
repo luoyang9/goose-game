@@ -5,7 +5,7 @@ public class JumpState : State {
     public JumpState() { }
 
     public override void Update() {
-        if(Input.GetKey(KeyCode.S) && player.rBody.velocity.y < 5f) {
+        if(Input.GetAxis(player.controller + "_Vertical") < -0.5f && player.rBody.velocity.y < 5f) {
             player.HardFall();
         } else {
             player.Airborne();

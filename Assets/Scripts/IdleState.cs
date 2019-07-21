@@ -11,7 +11,7 @@ public class IdleState : State
 		if(player.direction != 0) {
             machine.SwitchState<RunState>();
         }
-        if(Input.GetKey(KeyCode.W)) {
+        if(Input.GetButtonDown(player.controller + "_Jump")) {
             machine.SwitchState<JumpState>();
         }
 	}
