@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
 
     public Vector2 hookPosition;
     public Rigidbody2D rBody;
+    public string controller = "K";
 
     public const float FRICTION = 0.2f;
     public const float PULL_SPEED = 30f;
@@ -28,7 +29,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void HandleDirection() {
-        float horizontalInput = Input.GetAxis("Horizontal");
+        float horizontalInput = Input.GetAxis(controller + "_Horizontal");
         if (horizontalInput < 0) direction = -1;
         else if (horizontalInput > 0) direction = 1;
         else direction = 0;

@@ -9,7 +9,7 @@ public class RunState : State {
         if(Mathf.Abs(player.rBody.velocity.x) < 0.001) {
             machine.SwitchState<IdleState>();
         }
-        if(Input.GetKeyDown(KeyCode.W)) {
+        if(Input.GetButtonDown(player.controller + "_Jump")) {
             machine.SwitchState<JumpState>();
         }
     }
