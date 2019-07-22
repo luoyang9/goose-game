@@ -9,12 +9,18 @@ public class PlayerController : MonoBehaviour {
     public Vector2 hookPosition;
     public Rigidbody2D rBody;
     public string controller = "K";
+    public int numArrows = START_ARROWS;
+    public float nextArrowFire = 0f;
+    public GameObject arrowPrefab;
 
+    public const int START_ARROWS = 5;
     public const float FRICTION = 0.2f;
     public const float PULL_SPEED = 30f;
     public const float JUMP_VELOCITY = 20f;
     public const float MAX_MOVEMENT_SPEED = 20f;
     public const float MAX_FALL = 30f;
+    public const float ARROW_COOLDOWN = 0.5f;
+    public const float ARROW_START_DIST = 2f;
 
     void Start() {
         machine = gameObject.GetComponent<StateMachine>();
@@ -26,8 +32,14 @@ public class PlayerController : MonoBehaviour {
 
     void Update() {
         HandleDirection();
+        if (Input.GetButtonDown(controller + "_Jump")) {
+            machine.SwitchState<JumpState>();
+        }
+        if (Input.GetAxis(controller + "_Fire2") > 0.50 && nextArrowFire < Time.time) {
+            FireArrow();
+            nextArrowFire = Time.time + ARROW_COOLDOWN;
+        }
     }
-
     private void HandleDirection() {
         float horizontalInput = Input.GetAxis(controller + "_Horizontal");
         if (horizontalInput < 0) direction = -1;
@@ -80,5 +92,38 @@ public class PlayerController : MonoBehaviour {
     public void AutoRappel() {
         var hookVelocity = (hookPosition - (Vector2)transform.position).normalized * PULL_SPEED;
         rBody.velocity = hookVelocity;
+    }
+
+    public void Kill() {
+        Destroy(gameObject);
+    }
+
+    private void FireArrow() {
+        if (numArrows == 0) {
+            return;
+        }
+        Vector2 aimDirection;
+        if (controller == "K") {
+            var worldMousePosition =
+            Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f));
+            aimDirection = ((Vector2)worldMousePosition - (Vector2)transform.position).normalized;
+        }
+        else
+        {
+            var horizontalAxis = Input.GetAxisRaw(controller + "_X");
+            var verticalAxis = Input.GetAxisRaw(controller + "_Y");
+            if (horizontalAxis == 0f && verticalAxis == 0f) {
+                aimDirection = new Vector2(0, 1).normalized;
+            } else {
+                aimDirection = new Vector2(horizontalAxis, -verticalAxis).normalized;
+            }
+        }
+        GameObject obj = Instantiate(
+            arrowPrefab,
+            new Vector2(transform.position.x, transform.position.y) + aimDirection * ARROW_START_DIST,
+            Quaternion.identity);
+        Arrow arrow = obj.GetComponent<Arrow>();
+        arrow.direction = aimDirection;
+        numArrows--;
     }
 }
