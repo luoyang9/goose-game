@@ -19,7 +19,7 @@ public class RopeSystem : MonoBehaviour {
     public bool hitPlatform = false;
 
     public const float MIN_ROPE_LENGTH = 0.75f;
-    public const float FIRE_RATE = 0.15f;
+    public const float FIRE_DELAY = 0.3f;
 
     private void Start() {
         machine = gameObject.GetComponent<StateMachine>();
@@ -33,22 +33,23 @@ public class RopeSystem : MonoBehaviour {
 
     void Update() {
         UpdateRope();
-        HandleInput();
+        HandleShootHook();
     }
 
     void FixedUpdate() {
         HandleRopeLength();
     }
 
-    private void HandleInput() {
-        if (actions.HookShootPressed() && Time.time > nextFire) {
-            nextFire = Time.time + FIRE_RATE;
+    private void HandleShootHook() {
+        if (actions.HookShootPressed()) {
+            if (Time.time <= nextFire) return;
+            nextFire = Time.time + FIRE_DELAY;
             if (grapplingHookTransform != null) {
-                if (ropeAttached) ResetRope();
-            } else {
-                var aimDirection = actions.CalculateAim();
-                ShootHook(aimDirection);
+                if (!ropeAttached) return; // wait for hook to return
+                ResetRope();
             }
+            var aimDirection = actions.CalculateAim();
+            ShootHook(aimDirection);
         }
     }
 
@@ -83,6 +84,7 @@ public class RopeSystem : MonoBehaviour {
     public void ResetRope() {
         if (grapplingHookTransform == null) return;
         Destroy(grapplingHookTransform.gameObject);
+        grapplingHookTransform = null;  // should eventually happen after Destroy, but need it done this call
         ropeJoint.enabled = false;
         ropeAttached = false;
         ropeRenderer.enabled = false;
