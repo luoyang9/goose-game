@@ -19,13 +19,16 @@ public class InputActionMapper: MonoBehaviour {
         fire1Axis = controller + "_Fire1";
         fire2Axis = controller + "_Fire2";
         aimJoystickXAxis = controller + "_X";
-        aimJoystickXAxis = controller + "_Y";
+        aimJoystickYAxis = controller + "_Y";
     }
 
-    public bool GetJump() {
+    public bool JumpPressed() {
         return Input.GetButtonDown(jumpAxis);
     }
 
+    /**
+     * Returns -1 if left pressed, 1 if right pressed, else 0
+     */
     public int GetHorizontalDirection() {
         int direction;
         float horizontalInput = Input.GetAxis(horizontalAxis);
@@ -36,22 +39,22 @@ public class InputActionMapper: MonoBehaviour {
         return direction;
     }
 
-    public bool GetHookShoot() {
+    public bool HookShootPressed() {
         return Input.GetAxis(fire1Axis) > 0.5f;
     }
 
-    public bool GetArrowShoot() {
+    public bool ArrowShootPressed() {
         return Input.GetAxis(fire2Axis) > 0.5f;
     }
 
-    public bool GetHookRelease() {
+    public bool HookReleasePressed() {
         return Input.GetAxis(verticalAxis) < -0.5f;
     }
 
     /**
      * returns unit vector of aimed direction from player
      */
-    public Vector2 GetAim() {
+    public Vector2 CalculateAim() {
         Vector2 aimDirection;
         if (controller == "K") {
             // keyboard

@@ -16,6 +16,7 @@ public class RopeSystem : MonoBehaviour {
     public const float FIRE_RATE = 0.15f;
     public Transform grapplingHookTransform;
     public GrapplingHook grapplingHookPrefab;
+    public InputActionMapper actions;
 
     private void Start() {
         machine = gameObject.GetComponent<StateMachine>();
@@ -36,34 +37,13 @@ public class RopeSystem : MonoBehaviour {
         HandleRopeLength();
     }
 
-    /**
-     * returns unit vector of aimed direction from player
-     */
-    private Vector2 CalculateAim() {
-        Vector2 aimDirection;
-        if (playerController.controller == "K") {
-            var worldMousePosition =
-            Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f));
-            aimDirection = ((Vector2)worldMousePosition - (Vector2)transform.position).normalized;
-        } else {
-            var horizontalAxis = Input.GetAxisRaw(playerController.controller + "_X");
-            var verticalAxis = Input.GetAxisRaw(playerController.controller + "_Y");
-            if (horizontalAxis == 0f && verticalAxis == 0f) {
-                aimDirection = new Vector2(0, 1).normalized;
-            } else {
-                aimDirection = new Vector2(horizontalAxis, -verticalAxis).normalized;
-            }
-        }
-        return aimDirection;
-    }
-
     private void HandleInput() {
-        if (Input.GetAxis(playerController.controller + "_Fire1") > 0.50 && Time.time > nextFire) {
+        if (actions.HookShootPressed() && Time.time > nextFire) {
             nextFire = Time.time + FIRE_RATE;
-            if(grapplingHookTransform != null) {
-                if(ropeAttached) ResetRope();
+            if (grapplingHookTransform != null) {
+                if (ropeAttached) ResetRope();
             } else {
-                var aimDirection = CalculateAim();
+                var aimDirection = actions.CalculateAim();
                 ShootHook(aimDirection);
             }
         }
