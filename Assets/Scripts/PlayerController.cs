@@ -14,12 +14,15 @@ public class PlayerController : MonoBehaviour {
     public InputActionMapper actions;
     public RopeSystem ropeSystem;
     public Transform crosshair;
+    private WallCheck leftWallCheck;
+    private WallCheck rightWallCheck;
 
     public const int START_ARROWS = 5;
     public const float FRICTION = 0.2f;
     public const float PULL_SPEED = 30f;
     public const float JUMP_VELOCITY = 20f;
     public const float MAX_MOVEMENT_SPEED = 20f;
+    private const float WALL_JUMP_H_SPEED = 10f;
     public const float MAX_FALL = 30f;
     public const float ARROW_COOLDOWN = 0.5f;
     public const float ARROW_START_DIST = 2f;
@@ -39,6 +42,18 @@ public class PlayerController : MonoBehaviour {
         machine.RegisterState(FALL_STATE, FallUpdate, null, null);
         machine.RegisterState(HOOK_PULL_STATE, HookPullUpdate, null, null);
         machine.RegisterState(HOOK_END_STATE, HookEndUpdate, null, null);
+
+        // initialize wallChecks
+        var wallChecks = GetComponentsInChildren<WallCheck>();
+        Debug.Assert(wallChecks.Length == 2);
+        // they have opposite dirs
+        if (wallChecks[0].dir == 1) {
+            rightWallCheck = wallChecks[0];
+            leftWallCheck = wallChecks[1];
+        } else {
+            rightWallCheck = wallChecks[1];
+            leftWallCheck = wallChecks[0];
+        }
     }
 
     void FixedUpdate() {
@@ -106,6 +121,16 @@ public class PlayerController : MonoBehaviour {
             return IDLE_STATE;
         }
         Airborne();
+        // wall jump
+        if (actions.JumpPressed()) {
+            if (WallJumpCheck(-1)) {
+                WallJump(1);
+                return JUMP_STATE;
+            } else if (WallJumpCheck(1)) {
+                WallJump(-1);
+                return JUMP_STATE;
+            }
+        }
         return FALL_STATE;
     }
 
@@ -127,6 +152,17 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int HookEndUpdate() {
+        if (actions.JumpPressed()) {
+            ropeSystem.ResetRope();
+            if (WallJumpCheck(-1)) {
+                WallJump(1);
+            } else if (WallJumpCheck(1)) {
+                WallJump(-1);
+            } else {
+                // todo: put jump logic here
+            }
+            return JUMP_STATE;
+        }
         return HOOK_END_STATE;
     }
 
@@ -138,6 +174,19 @@ public class PlayerController : MonoBehaviour {
 
     private void HandleDirection() {
         facing = actions.GetHorizontalDirection();
+    }
+
+    public bool WallJumpCheck(int dir) {
+        if (dir == -1) return leftWallCheck.Touching;
+        else if (dir == 1) return rightWallCheck.Touching;
+        else return false;
+    }
+
+    public void WallJump(int dir) {
+        var vel = rBody.velocity;
+        vel.x = WALL_JUMP_H_SPEED * dir;
+        rBody.velocity = vel;
+        // todo: maybe do jump logic here
     }
 
     public void Airborne() {
