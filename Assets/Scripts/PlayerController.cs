@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour {
     public const float JUMP_VELOCITY = 20f;
     public const float MAX_MOVEMENT_SPEED = 20f;
     private const float WALL_JUMP_H_SPEED = 10f;
+    private const float WALL_SLIDE_DRAG = 20f;
     public const float MAX_FALL = 30f;
     public const float ARROW_COOLDOWN = 0.5f;
     public const float ARROW_START_DIST = 2f;
@@ -45,7 +46,6 @@ public class PlayerController : MonoBehaviour {
 
         // initialize wallChecks
         var wallChecks = GetComponentsInChildren<WallCheck>();
-        Debug.Assert(wallChecks.Length == 2);
         // they have opposite dirs
         if (wallChecks[0].dir == 1) {
             rightWallCheck = wallChecks[0];
@@ -196,6 +196,13 @@ public class PlayerController : MonoBehaviour {
             velocity.x = facing * MAX_MOVEMENT_SPEED;
         }
         // Gravity
+        // wall slide
+        if (facing == -1 && leftWallCheck.Touching || facing == 1 && rightWallCheck.Touching) {
+            // decelerate up to a max sliding velocity
+            rBody.drag = WALL_SLIDE_DRAG;
+        } else {
+            rBody.drag = 0;
+        }
         velocity.y = Mathf.Max(-MAX_FALL, velocity.y);
         rBody.velocity = velocity;
     }

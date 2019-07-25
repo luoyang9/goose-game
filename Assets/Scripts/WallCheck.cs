@@ -16,7 +16,6 @@ public class WallCheck : MonoBehaviour {
         if (collision.gameObject.layer == wallLayer) {
             // wall
             Touching = true;
-            Debug.Log("Touching");
         }
     }
 
@@ -24,7 +23,6 @@ public class WallCheck : MonoBehaviour {
         if (collision.gameObject.layer == wallLayer) {
             // wall
             Touching = false;
-            Debug.Log("Not Touching");
         }
     }
 }
