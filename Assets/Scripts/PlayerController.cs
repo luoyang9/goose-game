@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour {
     public int numArrows = START_ARROWS;
     public float nextArrowFire = 0f;
     public GameObject arrowPrefab;
+    public Transform crosshair;
 
     public const int START_ARROWS = 5;
     public const float FRICTION = 0.2f;
@@ -32,9 +33,12 @@ public class PlayerController : MonoBehaviour {
 
     void Update() {
         HandleDirection();
+        HandleCrosshair();
+        // TODO: This can't go in player controller update. It has to be part of different states.
         if (Input.GetButtonDown(controller + "_Jump")) {
             machine.SwitchState<JumpState>();
         }
+        // TODO: This needs to be separate and handled in different state switches. 
         if (Input.GetAxis(controller + "_Fire2") > 0.50 && nextArrowFire < Time.time) {
             FireArrow();
             nextArrowFire = Time.time + ARROW_COOLDOWN;
@@ -125,5 +129,37 @@ public class PlayerController : MonoBehaviour {
         Arrow arrow = obj.GetComponent<Arrow>();
         arrow.direction = aimDirection;
         numArrows--;
+    }
+
+    public void HandleCrosshair() {
+        if (controller == "K") {
+            var worldMousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f));
+            var facingDirection = worldMousePosition - transform.position;
+            var aimAngle = Mathf.Atan2(facingDirection.y, facingDirection.x);
+            if (aimAngle < 0f) {
+                aimAngle = Mathf.PI * 2 + aimAngle;
+            }
+            var x = transform.position.x + 2f * Mathf.Cos(aimAngle);
+            var y = transform.position.y + 2f * Mathf.Sin(aimAngle);
+            var crossHairPosition = new Vector3(x, y, 0);
+            crosshair.transform.position = crossHairPosition;
+        } else {
+            Vector2 aimDirection;
+            var horizontalAxis = Input.GetAxisRaw(controller + "_X");
+            var verticalAxis = Input.GetAxisRaw(controller + "_Y");
+            if (horizontalAxis == 0f && verticalAxis == 0f) {
+                aimDirection = new Vector2(0, 1).normalized;
+            } else {
+                aimDirection = new Vector2(horizontalAxis, -verticalAxis).normalized;
+            }
+            var aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x);
+            if (aimAngle < 0f) {
+                aimAngle = Mathf.PI * 2 + aimAngle;
+            }
+            var x = transform.position.x + 2f * Mathf.Cos(aimAngle);
+            var y = transform.position.y + 2f * Mathf.Sin(aimAngle);
+            var crossHairPosition = new Vector3(x, y, 0);
+            crosshair.transform.position = crossHairPosition;
+        }
     }
 }
