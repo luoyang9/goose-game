@@ -32,9 +32,6 @@ public class PlayerController : MonoBehaviour {
 
     void Update() {
         HandleDirection();
-        if (Input.GetButtonDown(controller + "_Jump")) {
-            machine.SwitchState<JumpState>();
-        }
         if (Input.GetAxis(controller + "_Fire2") > 0.50 && nextArrowFire < Time.time) {
             FireArrow();
             nextArrowFire = Time.time + ARROW_COOLDOWN;
