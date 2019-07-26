@@ -287,11 +287,11 @@ MonoBehaviour:
   hookPosition: {x: 0, y: 0}
   rBody: {fileID: 4443951294556298770}
   controller: K
---- !u!61 &8693690227528506847
   numArrows: 5
   nextArrowFire: 0
   arrowPrefab: {fileID: 4376571178142839650, guid: 6ea02ccc52e534b3b9f954dcb059e586,
     type: 3}
+--- !u!61 &8693690227528506847
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
