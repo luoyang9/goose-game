@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 4443951294556298780}
   - component: {fileID: 8693690227528506847}
   - component: {fileID: -2980204640073275049}
+  - component: {fileID: -239304574498877928}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -176,6 +177,7 @@ MonoBehaviour:
   grapplingHookTransform: {fileID: 0}
   grapplingHookPrefab: {fileID: 3155290924371631459, guid: 1150edfdf748c574f841c80c6d1a512b,
     type: 3}
+  actions: {fileID: -239304574498877928}
 --- !u!120 &4443951294556298783
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -283,14 +285,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 758018da1319d214abcfdf12976d9772, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: 0
+  facing: 0
   hookPosition: {x: 0, y: 0}
   rBody: {fileID: 4443951294556298770}
-  controller: K
   numArrows: 5
   nextArrowFire: 0
   arrowPrefab: {fileID: 4376571178142839650, guid: 6ea02ccc52e534b3b9f954dcb059e586,
     type: 3}
+  actions: {fileID: -239304574498877928}
+  ropeSystem: {fileID: 4443951294556298769}
 --- !u!61 &8693690227528506847
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -329,3 +332,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ca4e969be5ab5b4ca862fbe73aa7e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-239304574498877928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4443951294556298772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b85133996fb97e409bfaffbeed94a4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controller: K

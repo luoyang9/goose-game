@@ -10,20 +10,6 @@ public class FallState : State {
             machine.SwitchState<IdleState>();
             return;
         }
-        if(Input.GetKey(KeyCode.S)) {
-            player.HardFall();
-        } else {
-            player.Airborne();
-        }
-	}
-
-	public override void OnStateEnter()
-	{
-		base.OnStateEnter();
-	}
-
-	public override void OnStateExit()
-	{
-		base.OnStateExit();
+        player.Airborne();
 	}
 }
