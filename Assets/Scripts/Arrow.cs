@@ -8,6 +8,7 @@ public class Arrow : MonoBehaviour
     // States
     public const int IN_AIR = 0;
     public const int GROUNDED = 1;
+    public const int STOPPED = 2;
 
     private int wallLayer;
     private int platformLayer;
