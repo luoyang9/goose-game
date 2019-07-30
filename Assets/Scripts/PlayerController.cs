@@ -122,7 +122,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void Swing() {
-        Debug.Log("SWING");
         swinging = true;
         swingEndTime = Time.time + SWING_TIME;
         nextSwingTime = Time.time + SWING_COOLDOWN;
