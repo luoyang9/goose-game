@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour {
     public Rigidbody2D rBody;
     public int numArrows = START_ARROWS;
     public float nextArrowFire = 0f;
-    public GameObject arrowPrefab;
+    public Arrow arrowPrefab;
     public InputActionMapper actions;
     public RopeSystem ropeSystem;
 
@@ -98,11 +98,8 @@ public class PlayerController : MonoBehaviour {
             return;
         }
         Vector2 aimDirection = actions.CalculateAim();
-        GameObject obj = Instantiate(
-            arrowPrefab,
-            new Vector2(transform.position.x, transform.position.y) + aimDirection * ARROW_START_DIST,
-            Quaternion.identity);
-        Arrow arrow = obj.GetComponent<Arrow>();
+        var arrowStartPos = (Vector2)transform.position + aimDirection * ARROW_START_DIST;
+        Arrow arrow = Instantiate(arrowPrefab, arrowStartPos, Quaternion.identity);
         arrow.direction = aimDirection;
         numArrows--;
     }

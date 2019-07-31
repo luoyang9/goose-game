@@ -290,7 +290,7 @@ MonoBehaviour:
   rBody: {fileID: 4443951294556298770}
   numArrows: 5
   nextArrowFire: 0
-  arrowPrefab: {fileID: 4376571178142839650, guid: 6ea02ccc52e534b3b9f954dcb059e586,
+  arrowPrefab: {fileID: 476587864798531743, guid: e84ae2baf269c91499dca64938458578,
     type: 3}
   actions: {fileID: -239304574498877928}
   ropeSystem: {fileID: 4443951294556298769}
