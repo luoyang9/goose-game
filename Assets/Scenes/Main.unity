@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 562222180}
   - component: {fileID: 562222179}
   - component: {fileID: 562222175}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -559,7 +559,7 @@ GameObject:
   - component: {fileID: 817514147}
   - component: {fileID: 817514146}
   - component: {fileID: 817514148}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1489,6 +1489,11 @@ PrefabInstance:
       propertyPath: playerController
       value: 
       objectReference: {fileID: 9865026}
+    - target: {fileID: -239304574498877928, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
+        type: 3}
+      propertyPath: controller
+      value: J1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5518bcfb4dcaa454fb3a77ddf9839234, type: 3}
 --- !u!4 &1449094799 stripped
@@ -1732,5 +1737,10 @@ PrefabInstance:
       propertyPath: playerController
       value: 
       objectReference: {fileID: 301479572}
+    - target: {fileID: 4443951294556298782, guid: 5518bcfb4dcaa454fb3a77ddf9839234,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5518bcfb4dcaa454fb3a77ddf9839234, type: 3}

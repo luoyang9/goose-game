@@ -5,49 +5,33 @@ using UnityEngine;
 
 
 public class StateMachine : MonoBehaviour {
-    private List<State> statesList = new List<State>();
-    public State CurrentState { get; private set; }
+    private Dictionary<int, Func<int>> updateMap = new Dictionary<int, Func<int>>();
+    private Dictionary<int, Action> beginMap = new Dictionary<int, Action>();
+    private Dictionary<int, Action> endMap = new Dictionary<int, Action>();
+
+    private int currentState;
+    public int CurrentState {
+        get {
+            return currentState;
+        }
+        set {
+            if (value != currentState) {
+                Action end = endMap[currentState];
+                Action begin = beginMap[value];
+                if (end != null) end();
+                if (begin != null) begin();
+            }
+            currentState = value;
+        }
+    }
 
     private void Update() {
-        CurrentState.Update();
+        CurrentState = updateMap[CurrentState]();
     }
 
-    /// <summary>
-    /// Switch the currentState to a specific State object
-    /// </summary>
-    /// <param name="state">
-    /// The state object to set as the currentState</param>
-    /// <returns>Whether the state was changed</returns>
-    protected virtual bool SwitchState(State state) {
-        if (state != null && state != CurrentState) {
-            if (CurrentState != null) {
-                CurrentState.OnStateExit();
-            }
-            CurrentState = state;
-            gameObject.name = "Player - " + state.GetType().Name;
-            CurrentState.OnStateEnter();
-            return true;
-        }
-        return false;
-    }
-
-    /// <summary>
-    /// Switch the currentState to a State of a the given type.
-    /// </summary>
-    /// <typeparam name="StateType">
-    /// The type of state to use for the currentState</typeparam>
-    /// <returns>Whether the state was changed</returns>
-    public virtual bool SwitchState<StateType>() where StateType : State, new() {
-        // check if states list already contains this state type
-        foreach (State state in statesList) {
-            if (state is StateType) {
-                return SwitchState(state);
-            }
-        }
-        //if state type not found in list, make a new instance
-        State newState = new StateType();
-        newState.OnStateInitialize(gameObject.GetComponent<PlayerController>(), this);
-        statesList.Add(newState);
-        return SwitchState(newState);
+    public void RegisterState(int state, Func<int> update, Action begin, Action end) {
+        updateMap.Add(state, update);
+        beginMap.Add(state, begin);
+        endMap.Add(state, end);
     }
 }
