@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour {
     public Arrow arrowPrefab;
     public InputActionMapper actions;
     public RopeSystem ropeSystem;
+    public Transform crosshair;
 
     public const int START_ARROWS = 5;
     public const float FRICTION = 0.2f;
@@ -45,6 +46,7 @@ public class PlayerController : MonoBehaviour {
 
     void Update() {
         HandleDirection();
+        HandleCrosshair();
         if (actions.ArrowShootPressed() && nextArrowFire < Time.time) {
             FireArrow();
             nextArrowFire = Time.time + ARROW_COOLDOWN;
@@ -163,4 +165,17 @@ public class PlayerController : MonoBehaviour {
         arrow.direction = aimDirection;
         numArrows--;
     }
+
+    private void HandleCrosshair() {
+        Vector2 aimDirection = actions.CalculateAim();
+        var aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x);
+        if (aimAngle < 0f) {
+            aimAngle = Mathf.PI * 2 + aimAngle;
+        }
+        var x = transform.position.x + 2f * Mathf.Cos(aimAngle);
+        var y = transform.position.y + 2f * Mathf.Sin(aimAngle);
+        var crossHairPosition = new Vector3(x, y, 0);
+        crosshair.transform.position = crossHairPosition;
+    }
+
 }
