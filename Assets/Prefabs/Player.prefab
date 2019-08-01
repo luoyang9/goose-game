@@ -296,6 +296,7 @@ MonoBehaviour:
     type: 3}
   actions: {fileID: -239304574498877928}
   ropeSystem: {fileID: 4443951294556298769}
+  crosshair: {fileID: 8099013692215979369}
 --- !u!61 &8693690227528506847
 BoxCollider2D:
   m_ObjectHideFlags: 0
