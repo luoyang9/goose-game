@@ -23,21 +23,21 @@ public class PlayerController : MonoBehaviour {
     public const float ARROW_COOLDOWN = 0.5f;
     public const float ARROW_START_DIST = 2f;
 
-    public const int IdleState = 0;
-    public const int RunState = 1;
-    public const int JumpState = 2;
-    public const int FallState = 3;
-    public const int HookPullState = 4;
-    public const int HookEndState = 5;
+    public const int IDLE_STATE = 0;
+    public const int RUN_STATE = 1;
+    public const int JUMP_STATE = 2;
+    public const int FALL_STATE = 3;
+    public const int HOOK_PULL_STATE = 4;
+    public const int HOOK_END_STATE = 5;
 
     void Start() {
         machine = gameObject.GetComponent<StateMachine>();
-        machine.RegisterState(IdleState, idleUpdate, null, null);
-        machine.RegisterState(RunState, runUpdate, null, null);
-        machine.RegisterState(JumpState, jumpUpdate, jumpBegin, null);
-        machine.RegisterState(FallState, fallUpdate, null, null);
-        machine.RegisterState(HookPullState, hookPullUpdate, null, null);
-        machine.RegisterState(HookEndState, hookEndUpdate, null, null);
+        machine.RegisterState(IDLE_STATE, IdleUpdate, null, null);
+        machine.RegisterState(RUN_STATE, RunUpdate, null, null);
+        machine.RegisterState(JUMP_STATE, JumpUpdate, JumpBegin, null);
+        machine.RegisterState(FALL_STATE, FallUpdate, null, null);
+        machine.RegisterState(HOOK_PULL_STATE, HookPullUpdate, null, null);
+        machine.RegisterState(HOOK_END_STATE, HookEndUpdate, null, null);
     }
 
     void FixedUpdate() {
@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour {
         name = "Player - " + machine.CurrentState;
     }
 
-    private int idleUpdate() {
+    private int IdleUpdate() {
         // friction
         Vector2 velocity = rBody.velocity;
         if (velocity.x != 0) {
@@ -62,17 +62,17 @@ public class PlayerController : MonoBehaviour {
         
         // jump
         if (actions.JumpPressed()) {
-            return JumpState;
+            return JUMP_STATE;
         }
 
         if (facing != 0) {
-            return RunState;
+            return RUN_STATE;
         }
 
-        return IdleState;
+        return IDLE_STATE;
     }
 
-    private int runUpdate() {
+    private int RunUpdate() {
         // move
         Vector2 velocity = rBody.velocity;
         velocity.x = facing * MAX_MOVEMENT_SPEED;
@@ -80,34 +80,34 @@ public class PlayerController : MonoBehaviour {
 
         // jump
         if (actions.JumpPressed()) {
-            return JumpState;
+            return JUMP_STATE;
         }
 
         if (Mathf.Abs(rBody.velocity.x) < 0.001) {
-            return IdleState;
+            return IDLE_STATE;
         }
 
-        return RunState;
+        return RUN_STATE;
     }
 
-    private int jumpUpdate() {
+    private int JumpUpdate() {
         Airborne();
         if (rBody.velocity.y < 0) {
-            return FallState;
+            return FALL_STATE;
         }
 
-        return JumpState;
+        return JUMP_STATE;
     }
 
-    private int fallUpdate() {
+    private int FallUpdate() {
         if (Mathf.Abs(rBody.velocity.y) < 0.001) {
-            return IdleState;
+            return IDLE_STATE;
         }
         Airborne();
-        return FallState;
+        return FALL_STATE;
     }
 
-    private int hookPullUpdate() {
+    private int HookPullUpdate() {
         // autorappel
         var hookVelocity = (hookPosition - (Vector2)transform.position).normalized * PULL_SPEED;
         rBody.velocity = hookVelocity;
@@ -116,19 +116,19 @@ public class PlayerController : MonoBehaviour {
         if (Vector2.Distance(transform.position, hookPosition) < RopeSystem.MIN_ROPE_LENGTH) {
             if (ropeSystem.hitPlatform) {
                 ropeSystem.ResetRope();
-                return FallState;
+                return FALL_STATE;
             }
-            return HookEndState;
+            return HOOK_END_STATE;
         }
 
-        return HookPullState;
+        return HOOK_PULL_STATE;
     }
 
-    private int hookEndUpdate() {
-        return HookEndState;
+    private int HookEndUpdate() {
+        return HOOK_END_STATE;
     }
 
-    private void jumpBegin() {
+    private void JumpBegin() {
         Vector2 velocity = rBody.velocity;
         velocity.y = JUMP_VELOCITY;
         rBody.velocity = velocity;

@@ -77,7 +77,7 @@ public class RopeSystem : MonoBehaviour {
         ropeJoint.connectedAnchor = hookPoint;
         ropeJoint.enabled = true;
         playerController.hookPosition = hookPoint;
-        machine.CurrentState = PlayerController.HookPullState;
+        machine.CurrentState = PlayerController.HOOK_PULL_STATE;
     }
 
     public void ResetRope() {
@@ -87,7 +87,7 @@ public class RopeSystem : MonoBehaviour {
         ropeAttached = false;
         ropeRenderer.enabled = false;
         ropeRenderer.SetPositions(new Vector3[2]);
-        machine.CurrentState = PlayerController.FallState;
+        machine.CurrentState = PlayerController.FALL_STATE;
     }
 
     private void HandleRopeLength() {
