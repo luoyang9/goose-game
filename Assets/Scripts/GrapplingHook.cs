@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class GrapplingHook : MonoBehaviour {
-    const int LAYER_DEFAULT = 0;
+    const int LAYER_WALL = 11;
+    const int LAYER_PLATFORM = 10;
     public bool hooked;
     public Rigidbody2D rbody;
     public float HOOK_SPEED;
@@ -23,10 +24,11 @@ public class GrapplingHook : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D collider) {
         // if it's environment, latch on
-        if (collider.gameObject.layer == LAYER_DEFAULT) {
+        if (collider.gameObject.layer == LAYER_PLATFORM || collider.gameObject.layer == LAYER_WALL) {
             currentState = ST_HOOKED;
             direction = Vector2.zero;
             ropeSystem.LatchHook(transform.position);
+            ropeSystem.hitPlatform = collider.gameObject.layer == LAYER_PLATFORM;
         }
     }
     

@@ -7,16 +7,19 @@ using System.Linq;
 public class RopeSystem : MonoBehaviour {
     private StateMachine machine;
     private float nextFire = 0;
-    public DistanceJoint2D ropeJoint;
     private bool ropeAttached;
-    public LineRenderer ropeRenderer;
     private List<Vector2> ropePositions = new List<Vector2>();
+
+    public DistanceJoint2D ropeJoint;
+    public LineRenderer ropeRenderer;
     public PlayerController playerController;
-    public const float MIN_ROPE_LENGTH = 0.75f;
-    public const float FIRE_RATE = 0.15f;
     public Transform grapplingHookTransform;
     public GrapplingHook grapplingHookPrefab;
     public InputActionMapper actions;
+    public bool hitPlatform = false;
+
+    public const float MIN_ROPE_LENGTH = 0.75f;
+    public const float FIRE_RATE = 0.15f;
 
     private void Start() {
         machine = gameObject.GetComponent<StateMachine>();
@@ -74,7 +77,7 @@ public class RopeSystem : MonoBehaviour {
         ropeJoint.connectedAnchor = hookPoint;
         ropeJoint.enabled = true;
         playerController.hookPosition = hookPoint;
-        machine.SwitchState<HookPullState>();
+        machine.CurrentState = PlayerController.HOOK_PULL_STATE;
     }
 
     public void ResetRope() {
@@ -84,7 +87,7 @@ public class RopeSystem : MonoBehaviour {
         ropeAttached = false;
         ropeRenderer.enabled = false;
         ropeRenderer.SetPositions(new Vector3[2]);
-        machine.SwitchState<FallState>();
+        machine.CurrentState = PlayerController.FALL_STATE;
     }
 
     private void HandleRopeLength() {
