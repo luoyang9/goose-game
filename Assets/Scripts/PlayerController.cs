@@ -172,12 +172,16 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int HookPullUpdate() {
+        if (actions.HookReleasePressed()) {
+            ropeSystem.ResetRope();
+            return FALL_STATE;
+        }
         // autorappel
         var hookVelocity = (hookPosition - (Vector2)transform.position).normalized * PULL_SPEED;
         rBody.velocity = hookVelocity;
-
         // reached hook
         if (Vector2.Distance(transform.position, hookPosition) < RopeSystem.MIN_ROPE_LENGTH) {
+            // one-way platform
             if (ropeSystem.hitPlatform) {
                 ropeSystem.ResetRope();
                 return FALL_STATE;
@@ -189,6 +193,11 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int HookEndUpdate() {
+        if (actions.HookReleasePressed()) {
+            ropeSystem.ResetRope();
+            return FALL_STATE;
+        }
+
         if (actions.JumpPressed()) {
             ropeSystem.ResetRope();
             if (WallJumpCheck(-1)) {
