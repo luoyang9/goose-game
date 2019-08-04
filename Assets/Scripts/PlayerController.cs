@@ -11,18 +11,20 @@ public class PlayerController : MonoBehaviour {
     public InputActionMapper actions;
     public RopeSystem ropeSystem;
     public Transform crosshair;
+    public Animator animator;
     private WallCheck leftWallCheck;
     private WallCheck rightWallCheck;
+    private SpriteRenderer renderer;
 
     public const int START_ARROWS = 5;
     public const float FRICTION = 0.2f;
     public const float PULL_SPEED = 30f;
-    public const float JUMP_VELOCITY = 20f;
-    public const float MAX_MOVEMENT_SPEED = 20f;
+    public const float JUMP_VELOCITY = 30f;
+    public const float MAX_MOVEMENT_SPEED = 18f;
     private const float WALL_JUMP_H_SPEED = 8f;
     private const float WALL_JUMP_FORCE_TIME = 0.1f;
     private const float WALL_SLIDE_DRAG = 20f;
-    public const float MAX_FALL = 30f;
+    public const float MAX_FALL = 25f;
     public const float ARROW_COOLDOWN = 0.5f;
     public const float ARROW_START_DIST = 2f;
 
@@ -39,6 +41,7 @@ public class PlayerController : MonoBehaviour {
     private float forceMoveXTimer;
 
     void Start() {
+        renderer = gameObject.GetComponent<SpriteRenderer>();
         machine = gameObject.GetComponent<StateMachine>();
         machine.RegisterState(IDLE_STATE, IdleUpdate, null, null);
         machine.RegisterState(RUN_STATE, RunUpdate, null, null);
@@ -75,10 +78,19 @@ public class PlayerController : MonoBehaviour {
             forceMoveXTimer -= Time.deltaTime;
             moveX = forceMoveX;
         }
+
+        UpdateAnimator();
+    }
+
+    private void UpdateAnimator() {
+        animator.SetInteger("CurrentState", machine.CurrentState);
     }
 
     private void HandleDirection() {
         moveX = actions.GetHorizontalDirection();
+        if (moveX != 0) {
+            renderer.flipX = moveX > 0;
+        }
     }
 
     private void HandleArrowShoot() {
