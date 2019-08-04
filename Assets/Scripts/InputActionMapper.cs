@@ -11,7 +11,7 @@ public class InputActionMapper: MonoBehaviour {
     private string fire2Axis;
     private string aimJoystickXAxis;
     private string aimJoystickYAxis;
-    private string swingAxis;
+    private string meleeAxis;
 
     void Awake() {
         jumpAxis = controller + "_Jump";
@@ -21,7 +21,7 @@ public class InputActionMapper: MonoBehaviour {
         fire2Axis = controller + "_Fire2";
         aimJoystickXAxis = controller + "_X";
         aimJoystickYAxis = controller + "_Y";
-        swingAxis = controller + "_Swing";
+        meleeAxis = controller + "_Attack";
     }
 
     public bool JumpPressed() {
@@ -53,8 +53,8 @@ public class InputActionMapper: MonoBehaviour {
         return Input.GetAxis(verticalAxis) < -0.5f;
     }
 
-    public bool SwingPressed() {
-        return Input.GetAxis(swingAxis) > 0.5f;
+    public bool MeleePressed() {
+        return Input.GetAxis(meleeAxis) > 0.5f;
     }
 
     /**

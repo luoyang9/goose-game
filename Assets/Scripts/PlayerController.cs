@@ -10,24 +10,23 @@ public class PlayerController : MonoBehaviour {
     public Animator animator;
     public Match match;
     public bool alive = true;
-    private WallCheck leftWallCheck;
-    private WallCheck rightWallCheck;
-    private SpriteRenderer renderer;
-    private StateMachine machine;
+    public Melee melee;
+    public SpriteRenderer sprite;
+    public StateMachine machine;
+    public WallCheck leftWallCheck;
+    public WallCheck rightWallCheck;
     // movement
     public int moveX = 0;
     private int forceMoveX;
     private float forceMoveXTimer;
     public Rigidbody2D rBody;
+    public int Facing { get; private set; } = 1; // either -1 or 1
     // arrows
     public int numArrows = START_ARROWS;
     public float nextArrowFire = 0f;
     public Arrow arrowPrefab;
     // melee
-    public bool swinging = false;
     private float nextSwingTime = 0;
-    private float swingEndTime = 0;
-    private ArrayList currentCollisions = new ArrayList();
 
     // CONSTANTS
     // Movement
@@ -44,7 +43,7 @@ public class PlayerController : MonoBehaviour {
     public const float ARROW_START_DIST = 2f;
     public const int START_ARROWS = 5;
     // Melee
-    public const float SWING_COOLDOWN = 1f;
+    public const float SWING_COOLDOWN = 0.5f;
     public const float SWING_TIME = 0.1f;
     // states
     public const int IDLE_STATE = 0;
@@ -56,7 +55,6 @@ public class PlayerController : MonoBehaviour {
 
 
     void Start() {
-        renderer = gameObject.GetComponent<SpriteRenderer>();
         machine = gameObject.GetComponent<StateMachine>();
         machine.RegisterState(IDLE_STATE, IdleUpdate, null, null);
         machine.RegisterState(RUN_STATE, RunUpdate, null, null);
@@ -64,17 +62,6 @@ public class PlayerController : MonoBehaviour {
         machine.RegisterState(FALL_STATE, FallUpdate, null, FallEnd);
         machine.RegisterState(HOOK_PULL_STATE, HookPullUpdate, null, null);
         machine.RegisterState(HOOK_END_STATE, HookEndUpdate, null, null);
-
-        // initialize wallChecks
-        var wallChecks = GetComponentsInChildren<WallCheck>();
-        // they have opposite dirs
-        if (wallChecks[0].dir == 1) {
-            rightWallCheck = wallChecks[0];
-            leftWallCheck = wallChecks[1];
-        } else {
-            rightWallCheck = wallChecks[1];
-            leftWallCheck = wallChecks[0];
-        }
 
         forceMoveX = 0;
         forceMoveXTimer = 0;
@@ -84,9 +71,11 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update() {
+        // actions that are always possible
         HandleDirection();
         HandleCrosshair();
         HandleArrowShoot();
+        HandleMeleeAttack();
 
         // force moving direction
         if (forceMoveXTimer > 0) {
@@ -94,12 +83,6 @@ public class PlayerController : MonoBehaviour {
             moveX = forceMoveX;
         }
 
-        if (actions.SwingPressed() && Time.time > nextSwingTime) {
-            Swing();
-        }
-        if (swinging && Time.time > swingEndTime) {
-            swinging = false;
-        }
         UpdateAnimator();
     }
 
@@ -110,8 +93,10 @@ public class PlayerController : MonoBehaviour {
     private void HandleDirection() {
         moveX = actions.GetHorizontalDirection();
         if (moveX != 0) {
-            renderer.flipX = moveX > 0;
+            Facing = moveX;
         }
+        sprite.flipX = Facing < 0;
+
     }
 
     private void HandleArrowShoot() {
@@ -121,24 +106,11 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void Swing() {
-        swinging = true;
-        swingEndTime = Time.time + SWING_TIME;
-        nextSwingTime = Time.time + SWING_COOLDOWN;
-        for (int i = 0; i < currentCollisions.Count; i++) {
-            processSwingCollision((Collider2D)currentCollisions[i]);
+    private void HandleMeleeAttack() {
+        if (actions.MeleePressed() && Time.time > nextSwingTime) {
+            nextSwingTime = Time.time + SWING_COOLDOWN;
+            melee.Attack();
         }
-    }
-
-    private void processSwingCollision(Collider2D collider) {
-        PlayerController player = collider.gameObject.GetComponent<PlayerController>();
-        if (player != null) {
-            player.Kill();
-        }
-    }
-
-    public bool ReachedHook() {
-        return Vector2.Distance(transform.position, hookPosition) < RopeSystem.MIN_ROPE_LENGTH;
     }
 
     private int IdleUpdate() {
@@ -283,6 +255,7 @@ public class PlayerController : MonoBehaviour {
         var vel = rBody.velocity;
         vel.x = WALL_JUMP_H_SPEED * dir;
         rBody.velocity = vel;
+        Facing = dir;
         // todo: maybe do jump logic here
     }
 
@@ -313,15 +286,9 @@ public class PlayerController : MonoBehaviour {
         numArrows--;
     }
 
-    // todo: move out of player gameobject
-    void OnTriggerEnter2D(Collider2D collider) {
-        currentCollisions.Add(collider);
-        if (swinging) {
-            processSwingCollision(collider);
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collider) {
-        currentCollisions.Remove(collider);
+    private void HandleCrosshair() {
+        Vector2 aimDirection = actions.CalculateAim();
+        var crossHairPosition = transform.position + (Vector3)aimDirection * 2;
+        crosshair.transform.position = crossHairPosition;
     }
 }
