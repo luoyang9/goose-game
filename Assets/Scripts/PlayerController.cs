@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
     public Vector2 hookPosition;
@@ -12,6 +11,8 @@ public class PlayerController : MonoBehaviour {
     public RopeSystem ropeSystem;
     public Transform crosshair;
     public Animator animator;
+    public Match match;
+    public bool alive = true;
     private WallCheck leftWallCheck;
     private WallCheck rightWallCheck;
     private SpriteRenderer renderer;
@@ -37,7 +38,6 @@ public class PlayerController : MonoBehaviour {
 
     private StateMachine machine;
     public int moveX = 0;
-    private bool alive = true;
     private int forceMoveX;
     private float forceMoveXTimer;
 
@@ -259,18 +259,7 @@ public class PlayerController : MonoBehaviour {
     public void Kill() {
         Destroy(gameObject);
         alive = false;
-        // TODO: We probably need a Game object and move global game code like this there
-        GameObject[] remainingObjects = gameObject.scene.GetRootGameObjects();
-        int numPlayersLeft = 0;
-        foreach (GameObject gameObject in remainingObjects) {
-            PlayerController player = gameObject.GetComponent<PlayerController>();
-            if (player != null && player.alive) {
-                numPlayersLeft += 1;
-            }
-        }
-        if (numPlayersLeft == 1) {
-            SceneManager.LoadScene("EndGame");
-        }
+        match.OnPlayerDeath();
     }
 
     private void FireArrow() {
