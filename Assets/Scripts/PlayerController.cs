@@ -2,22 +2,34 @@
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
-    public Vector2 hookPosition;
-    public Rigidbody2D rBody;
-    public int numArrows = START_ARROWS;
-    public float nextArrowFire = 0f;
-    public Arrow arrowPrefab;
+    // VARIABLES
     public InputActionMapper actions;
+    public Vector2 hookPosition;
     public RopeSystem ropeSystem;
     public Transform crosshair;
     public Animator animator;
     public Match match;
     public bool alive = true;
-    private WallCheck leftWallCheck;
-    private WallCheck rightWallCheck;
-    private SpriteRenderer renderer;
+    public Melee melee;
+    public SpriteRenderer sprite;
+    public StateMachine machine;
+    public WallCheck leftWallCheck;
+    public WallCheck rightWallCheck;
+    // movement
+    public int moveX = 0;
+    private int forceMoveX;
+    private float forceMoveXTimer;
+    public Rigidbody2D rBody;
+    public int Facing { get; private set; } = 1; // either -1 or 1
+    // arrows
+    public int numArrows = START_ARROWS;
+    public float nextArrowFire = 0f;
+    public Arrow arrowPrefab;
+    // melee
+    private float nextSwingTime = 0;
 
-    public const int START_ARROWS = 5;
+    // CONSTANTS
+    // Movement
     public const float FRICTION = 0.2f;
     public const float PULL_SPEED = 30f;
     public const float JUMP_VELOCITY = 30f;
@@ -26,9 +38,14 @@ public class PlayerController : MonoBehaviour {
     private const float WALL_JUMP_FORCE_TIME = 0.1f;
     private const float WALL_SLIDE_DRAG = 20f;
     public const float MAX_FALL = 25f;
+    // Arrows
     public const float ARROW_COOLDOWN = 0.5f;
     public const float ARROW_START_DIST = 2f;
-
+    public const int START_ARROWS = 5;
+    // Melee
+    public const float SWING_COOLDOWN = 0.5f;
+    public const float SWING_TIME = 0.1f;
+    // states
     public const int IDLE_STATE = 0;
     public const int RUN_STATE = 1;
     public const int JUMP_STATE = 2;
@@ -36,13 +53,8 @@ public class PlayerController : MonoBehaviour {
     public const int HOOK_PULL_STATE = 4;
     public const int HOOK_END_STATE = 5;
 
-    private StateMachine machine;
-    public int moveX = 0;
-    private int forceMoveX;
-    private float forceMoveXTimer;
 
     void Start() {
-        renderer = gameObject.GetComponent<SpriteRenderer>();
         machine = gameObject.GetComponent<StateMachine>();
         machine.RegisterState(IDLE_STATE, IdleUpdate, null, null);
         machine.RegisterState(RUN_STATE, RunUpdate, null, null);
@@ -50,17 +62,6 @@ public class PlayerController : MonoBehaviour {
         machine.RegisterState(FALL_STATE, FallUpdate, null, FallEnd);
         machine.RegisterState(HOOK_PULL_STATE, HookPullUpdate, null, null);
         machine.RegisterState(HOOK_END_STATE, HookEndUpdate, null, null);
-
-        // initialize wallChecks
-        var wallChecks = GetComponentsInChildren<WallCheck>();
-        // they have opposite dirs
-        if (wallChecks[0].dir == 1) {
-            rightWallCheck = wallChecks[0];
-            leftWallCheck = wallChecks[1];
-        } else {
-            rightWallCheck = wallChecks[1];
-            leftWallCheck = wallChecks[0];
-        }
 
         forceMoveX = 0;
         forceMoveXTimer = 0;
@@ -70,9 +71,11 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Update() {
+        // actions that are always possible
         HandleDirection();
         HandleCrosshair();
         HandleArrowShoot();
+        HandleMeleeAttack();
 
         // force moving direction
         if (forceMoveXTimer > 0) {
@@ -90,14 +93,23 @@ public class PlayerController : MonoBehaviour {
     private void HandleDirection() {
         moveX = actions.GetHorizontalDirection();
         if (moveX != 0) {
-            renderer.flipX = moveX > 0;
+            Facing = moveX;
         }
+        sprite.flipX = Facing < 0;
+
     }
 
     private void HandleArrowShoot() {
         if (actions.ArrowShootPressed() && nextArrowFire < Time.time) {
             FireArrow();
             nextArrowFire = Time.time + ARROW_COOLDOWN;
+        }
+    }
+
+    private void HandleMeleeAttack() {
+        if (actions.MeleePressed() && Time.time > nextSwingTime) {
+            nextSwingTime = Time.time + SWING_COOLDOWN;
+            melee.Attack();
         }
     }
 
@@ -243,6 +255,7 @@ public class PlayerController : MonoBehaviour {
         var vel = rBody.velocity;
         vel.x = WALL_JUMP_H_SPEED * dir;
         rBody.velocity = vel;
+        Facing = dir;
         // todo: maybe do jump logic here
     }
 
@@ -275,14 +288,7 @@ public class PlayerController : MonoBehaviour {
 
     private void HandleCrosshair() {
         Vector2 aimDirection = actions.CalculateAim();
-        var aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x);
-        if (aimAngle < 0f) {
-            aimAngle = Mathf.PI * 2 + aimAngle;
-        }
-        var x = transform.position.x + 2f * Mathf.Cos(aimAngle);
-        var y = transform.position.y + 2f * Mathf.Sin(aimAngle);
-        var crossHairPosition = new Vector3(x, y, 0);
+        var crossHairPosition = transform.position + (Vector3)aimDirection * 2;
         crosshair.transform.position = crossHairPosition;
     }
-
 }
