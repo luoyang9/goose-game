@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-
 public class PlayerController : MonoBehaviour {
     public Vector2 hookPosition;
     public Rigidbody2D rBody;
@@ -12,6 +11,8 @@ public class PlayerController : MonoBehaviour {
     public RopeSystem ropeSystem;
     public Transform crosshair;
     public Animator animator;
+    public Match match;
+    public bool alive = true;
     private WallCheck leftWallCheck;
     private WallCheck rightWallCheck;
     private SpriteRenderer renderer;
@@ -257,6 +258,8 @@ public class PlayerController : MonoBehaviour {
 
     public void Kill() {
         Destroy(gameObject);
+        alive = false;
+        match.OnPlayerDeath();
     }
 
     private void FireArrow() {
