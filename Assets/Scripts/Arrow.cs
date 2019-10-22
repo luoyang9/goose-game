@@ -67,6 +67,7 @@ public class Arrow : MonoBehaviour
             transform.rotation = rotation;
         }
     }
+
     void OnBecameInvisible() {
         Destroy(gameObject);
     }

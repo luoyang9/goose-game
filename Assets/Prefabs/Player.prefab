@@ -488,6 +488,8 @@ MonoBehaviour:
   ropeSystem: {fileID: 4443951294556298769}
   crosshair: {fileID: 8099013692215979369}
   animator: {fileID: 6885775752252314838}
+  match: {fileID: 0}
+  alive: 1
   melee: {fileID: 2907988911900256694}
   sprite: {fileID: 4443951294556298773}
   machine: {fileID: -2980204640073275049}
