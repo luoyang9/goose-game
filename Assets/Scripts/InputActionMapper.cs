@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using UnityEngine.InputSystem;
 
 public class InputActionMapper: MonoBehaviour {
     public string controller = "K";
@@ -24,22 +24,29 @@ public class InputActionMapper: MonoBehaviour {
         meleeAxis = controller + "_Attack";
     }
 
-    public bool JumpPressed() {
-        return Input.GetButtonDown(jumpAxis);
+    #region messages sent by PlayerInput
+
+    public void OnMove(InputValue input)
+    {
+        Vector2 direction = (Vector2)input.Get();
+        HorizontalDirection = (int)direction.x;
     }
+
+    public void OnJump(InputValue input)
+    {
+        JumpPressed = (bool)input.Get();
+    }
+
+    #endregion
+
+    #region exposed input actions
+
+    public bool JumpPressed { get; private set; }
 
     /**
      * Returns -1 if left pressed, 1 if right pressed, else 0
      */
-    public int GetHorizontalDirection() {
-        int direction;
-        float horizontalInput = Input.GetAxis(horizontalAxis);
-        if (horizontalInput < 0) direction = -1;
-        else if (horizontalInput > 0) direction = 1;
-        else direction = 0;
-
-        return direction;
-    }
+    public int HorizontalDirection { get; private set; }
 
     public bool HookShootPressed() {
         return Input.GetAxis(fire1Axis) > 0.5f;
@@ -78,4 +85,6 @@ public class InputActionMapper: MonoBehaviour {
         }
         return aimDirection.normalized;
     }
+
+    #endregion
 }

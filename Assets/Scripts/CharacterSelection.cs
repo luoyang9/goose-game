@@ -6,4 +6,5 @@ public struct CharacterSelection
 {
     public string name;
     public Sprite splash;
+    public GameObject prefab;
 }

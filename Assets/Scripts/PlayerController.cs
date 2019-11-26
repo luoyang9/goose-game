@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void HandleDirection() {
-        moveX = actions.GetHorizontalDirection();
+        moveX = actions.HorizontalDirection;
         if (moveX != 0) {
             Facing = moveX;
         }
@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour {
         }
         rBody.velocity = velocity;
         // jump
-        if (actions.JumpPressed()) {
+        if (actions.JumpPressed) {
             return JUMP_STATE;
         }
         // falling
@@ -143,7 +143,7 @@ public class PlayerController : MonoBehaviour {
         rBody.velocity = velocity;
 
         // jump
-        if (actions.JumpPressed()) {
+        if (actions.JumpPressed) {
             return JUMP_STATE;
         }
         // falling
@@ -180,7 +180,7 @@ public class PlayerController : MonoBehaviour {
             rBody.drag = 0;
         }
         // wall jump
-        if (actions.JumpPressed()) {
+        if (actions.JumpPressed) {
             if (WallJumpCheck(-1)) {
                 WallJump(1);
                 return JUMP_STATE;
@@ -223,7 +223,7 @@ public class PlayerController : MonoBehaviour {
             return FALL_STATE;
         }
 
-        if (actions.JumpPressed()) {
+        if (actions.JumpPressed) {
             ropeSystem.ResetRope();
             if (WallJumpCheck(-1)) {
                 WallJump(1);

@@ -1,14 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerSelection : MonoBehaviour
 {
-    public delegate void Action();
-    public event Action OnSelectionActivate;
-    public event Action OnSelectionDeactivate;
-    public delegate void CharacterChangedAction(string character);
+    public delegate void StatusChangedAction(bool active);
+    public event StatusChangedAction OnSelectionStatusChange;
+    public delegate void CharacterChangedAction(GameObject character);
     public event CharacterChangedAction OnCharacterChanged;
 
     public Button playerTag;
@@ -16,6 +16,7 @@ public class PlayerSelection : MonoBehaviour
     public Button rightChange;
     public Image splash;
     public Image character;
+    public GameObject foreground;
     public CharacterSelection[] roster;
 
     private int selectedCharacter;
@@ -23,9 +24,17 @@ public class PlayerSelection : MonoBehaviour
         get { return selectedCharacter; }
         set {
             selectedCharacter = value;
-            OnCharacterChanged?.Invoke(roster[selectedCharacter].name);
+            OnCharacterChanged?.Invoke(roster[selectedCharacter].prefab);
             UpdateCharacterSprites(selectedCharacter);
         }
+    }
+
+    private bool selectionActive;
+
+    private void Awake()
+    {
+        selectionActive = true;
+        SelectedCharacter = 0;
     }
 
     public void OnEnable()
@@ -44,7 +53,11 @@ public class PlayerSelection : MonoBehaviour
 
     private void OnTagClicked()
     {
-        OnSelectionDeactivate();
+        selectionActive = !selectionActive;
+
+        foreground.SetActive(selectionActive);
+        splash.enabled = selectionActive;
+        OnSelectionStatusChange?.Invoke(selectionActive);
     }
 
     public void OnLeftChange()
