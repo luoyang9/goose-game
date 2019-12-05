@@ -17,6 +17,7 @@ public class PlayerSelection : MonoBehaviour
     public Image splash;
     public Image character;
     public GameObject foreground;
+    public Text controller;
     public CharacterSelection[] roster;
 
     private int selectedCharacter;
@@ -68,6 +69,17 @@ public class PlayerSelection : MonoBehaviour
     public void OnRightChange()
     {
         SelectedCharacter = (SelectedCharacter + 1) % roster.Length;
+    }
+
+    public void SetTagText(string text)
+    {
+        var tagText = playerTag.GetComponentInChildren<Text>();
+        tagText.text = text;
+    }
+
+    public void SetControllerText(string text)
+    {
+        controller.text = text;
     }
 
     private void UpdateCharacterSprites(int i)

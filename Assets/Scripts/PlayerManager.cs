@@ -83,7 +83,12 @@ public class PlayerManager : MonoBehaviour
         }
         var mapping = new PlayerMapping(playerAddIdx, devices, null);
         mappings[playerAddIdx] = mapping;
-        playerSelections[playerAddIdx].gameObject.SetActive(true);
+
+        var selection = playerSelections[playerAddIdx];
+        selection.gameObject.SetActive(true);
+        selection.SetTagText($"P{playerAddIdx + 1}");
+        selection.SetControllerText(player.currentControlScheme);
+
         playerAddIdx += 1;
     }
 }

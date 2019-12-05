@@ -449,14 +449,11 @@ MonoBehaviour:
   splash: {fileID: 2506486376730880739}
   character: {fileID: 1439589432676775010}
   foreground: {fileID: 8679564592174006802}
+  controller: {fileID: 625670515538153750}
   roster:
   - name: MSCharacter
     splash: {fileID: 21300000, guid: 81e06edecca5bfe46bb269fe005e5522, type: 3}
     prefab: {fileID: 4443951294556298772, guid: d9addbae1f6fdcc4db01e20bc2751da9,
-      type: 3}
-  - name: BoxCharacter
-    splash: {fileID: 21300000, guid: 7da685343d84e4149b3090f525b70c01, type: 3}
-    prefab: {fileID: 4443951294556298772, guid: 84ddffa2b57ae4b299140cafac6babc8,
       type: 3}
 --- !u!1 &7737245054097954917
 GameObject:
