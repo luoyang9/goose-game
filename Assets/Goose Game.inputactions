@@ -14,7 +14,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Look",
+                    "name": "Aim",
                     "type": "Value",
                     "id": "50028980-1d93-4563-a75a-57077515fef4",
                     "expectedControlType": "Vector2",
@@ -22,10 +22,10 @@
                     "interactions": ""
                 },
                 {
-                    "name": "PrimaryFire",
-                    "type": "Button",
+                    "name": "ArrowShoot",
+                    "type": "Value",
                     "id": "cc30d1b3-9d15-470b-8ed3-c6721bd23060",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
                 },
@@ -38,9 +38,17 @@
                     "interactions": ""
                 },
                 {
-                    "name": "SecondaryFire",
-                    "type": "Button",
+                    "name": "HookShoot",
+                    "type": "Value",
                     "id": "f9c20e73-e3bd-4d98-b2cd-1e395249a9a6",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Melee",
+                    "type": "Value",
+                    "id": "d9821733-29e8-4d94-8fc4-aaec6678f42e",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
@@ -175,18 +183,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8c8e490b-c610-4785-884f-f04217b23ca4",
-                    "path": "<Pointer>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse;Touch",
-                    "action": "Look",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -197,7 +194,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "PrimaryFire",
+                    "action": "ArrowShoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -208,7 +205,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "PrimaryFire",
+                    "action": "ArrowShoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -219,7 +216,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Touch",
-                    "action": "PrimaryFire",
+                    "action": "ArrowShoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -230,7 +227,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Joystick",
-                    "action": "PrimaryFire",
+                    "action": "ArrowShoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -258,12 +255,67 @@
                 },
                 {
                     "name": "",
+                    "id": "8eba0ab1-e1f3-4fbe-8702-43c818eda622",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "9728bc51-cba3-429a-941e-5424444610b4",
-                    "path": "",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "HookShoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3a581866-1340-4471-8b27-60b315f50b00",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "HookShoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8c51e16f-7609-42b2-a9d6-43ff1f8f3043",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Melee",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f6c7a55a-0444-435a-a870-810c386c2d80",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "SecondaryFire",
+                    "action": "Melee",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8c8e490b-c610-4785-884f-f04217b23ca4",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse;Touch",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

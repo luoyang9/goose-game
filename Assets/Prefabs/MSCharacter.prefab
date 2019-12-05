@@ -552,7 +552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b85133996fb97e409bfaffbeed94a4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: J1
+  playerInput: {fileID: 8158587971432678033}
 --- !u!95 &6885775752252314838
 Animator:
   serializedVersion: 3

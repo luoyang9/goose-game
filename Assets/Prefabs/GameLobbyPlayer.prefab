@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2854233066694896765}
-  - component: {fileID: 546496435069104816}
   - component: {fileID: 7605518071071815002}
   - component: {fileID: 4904866065223827252}
   m_Layer: 0
@@ -38,18 +37,6 @@ RectTransform:
   m_AnchoredPosition: {x: 3.1668649, y: -0.8221377}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &546496435069104816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4485563698593125436}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c218ca82c81be4b56b9ade2d28424041, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7605518071071815002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,7 +66,7 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 546496435069104816}
+      - m_Target: {fileID: 0}
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -108,7 +95,7 @@ MonoBehaviour:
     m_ActionName: Player/Fire[/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 546496435069104816}
+      - m_Target: {fileID: 0}
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -125,7 +112,7 @@ MonoBehaviour:
     m_ActionName: UI/Navigate
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 546496435069104816}
+      - m_Target: {fileID: 0}
         m_MethodName: OnSubmit
         m_Mode: 0
         m_Arguments:
@@ -142,7 +129,7 @@ MonoBehaviour:
     m_ActionName: UI/Submit
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 546496435069104816}
+      - m_Target: {fileID: 0}
         m_MethodName: OnCancel
         m_Mode: 0
         m_Arguments:
@@ -165,7 +152,7 @@ MonoBehaviour:
     m_ActionName: UI/Point[/Mouse/position]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 546496435069104816}
+      - m_Target: {fileID: 0}
         m_MethodName: OnClick
         m_Mode: 0
         m_Arguments:
@@ -194,7 +181,7 @@ MonoBehaviour:
     m_ActionName: UI/MiddleClick[/Mouse/middleButton]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 546496435069104816}
+      - m_Target: {fileID: 0}
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -229,7 +216,7 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceSelect
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
-  m_DefaultActionMap: 3b5be4cb-3948-4c95-9c5c-29d42cb019fa
+  m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!212 &4904866065223827252

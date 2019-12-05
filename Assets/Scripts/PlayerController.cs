@@ -67,9 +67,6 @@ public class PlayerController : MonoBehaviour {
         forceMoveXTimer = 0;
     }
 
-    void FixedUpdate() {
-    }
-
     void Update() {
         // actions that are always possible
         HandleDirection();
@@ -100,14 +97,14 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void HandleArrowShoot() {
-        if (actions.ArrowShootPressed() && nextArrowFire < Time.time) {
+        if (actions.ArrowShootPressed && nextArrowFire < Time.time) {
             FireArrow();
             nextArrowFire = Time.time + ARROW_COOLDOWN;
         }
     }
 
     private void HandleMeleeAttack() {
-        if (actions.MeleePressed() && Time.time > nextSwingTime) {
+        if (actions.MeleePressed && Time.time > nextSwingTime) {
             nextSwingTime = Time.time + SWING_COOLDOWN;
             melee.Attack();
         }
@@ -197,7 +194,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int HookPullUpdate() {
-        if (actions.HookReleasePressed()) {
+        if (actions.HookReleasePressed) {
             ropeSystem.ResetRope();
             return FALL_STATE;
         }
@@ -218,7 +215,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int HookEndUpdate() {
-        if (actions.HookReleasePressed()) {
+        if (actions.HookReleasePressed) {
             ropeSystem.ResetRope();
             return FALL_STATE;
         }
@@ -279,7 +276,7 @@ public class PlayerController : MonoBehaviour {
         if (numArrows == 0) {
             return;
         }
-        Vector2 aimDirection = actions.CalculateAim();
+        Vector2 aimDirection = actions.Aim;
         var arrowStartPos = (Vector2)transform.position + aimDirection * ARROW_START_DIST;
         Arrow arrow = Instantiate(arrowPrefab, arrowStartPos, Quaternion.identity);
         arrow.direction = aimDirection;
@@ -287,7 +284,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void HandleCrosshair() {
-        Vector2 aimDirection = actions.CalculateAim();
+        Vector2 aimDirection = actions.Aim;
         var crossHairPosition = transform.position + (Vector3)aimDirection * 2;
         crosshair.transform.position = crossHairPosition;
     }
