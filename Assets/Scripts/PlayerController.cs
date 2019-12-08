@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour {
     public StateMachine machine;
     public WallCheck leftWallCheck;
     public WallCheck rightWallCheck;
+    public PlayerMapping PlayerChoice { get; set; }
     // movement
     public int moveX = 0;
     private int forceMoveX;
@@ -53,6 +54,9 @@ public class PlayerController : MonoBehaviour {
     public const int HOOK_PULL_STATE = 4;
     public const int HOOK_END_STATE = 5;
 
+    // EVENTS
+    public delegate void PlayerDeathHandler(int tag);
+    public static event PlayerDeathHandler OnPlayerDeath;
 
     void Start() {
         machine = gameObject.GetComponent<StateMachine>();
@@ -269,7 +273,7 @@ public class PlayerController : MonoBehaviour {
     public void Kill() {
         Destroy(gameObject);
         alive = false;
-        match.OnPlayerDeath();
+        OnPlayerDeath?.Invoke(PlayerChoice.PlayerTag);
     }
 
     private void FireArrow() {

@@ -2,20 +2,50 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public Transform[] spawns;
+    private PlayerController[] players;
+    private int numPlayers;
+
+    protected void OnEnable()
+    {
+        PlayerController.OnPlayerDeath += OnPlayerDeath;
+    }
+
+    protected void OnDisable()
+    {
+        PlayerController.OnPlayerDeath -= OnPlayerDeath;
+    }
 
     public void SpawnPlayers(List<PlayerMapping> mappings)
     {
-        Debug.Assert(mappings.Count <= PlayerManager.MAX_PLAYERS, "unsupported number of players");
+        numPlayers = mappings.Count;
+        Debug.Assert(numPlayers <= PlayerManager.MAX_PLAYERS, "unsupported number of players");
 
-        for (int i = 0; i < mappings.Count; i++)
+        players = new PlayerController[numPlayers];
+
+        for (int i = 0; i < numPlayers; i++)
         {
-            var devices = mappings[i].Controller;
-            var input = PlayerInput.Instantiate(mappings[i].Character, pairWithDevices: devices);
+            var mapping = mappings[i];
+            var devices = mapping.Controller;
+            var input = PlayerInput.Instantiate(mapping.Character, pairWithDevices: devices);
             input.transform.position = spawns[i].position;
+            var player = input.GetComponent<PlayerController>();
+            player.PlayerChoice = mapping;
+            players[i] = player;
+        }
+    }
+
+    void OnPlayerDeath(int id)
+    {
+        numPlayers -= 1;
+
+        if (numPlayers <= 1)
+        {
+            SceneManager.LoadScene("EndGame");
         }
     }
 }

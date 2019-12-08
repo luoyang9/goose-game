@@ -44,6 +44,11 @@ public class PlayerManager : MonoBehaviour
         return (status) => mappings[selectionIdx].Active = status;
     }
 
+    public void OnPressBack()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
     public void OnStartFight()
     {
         DontDestroyOnLoad(gameObject);

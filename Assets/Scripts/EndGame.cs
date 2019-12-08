@@ -8,6 +8,6 @@ public class EndGame : MonoBehaviour
     // TODO: Identify the winner once we decide on how we're identifying them
     // Eg. by name or player number
     public void OpenMenu() {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("PlayerSelection");
     }
 }
