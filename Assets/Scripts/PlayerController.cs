@@ -8,7 +8,6 @@ public class PlayerController : MonoBehaviour {
     public RopeSystem ropeSystem;
     public Transform crosshair;
     public Animator animator;
-    public Match match;
     public bool alive = true;
     public Melee melee;
     public SpriteRenderer sprite;
