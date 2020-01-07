@@ -86,6 +86,11 @@ public class PlayerController : MonoBehaviour {
         UpdateAnimator();
     }
 
+    void OnBecameInvisible() {
+        // Kills player if they fall off the map
+        Kill();
+    }
+
     private void UpdateAnimator() {
         animator.SetInteger("CurrentState", machine.CurrentState);
     }
