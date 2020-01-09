@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public Camera camera;
     public Transform[] spawns;
     private PlayerController[] players;
     private int numPlayers;
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour
             input.transform.position = spawns[i].position;
             var player = input.GetComponent<PlayerController>();
             player.PlayerChoice = mapping;
+            player.Camera = camera;
             players[i] = player;
         }
     }
