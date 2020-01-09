@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour {
     public int numArrows = START_ARROWS;
     public float nextArrowFire = 0f;
     public Arrow arrowPrefab;
+    public Text arrowCountText;
     // melee
     private float nextSwingTime = 0;
 
@@ -88,6 +90,7 @@ public class PlayerController : MonoBehaviour {
             moveX = forceMoveX;
         }
 
+        arrowCountText.text = "Arrows: " + numArrows.ToString();
         UpdateAnimator();
     }
 
