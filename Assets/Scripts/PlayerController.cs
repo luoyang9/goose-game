@@ -218,7 +218,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int HookEndUpdate() {
-        if (actions.HookReleasePressed) {
+        if (actions.HookReleasePressed || actions.HorizontalDirection != 0) {
             ropeSystem.ResetRope();
             return FALL_STATE;
         }
