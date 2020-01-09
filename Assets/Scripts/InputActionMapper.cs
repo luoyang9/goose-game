@@ -12,6 +12,7 @@ public class InputActionMapper: MonoBehaviour {
     private InputAction hookShoot;
     private InputAction melee;
     private InputAction aim;
+    private InputAction forceField;
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class InputActionMapper: MonoBehaviour {
         hookShoot = actions["HookShoot"];
         melee = actions["Melee"];
         aim = actions["Aim"];
+        forceField = actions["ForceField"];
     }
     
     public bool JumpPressed {
@@ -89,5 +91,9 @@ public class InputActionMapper: MonoBehaviour {
             }
             return direction;
         }
+    }
+
+    public bool ForceFieldPressed {
+        get { return forceField.ReadValue<float>() > 0.5f; }
     }
 }

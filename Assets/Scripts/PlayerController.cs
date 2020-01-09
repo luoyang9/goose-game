@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour {
     public Arrow arrowPrefab;
     // melee
     private float nextSwingTime = 0;
+    public GameObject forceField;
 
     // CONSTANTS
     // Movement
@@ -56,6 +57,7 @@ public class PlayerController : MonoBehaviour {
     public const int HOOK_PULL_STATE = 4;
     public const int HOOK_END_STATE = 5;
     public const int FALL_THROUGH_PLATFORM_STATE = 6;
+    public const int FORCE_FIELD_STATE = 7;
 
     // EVENTS
     public delegate void PlayerDeathHandler(int tag);
@@ -70,6 +72,8 @@ public class PlayerController : MonoBehaviour {
         machine.RegisterState(HOOK_PULL_STATE, HookPullUpdate, null, null);
         machine.RegisterState(HOOK_END_STATE, HookEndUpdate, null, null);
         machine.RegisterState(FALL_THROUGH_PLATFORM_STATE, FallThroughUpdate, null, null);
+        machine.RegisterState(FORCE_FIELD_STATE, ForceFieldUpdate, null, null);
+
         forceMoveX = 0;
         forceMoveXTimer = 0;
     }
@@ -147,6 +151,10 @@ public class PlayerController : MonoBehaviour {
         if (moveX != 0) {
             return RUN_STATE;
         }
+        // force field
+        if (actions.ForceFieldPressed) {
+            return FORCE_FIELD_STATE;
+        }
 
         return IDLE_STATE;
     }
@@ -164,6 +172,10 @@ public class PlayerController : MonoBehaviour {
         // fall through platforms
         if (actions.DownPressed && groundCheck.isTouchingPlatform()) {
             return FALL_THROUGH_PLATFORM_STATE;
+        }
+        // force field
+        if (actions.ForceFieldPressed) {
+            return FORCE_FIELD_STATE;
         }
         // falling
         if (rBody.velocity.y < -0.001) {
@@ -265,6 +277,12 @@ public class PlayerController : MonoBehaviour {
             return JUMP_STATE;
         }
         return HOOK_END_STATE;
+    }
+
+    private int ForceFieldUpdate() {
+        forceField.SetActive(actions.ForceFieldPressed);
+        if (!actions.ForceFieldPressed) return IDLE_STATE;
+        return FORCE_FIELD_STATE;
     }
 
     private void JumpBegin() {
