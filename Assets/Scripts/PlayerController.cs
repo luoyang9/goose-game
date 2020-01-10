@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour {
     public StateMachine machine;
     public WallCheck leftWallCheck;
     public WallCheck rightWallCheck;
+    public GroundCheck groundCheck;
     public PlayerMapping PlayerChoice { get; set; }
     // movement
     public int moveX = 0;
@@ -38,6 +39,7 @@ public class PlayerController : MonoBehaviour {
     private const float WALL_JUMP_FORCE_TIME = 0.1f;
     private const float WALL_SLIDE_DRAG = 20f;
     public const float MAX_FALL = 25f;
+    public const float FALL_THROUGH_SPEED = 0.5f;
     // Arrows
     public const float ARROW_COOLDOWN = 0.5f;
     public const float ARROW_START_DIST = 2f;
@@ -52,6 +54,7 @@ public class PlayerController : MonoBehaviour {
     public const int FALL_STATE = 3;
     public const int HOOK_PULL_STATE = 4;
     public const int HOOK_END_STATE = 5;
+    public const int FALL_THROUGH_PLATFORM_STATE = 6;
 
     // EVENTS
     public delegate void PlayerDeathHandler(int tag);
@@ -65,7 +68,7 @@ public class PlayerController : MonoBehaviour {
         machine.RegisterState(FALL_STATE, FallUpdate, null, FallEnd);
         machine.RegisterState(HOOK_PULL_STATE, HookPullUpdate, null, null);
         machine.RegisterState(HOOK_END_STATE, HookEndUpdate, null, null);
-
+        machine.RegisterState(FALL_THROUGH_PLATFORM_STATE, FallThroughUpdate, null, null);
         forceMoveX = 0;
         forceMoveXTimer = 0;
     }
@@ -96,7 +99,6 @@ public class PlayerController : MonoBehaviour {
             Facing = moveX;
         }
         sprite.flipX = Facing < 0;
-
     }
 
     private void HandleArrowShoot() {
@@ -124,6 +126,10 @@ public class PlayerController : MonoBehaviour {
         if (actions.JumpPressed) {
             return JUMP_STATE;
         }
+        // fall through platforms
+        if (actions.FallPressed && groundCheck.isTouchingPlatform()) {
+            return FALL_THROUGH_PLATFORM_STATE;
+        }
         // falling
         if (rBody.velocity.y < -0.001) {
             return FALL_STATE;
@@ -146,6 +152,10 @@ public class PlayerController : MonoBehaviour {
         if (actions.JumpPressed) {
             return JUMP_STATE;
         }
+        // fall through platforms
+        if (actions.FallPressed && groundCheck.isTouchingPlatform()) {
+            return FALL_THROUGH_PLATFORM_STATE;
+        }
         // falling
         if (rBody.velocity.y < -0.001) {
             return FALL_STATE;
@@ -156,6 +166,16 @@ public class PlayerController : MonoBehaviour {
         }
 
         return RUN_STATE;
+    }
+
+    private int FallThroughUpdate() {
+        if (!groundCheck.isTouchingPlatform()) {
+            return FALL_STATE;
+        }
+        Vector2 position = rBody.position;
+        position.y -= FALL_THROUGH_SPEED;
+        rBody.position = position;
+        return FALL_THROUGH_PLATFORM_STATE;
     }
 
     private int JumpUpdate() {
@@ -197,7 +217,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int HookPullUpdate() {
-        if (actions.HookReleasePressed) {
+        if (actions.FallPressed) {
             ropeSystem.ResetRope();
             return FALL_STATE;
         }
@@ -218,7 +238,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int HookEndUpdate() {
-        if (actions.HookReleasePressed || actions.HorizontalDirection != 0) {
+        if (actions.FallPressed || actions.HorizontalDirection != 0) {
             ropeSystem.ResetRope();
             return FALL_STATE;
         }
