@@ -7,7 +7,7 @@ public class ForceField : MonoBehaviour
     private int arrowLayer;
     private InputActionMapper input;
 
-    private void Start() {
+    private void Awake() {
         arrowLayer = LayerMask.NameToLayer("Arrow");
         input = GetComponentInParent<InputActionMapper>();
     }
@@ -17,6 +17,7 @@ public class ForceField : MonoBehaviour
             var arrow = collision.GetComponent<Arrow>();
             var direction = input.Aim;
             var arrowStartPos = (Vector2)transform.position + direction * PlayerController.ARROW_START_DIST;
+            arrow.transform.position = arrowStartPos;
             arrow.direction = direction;
             arrow.rbody.velocity = direction * Arrow.ARROW_SPEED;
         }

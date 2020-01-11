@@ -28,6 +28,7 @@ public class Arrow : MonoBehaviour
     }
 
     void FixedUpdate() {
+        UpdateScale();
         UpdateAngle();
     }
 
@@ -51,7 +52,7 @@ public class Arrow : MonoBehaviour
     }
 
     private void UpdateScale() {
-        if (direction.x < 0) {
+        if (direction.x * transform.localScale.x < 0) {
             var scale = transform.localScale;
             scale.x = -transform.localScale.x;
             transform.localScale = scale;

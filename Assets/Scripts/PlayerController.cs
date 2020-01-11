@@ -29,7 +29,10 @@ public class PlayerController : MonoBehaviour {
     public Arrow arrowPrefab;
     // melee
     private float nextSwingTime = 0;
+    // force field
     public GameObject forceField;
+    private float lagTimer;
+    private bool InLag { get { return lagTimer > 0; } }
 
     // CONSTANTS
     // Movement
@@ -83,13 +86,16 @@ public class PlayerController : MonoBehaviour {
         CheckIfOffScreen();
         HandleDirection();
         HandleCrosshair();
-        HandleArrowShoot();
         HandleMeleeAttack();
 
         // force moving direction
         if (forceMoveXTimer > 0) {
             forceMoveXTimer -= Time.deltaTime;
             moveX = forceMoveX;
+        }
+
+        if (InLag) {
+            lagTimer -= Time.deltaTime;
         }
 
         UpdateAnimator();
@@ -129,6 +135,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int IdleUpdate() {
+        ropeSystem.HandleShootHook();
+        HandleArrowShoot();
         // friction
         Vector2 velocity = rBody.velocity;
         if (velocity.x != 0) {
@@ -136,7 +144,7 @@ public class PlayerController : MonoBehaviour {
         }
         rBody.velocity = velocity;
         // jump
-        if (actions.JumpPressed) {
+        if (!InLag && actions.JumpPressed) {
             return JUMP_STATE;
         }
         // fall through platformsF
@@ -152,7 +160,7 @@ public class PlayerController : MonoBehaviour {
             return RUN_STATE;
         }
         // force field
-        if (actions.ForceFieldPressed) {
+        if (!InLag && actions.ForceFieldPressed) {
             return FORCE_FIELD_STATE;
         }
 
@@ -160,13 +168,15 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int RunUpdate() {
+        ropeSystem.HandleShootHook();
+        HandleArrowShoot();
         // move
         Vector2 velocity = rBody.velocity;
         velocity.x = moveX * MAX_MOVEMENT_SPEED;
         rBody.velocity = velocity;
 
         // jump
-        if (actions.JumpPressed) {
+        if (!InLag && actions.JumpPressed) {
             return JUMP_STATE;
         }
         // fall through platforms
@@ -174,7 +184,7 @@ public class PlayerController : MonoBehaviour {
             return FALL_THROUGH_PLATFORM_STATE;
         }
         // force field
-        if (actions.ForceFieldPressed) {
+        if (!InLag && actions.ForceFieldPressed) {
             return FORCE_FIELD_STATE;
         }
         // falling
@@ -201,6 +211,9 @@ public class PlayerController : MonoBehaviour {
 
     private int JumpUpdate() {
         Airborne();
+        ropeSystem.HandleShootHook();
+        HandleArrowShoot();
+
         if (rBody.velocity.y < 0) {
             return FALL_STATE;
         }
@@ -213,6 +226,8 @@ public class PlayerController : MonoBehaviour {
             return IDLE_STATE;
         }
         Airborne();
+        ropeSystem.HandleShootHook();
+        HandleArrowShoot();
         // wall slide
         if (moveX == -1 && leftWallCheck.Touching || moveX == 1 && rightWallCheck.Touching) {
             // decelerate up to a max sliding velocity
@@ -242,6 +257,8 @@ public class PlayerController : MonoBehaviour {
             ropeSystem.ResetRope();
             return FALL_STATE;
         }
+        ropeSystem.HandleShootHook();
+        HandleArrowShoot();
         // autorappel
         var hookVelocity = (hookPosition - (Vector2)transform.position).normalized * PULL_SPEED;
         rBody.velocity = hookVelocity;
@@ -263,6 +280,8 @@ public class PlayerController : MonoBehaviour {
             ropeSystem.ResetRope();
             return FALL_STATE;
         }
+        ropeSystem.HandleShootHook();
+        HandleArrowShoot();
 
         if (actions.JumpPressed) {
             ropeSystem.ResetRope();
@@ -279,10 +298,22 @@ public class PlayerController : MonoBehaviour {
         return HOOK_END_STATE;
     }
 
+    public const float MAX_FORCE_FIELD_DURATION = 2;
+    private float forceFieldTimer = MAX_FORCE_FIELD_DURATION;
     private int ForceFieldUpdate() {
-        forceField.SetActive(actions.ForceFieldPressed);
-        if (!actions.ForceFieldPressed) return IDLE_STATE;
-        return FORCE_FIELD_STATE;
+        // if pressed, start timer for lag
+        if (actions.ForceFieldPressed && forceFieldTimer > 0) {
+            forceField.SetActive(true);
+            // holding
+            forceFieldTimer -= Time.deltaTime; // todo: don't subtract time on the first press
+
+            return FORCE_FIELD_STATE;
+        }
+        // let go/ run out
+        forceField.SetActive(false);
+        forceFieldTimer = MAX_FORCE_FIELD_DURATION;
+        lagTimer = 0.4f;
+        return IDLE_STATE;
     }
 
     private void JumpBegin() {

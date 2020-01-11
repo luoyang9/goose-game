@@ -8,7 +8,6 @@ public class RopeSystem : MonoBehaviour {
     private StateMachine machine;
     private float nextFire = 0;
     private bool ropeAttached;
-    private List<Vector2> ropePositions = new List<Vector2>();
 
     public DistanceJoint2D ropeJoint;
     public LineRenderer ropeRenderer;
@@ -33,14 +32,13 @@ public class RopeSystem : MonoBehaviour {
 
     void Update() {
         UpdateRope();
-        HandleShootHook();
     }
 
     void FixedUpdate() {
         HandleRopeLength();
     }
 
-    private void HandleShootHook() {
+    public void HandleShootHook() {
         if (actions.HookShootPressed) {
             if (Time.time <= nextFire) return;
             nextFire = Time.time + FIRE_DELAY;
