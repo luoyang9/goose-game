@@ -5590,6 +5590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9343143a6f6460088140a416506c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  camera: {fileID: 1530025136}
   spawns:
   - {fileID: 1298721040}
   - {fileID: 1263350115}
