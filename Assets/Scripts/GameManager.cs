@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
             input.transform.position = spawns[i].position;
             var player = input.GetComponent<PlayerController>();
             player.PlayerChoice = mapping;
-            player.Camera = camera;
+            player.gameCamera = camera;
             players[i] = player;
         }
     }

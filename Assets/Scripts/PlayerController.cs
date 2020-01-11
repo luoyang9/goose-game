@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
     // VARIABLES
-    public Camera Camera { get; set; }
+    public Camera gameCamera { get; set; }
     public InputActionMapper actions;
     public Vector2 hookPosition;
     public RopeSystem ropeSystem;
@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void CheckIfOffScreen() {
-        var pos = Camera.WorldToScreenPoint(transform.position);
+        var pos = gameCamera.WorldToScreenPoint(transform.position);
         if (!Screen.safeArea.Contains(pos)) {
             Kill();
         }
