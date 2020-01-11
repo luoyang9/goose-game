@@ -3,6 +3,7 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
     // VARIABLES
+    public Camera gameCamera { get; set; }
     public InputActionMapper actions;
     public Vector2 hookPosition;
     public RopeSystem ropeSystem;
@@ -75,6 +76,7 @@ public class PlayerController : MonoBehaviour {
 
     void Update() {
         // actions that are always possible
+        CheckIfOffScreen();
         HandleDirection();
         HandleCrosshair();
         HandleArrowShoot();
@@ -91,6 +93,13 @@ public class PlayerController : MonoBehaviour {
 
     private void UpdateAnimator() {
         animator.SetInteger("CurrentState", machine.CurrentState);
+    }
+
+    private void CheckIfOffScreen() {
+        var pos = gameCamera.WorldToScreenPoint(transform.position);
+        if (!Screen.safeArea.Contains(pos)) {
+            Kill();
+        }
     }
 
     private void HandleDirection() {
