@@ -126,8 +126,8 @@ public class PlayerController : MonoBehaviour {
         if (actions.JumpPressed) {
             return JUMP_STATE;
         }
-        // fall through platforms
-        if (actions.FallPressed && groundCheck.isTouchingPlatform()) {
+        // fall through platformsF
+        if (actions.DownPressed && groundCheck.isTouchingPlatform()) {
             return FALL_THROUGH_PLATFORM_STATE;
         }
         // falling
@@ -153,7 +153,7 @@ public class PlayerController : MonoBehaviour {
             return JUMP_STATE;
         }
         // fall through platforms
-        if (actions.FallPressed && groundCheck.isTouchingPlatform()) {
+        if (actions.DownPressed && groundCheck.isTouchingPlatform()) {
             return FALL_THROUGH_PLATFORM_STATE;
         }
         // falling
@@ -217,7 +217,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int HookPullUpdate() {
-        if (actions.FallPressed) {
+        if (actions.DownPressed) {
             ropeSystem.ResetRope();
             return FALL_STATE;
         }
@@ -238,7 +238,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int HookEndUpdate() {
-        if (actions.FallPressed || actions.HorizontalDirection != 0) {
+        if (actions.DownPressed || actions.HorizontalDirection != 0) {
             ropeSystem.ResetRope();
             return FALL_STATE;
         }

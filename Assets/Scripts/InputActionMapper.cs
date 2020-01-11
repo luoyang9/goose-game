@@ -53,7 +53,7 @@ public class InputActionMapper: MonoBehaviour {
         get { return arrowShoot.ReadValue<float>() > 0.5f; }
     }
 
-    public bool FallPressed {
+    public bool DownPressed {
         get
         {
             var direction = move.ReadValue<Vector2>();
