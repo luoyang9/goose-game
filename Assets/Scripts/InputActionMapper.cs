@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public class InputActionMapper: MonoBehaviour {
     public PlayerInput playerInput;
 
+    private Vector2 lastAimDirection;
     private InputActionAsset actions;
     private InputAction jump;
     private InputAction move;
@@ -15,6 +16,7 @@ public class InputActionMapper: MonoBehaviour {
 
     private void Awake()
     {
+        lastAimDirection = new Vector2(0, 1);
         actions = playerInput.actions;
         jump = actions["Jump"];
         move = actions["Move"];
@@ -83,8 +85,13 @@ public class InputActionMapper: MonoBehaviour {
                     direction = ((Vector2)worldMousePosition - (Vector2)transform.position).normalized;
                     break;
                 default:
-                    var stickDirection = aim.ReadValue<Vector2>();
-                    direction = stickDirection == Vector2.zero ? new Vector2(0, 1) : stickDirection;
+                    var aimDirection = aim.ReadValue<Vector2>();
+                    var moveDirection = move.ReadValue<Vector2>();
+                    direction = aimDirection == Vector2.zero 
+                        ? (moveDirection == Vector2.zero ? lastAimDirection : moveDirection)
+                        : aimDirection;
+                    direction = direction.normalized;
+                    lastAimDirection = direction;
                     break;
             }
             return direction;
