@@ -226,7 +226,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int HookPullUpdate() {
-        if (actions.DownPressed) {
+        if (actions.DownPressed || actions.JumpPressed) {
             ropeSystem.ResetRope();
             return FALL_STATE;
         }
@@ -259,7 +259,8 @@ public class PlayerController : MonoBehaviour {
             } else if (WallJumpCheck(1)) {
                 WallJump(-1);
             } else {
-                // todo: put jump logic here
+                ropeSystem.ResetRope();
+                return FALL_STATE;
             }
             return JUMP_STATE;
         }
