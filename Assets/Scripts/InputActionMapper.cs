@@ -39,8 +39,8 @@ public class InputActionMapper: MonoBehaviour {
             var direction = move.ReadValue<Vector2>();
             int ret;
 
-            if (direction.x > 0) ret = 1;
-            else if (direction.x < 0) ret = -1;
+            if (direction.x > 0.5f) ret = 1;
+            else if (direction.x < -0.5f) ret = -1;
             else ret = 0;
 
             return ret;
