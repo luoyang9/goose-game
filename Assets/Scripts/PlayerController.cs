@@ -35,12 +35,14 @@ public class PlayerController : MonoBehaviour {
     public const float FRICTION = 0.2f;
     public const float PULL_SPEED = 30f;
     public const float JUMP_VELOCITY = 30f;
+    public const float MOVEMENT_ACCELERATION = 6f;
     public const float MAX_MOVEMENT_SPEED = 18f;
     private const float WALL_JUMP_H_SPEED = 8f;
     private const float WALL_JUMP_FORCE_TIME = 0.1f;
     private const float WALL_SLIDE_DRAG = 20f;
-    public const float MAX_FALL = 25f;
+    public const float MAX_FALL = 18f;
     public const float FALL_THROUGH_SPEED = 0.5f;
+    public const float AIR_DRAG = 1f;
     // Arrows
     public const float ARROW_COOLDOWN = 0.5f;
     public const float ARROW_START_DIST = 2f;
@@ -154,7 +156,8 @@ public class PlayerController : MonoBehaviour {
     private int RunUpdate() {
         // move
         Vector2 velocity = rBody.velocity;
-        velocity.x = moveX * MAX_MOVEMENT_SPEED;
+        velocity.x += moveX * MOVEMENT_ACCELERATION;
+        velocity.x = clampMoveSpeed(velocity.x);
         rBody.velocity = velocity;
 
         // jump
@@ -170,7 +173,7 @@ public class PlayerController : MonoBehaviour {
             return FALL_STATE;
         }
         // idle
-        if (Mathf.Abs(rBody.velocity.x) < 0.001) {
+        if (moveX == 0) {
             return IDLE_STATE;
         }
 
@@ -293,7 +296,10 @@ public class PlayerController : MonoBehaviour {
         Vector2 velocity = rBody.velocity;
         if (forceMoveXTimer <= 0 && moveX != 0) {
             // Horizontal air movement
-            velocity.x = moveX * MAX_MOVEMENT_SPEED;
+            velocity.x += moveX * MOVEMENT_ACCELERATION;
+            velocity.x = clampMoveSpeed(velocity.x);
+        } else {
+            velocity.x -= velocity.x > 0 ? AIR_DRAG : -AIR_DRAG;
         }
         velocity.y = Mathf.Max(-MAX_FALL, velocity.y);
         rBody.velocity = velocity;
@@ -321,4 +327,9 @@ public class PlayerController : MonoBehaviour {
         var crossHairPosition = transform.position + (Vector3)aimDirection * 2;
         crosshair.transform.position = crossHairPosition;
     }
+
+    private float clampMoveSpeed(float velocityX) {
+        return (velocityX > 0 ? 1f : -1f) * Mathf.Min(Mathf.Abs(velocityX), MAX_MOVEMENT_SPEED);
+    }
+
 }
