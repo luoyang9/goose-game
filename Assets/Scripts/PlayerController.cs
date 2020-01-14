@@ -298,8 +298,9 @@ public class PlayerController : MonoBehaviour {
             // Horizontal air movement
             velocity.x += moveX * MOVEMENT_ACCELERATION;
             velocity.x = clampMoveSpeed(velocity.x);
-        } else {
-            velocity.x -= velocity.x > 0 ? AIR_DRAG : -AIR_DRAG;
+        } else if (velocity.x != 0) {
+            var airDrag = Mathf.Min(Mathf.Abs(velocity.x), AIR_DRAG);
+            velocity.x -= velocity.x > 0 ? airDrag : -airDrag;
         }
         velocity.y = Mathf.Max(-MAX_FALL, velocity.y);
         rBody.velocity = velocity;
