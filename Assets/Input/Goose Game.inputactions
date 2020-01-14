@@ -288,6 +288,17 @@
                 },
                 {
                     "name": "",
+                    "id": "534a24cd-a2f5-4944-ab64-9f6e7ca7f4aa",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "HookShoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "8c51e16f-7609-42b2-a9d6-43ff1f8f3043",
                     "path": "<Keyboard>/f",
                     "interactions": "",
