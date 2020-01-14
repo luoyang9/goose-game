@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2854233066694896765}
   - component: {fileID: 7605518071071815002}
-  - component: {fileID: 4904866065223827252}
+  - component: {fileID: 2035027779737674478}
+  - component: {fileID: 5205966020759154696}
   m_Layer: 0
   m_Name: GameLobbyPlayer
   m_TagString: Untagged
@@ -52,7 +53,7 @@ MonoBehaviour:
   m_Actions: {fileID: -944628639613478452, guid: d80d7c671c79a4663a165a0a38e5cb17,
     type: 3}
   m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
+  m_UIInputModule: {fileID: 5205966020759154696}
   m_DeviceLostEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -216,55 +217,60 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceSelect
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
-  m_DefaultActionMap: Player
+  m_DefaultActionMap: UI
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!212 &4904866065223827252
-SpriteRenderer:
+--- !u!114 &2035027779737674478
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4485563698593125436}
   m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -979931886528107223, guid: 78744a2bd9aeb460a825c0bbd827c474,
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b16c6f78230fa4964a222622d8aae332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+  m_PlayerRoot: {fileID: 0}
+--- !u!114 &5205966020759154696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4485563698593125436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RepeatDelay: 0.5
+  m_RepeatRate: 0.1
+  m_ActionsAsset: {fileID: -944628639613478452, guid: d80d7c671c79a4663a165a0a38e5cb17,
     type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_PointAction: {fileID: 1054132383583890850, guid: d80d7c671c79a4663a165a0a38e5cb17,
+    type: 3}
+  m_MoveAction: {fileID: 3710738434707379630, guid: d80d7c671c79a4663a165a0a38e5cb17,
+    type: 3}
+  m_SubmitAction: {fileID: 2064916234097673511, guid: d80d7c671c79a4663a165a0a38e5cb17,
+    type: 3}
+  m_CancelAction: {fileID: -1967631576421560919, guid: d80d7c671c79a4663a165a0a38e5cb17,
+    type: 3}
+  m_LeftClickAction: {fileID: 8056856818456041789, guid: d80d7c671c79a4663a165a0a38e5cb17,
+    type: 3}
+  m_MiddleClickAction: {fileID: 3279352641294131588, guid: d80d7c671c79a4663a165a0a38e5cb17,
+    type: 3}
+  m_RightClickAction: {fileID: 3837173908680883260, guid: d80d7c671c79a4663a165a0a38e5cb17,
+    type: 3}
+  m_ScrollWheelAction: {fileID: 4502412055082496612, guid: d80d7c671c79a4663a165a0a38e5cb17,
+    type: 3}
+  m_TrackedDevicePositionAction: {fileID: 4754684134866288074, guid: d80d7c671c79a4663a165a0a38e5cb17,
+    type: 3}
+  m_TrackedDeviceOrientationAction: {fileID: 1025543830046995696, guid: d80d7c671c79a4663a165a0a38e5cb17,
+    type: 3}
+  m_TrackedDeviceSelectAction: {fileID: 2559092417903258184, guid: d80d7c671c79a4663a165a0a38e5cb17,
+    type: 3}

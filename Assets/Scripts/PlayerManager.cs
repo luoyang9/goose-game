@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -81,6 +83,7 @@ public class PlayerManager : MonoBehaviour
 
     private void OnPlayerJoined(PlayerInput player)
     {
+        // update mapping
         var devices = new InputDevice[player.devices.Count];
         for (int i = 0; i < player.devices.Count; i++)
         {
@@ -88,11 +91,15 @@ public class PlayerManager : MonoBehaviour
         }
         var mapping = new PlayerMapping(playerAddIdx, devices, null);
         mappings[playerAddIdx] = mapping;
-
+        // update UI
         var selection = playerSelections[playerAddIdx];
         selection.gameObject.SetActive(true);
         selection.SetTagText($"P{playerAddIdx + 1}");
         selection.SetControllerText(player.currentControlScheme);
+        // connect player to UI
+        var evtSystem = player.GetComponent<MultiplayerEventSystem>();
+        evtSystem.playerRoot = selection.gameObject;
+        evtSystem.firstSelectedGameObject = selection.GetComponentInChildren<Button>().gameObject;
 
         playerAddIdx += 1;
     }
