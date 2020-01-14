@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
 
     public int GetWinnerId() {
         // Assumes only one player left at this point
-        for (int i = 0; i < numPlayers; i++) {
+        for (int i = 0; i < players.Length; i++) {
             if (players[i].alive) {
                 return i;
             }
