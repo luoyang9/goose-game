@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInput))]
@@ -14,6 +15,11 @@ public class InputActionMapper: MonoBehaviour {
     private InputAction melee;
     private InputAction aim;
 
+    public event Action Jump;
+    public event Action ArrowShoot;
+    public event Action HookShoot;
+    public event Action Melee;
+
     private void Awake()
     {
         lastAimDirection = new Vector2(0, 1);
@@ -25,9 +31,35 @@ public class InputActionMapper: MonoBehaviour {
         melee = actions["Melee"];
         aim = actions["Aim"];
     }
-    
-    public bool JumpPressed {
-        get { return jump.ReadValue<float>() > 0.5f; }
+
+    private void OnEnable() {
+        jump.performed += OnJump;
+        arrowShoot.performed += OnArrowShoot;
+        hookShoot.performed += OnHookShoot;
+        melee.performed += OnMelee;
+    }
+
+    private void OnDisable() {
+        jump.performed -= OnJump;
+        arrowShoot.performed -= OnArrowShoot;
+        hookShoot.performed -= OnHookShoot;
+        melee.performed -= OnMelee;
+    }
+
+    private void OnJump(InputAction.CallbackContext c) {
+        Jump?.Invoke();
+    }
+
+    private void OnArrowShoot(InputAction.CallbackContext c) {
+        ArrowShoot?.Invoke();
+    }
+
+    private void OnHookShoot(InputAction.CallbackContext c) {
+        HookShoot?.Invoke();
+    }
+
+    private void OnMelee(InputAction.CallbackContext c) {
+        Melee?.Invoke();
     }
 
     /**
@@ -47,24 +79,12 @@ public class InputActionMapper: MonoBehaviour {
         }
     }
 
-    public bool HookShootPressed {
-        get { return hookShoot.ReadValue<float>() > 0.5f; }
-    }
-
-    public bool ArrowShootPressed {
-        get { return arrowShoot.ReadValue<float>() > 0.5f; }
-    }
-
     public bool DownPressed {
         get
         {
             var direction = move.ReadValue<Vector2>();
             return direction.y < -0.5f;
         }
-    }
-
-    public bool MeleePressed {
-        get { return melee.ReadValue<float>() > 0.5f; }
     }
 
     /**

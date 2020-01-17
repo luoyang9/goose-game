@@ -18,8 +18,8 @@ public class StateMachine : MonoBehaviour {
             if (value != currentState) {
                 Action end = endMap[currentState];
                 Action begin = beginMap[value];
-                if (end != null) end();
-                if (begin != null) begin();
+                end?.Invoke();
+                begin?.Invoke();
             }
             currentState = value;
         }
