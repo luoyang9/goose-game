@@ -38,6 +38,12 @@ public class RopeSystem : MonoBehaviour {
         HandleRopeLength();
     }
 
+    private void OnDestroy() {
+        if (grapplingHookTransform != null) {
+            Destroy(grapplingHookTransform.gameObject);
+        }
+    }
+
     public void HandleShootHook() {
         if (actions.HookShootPressed) {
             if (Time.time <= nextFire) return;
