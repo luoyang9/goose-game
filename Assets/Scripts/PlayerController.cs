@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour {
     private float nextSwingTime = 0;
     // force field
     public GameObject forceField;
+    private float forceFieldTimer = MAX_FORCE_FIELD_DURATION;
     private float lagTimer;
     private bool InLag { get { return lagTimer > 0; } }
 
@@ -54,6 +55,8 @@ public class PlayerController : MonoBehaviour {
     // Melee
     public const float SWING_COOLDOWN = 0.5f;
     public const float SWING_TIME = 0.1f;
+    // force field
+    public const float MAX_FORCE_FIELD_DURATION = 2;
     // states
     public const int IDLE_STATE = 0;
     public const int RUN_STATE = 1;
@@ -301,8 +304,6 @@ public class PlayerController : MonoBehaviour {
         return HOOK_END_STATE;
     }
 
-    public const float MAX_FORCE_FIELD_DURATION = 2;
-    private float forceFieldTimer = MAX_FORCE_FIELD_DURATION;
     private int ForceFieldUpdate() {
         // if pressed, start timer for lag
         if (actions.ForceFieldPressed && forceFieldTimer > 0) {
