@@ -4,12 +4,12 @@ using UnityEngine.InputSystem.Utilities;
 
 public class PlayerMapping
 {
-    public int PlayerTag { get; private set; }
+    public string PlayerTag { get; private set; }
     public InputDevice[] Controller { get; private set; }
     public GameObject Character { get; set; }
     public bool Active { get; set; }
 
-    public PlayerMapping(int tag, InputDevice[] controller, GameObject character)
+    public PlayerMapping(string tag, InputDevice[] controller, GameObject character)
     {
         PlayerTag = tag;
         Controller = controller;

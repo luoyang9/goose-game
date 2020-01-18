@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour {
     public const int FORCE_FIELD_STATE = 7;
 
     // EVENTS
-    public delegate void PlayerDeathHandler(int tag);
+    public delegate void PlayerDeathHandler(string tag);
     public static event PlayerDeathHandler OnPlayerDeath;
 
     void Start() {
@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour {
 
         forceMoveX = 0;
         forceMoveXTimer = 0;
-        playerLabel.text = "Player " + (PlayerChoice.PlayerTag + 1).ToString();
+        playerLabel.text = PlayerChoice.PlayerTag;
     }
 
     private void OnEnable() {
