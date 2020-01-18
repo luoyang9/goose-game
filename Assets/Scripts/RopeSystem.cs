@@ -33,7 +33,6 @@ public class RopeSystem : MonoBehaviour {
 
     void Update() {
         UpdateRope();
-        HandleShootHook();
     }
 
     void FixedUpdate() {
@@ -46,17 +45,15 @@ public class RopeSystem : MonoBehaviour {
         }
     }
 
-    private void HandleShootHook() {
-        if (actions.HookShootPressed) {
-            if (Time.time <= nextFire) return;
-            nextFire = Time.time + FIRE_DELAY;
-            if (grapplingHookTransform != null) {
-                if (!ropeAttached) return; // wait for hook to return
-                ResetRope();
-            }
-            var aimDirection = actions.Aim;
-            ShootHook(aimDirection);
+    public void AttemptShootHook() {
+        if (Time.time <= nextFire) return;
+        nextFire = Time.time + FIRE_DELAY;
+        if (grapplingHookTransform != null) {
+            if (!ropeAttached) return; // wait for hook to return
+            ResetRope();
         }
+        var aimDirection = actions.Aim;
+        ShootHook(aimDirection);
     }
 
     private void UpdateRope() {

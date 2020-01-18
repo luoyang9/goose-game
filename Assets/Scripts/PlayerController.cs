@@ -76,13 +76,25 @@ public class PlayerController : MonoBehaviour {
         forceMoveXTimer = 0;
     }
 
+    private void OnEnable() {
+        actions.Jump += OnJump;
+        actions.ArrowShoot += OnArrowShoot;
+        actions.HookShoot += OnHookShoot;
+        actions.Melee += OnMeleeAttack;
+    }
+
+    private void OnDisable() {
+        actions.Jump -= OnJump;
+        actions.ArrowShoot -= OnArrowShoot;
+        actions.HookShoot -= OnHookShoot;
+        actions.Melee -= OnMeleeAttack;
+    }
+
     void Update() {
         // actions that are always possible
         CheckIfOffScreen();
         HandleDirection();
         HandleCrosshair();
-        HandleArrowShoot();
-        HandleMeleeAttack();
 
         // force moving direction
         if (forceMoveXTimer > 0) {
@@ -112,20 +124,6 @@ public class PlayerController : MonoBehaviour {
         sprite.flipX = Facing < 0;
     }
 
-    private void HandleArrowShoot() {
-        if (actions.ArrowShootPressed && nextArrowFire < Time.time) {
-            FireArrow();
-            nextArrowFire = Time.time + ARROW_COOLDOWN;
-        }
-    }
-
-    private void HandleMeleeAttack() {
-        if (actions.MeleePressed && Time.time > nextSwingTime) {
-            nextSwingTime = Time.time + SWING_COOLDOWN;
-            melee.Attack();
-        }
-    }
-
     private int IdleUpdate() {
         // friction
         Vector2 velocity = rBody.velocity;
@@ -133,10 +131,6 @@ public class PlayerController : MonoBehaviour {
             velocity.x -= FRICTION * velocity.x;
         }
         rBody.velocity = velocity;
-        // jump
-        if (actions.JumpPressed) {
-            return JUMP_STATE;
-        }
         // fall through platformsF
         if (actions.DownPressed && groundCheck.isTouchingPlatform()) {
             return FALL_THROUGH_PLATFORM_STATE;
@@ -157,13 +151,9 @@ public class PlayerController : MonoBehaviour {
         // move
         Vector2 velocity = rBody.velocity;
         velocity.x += moveX * MOVEMENT_ACCELERATION;
-        velocity.x = clampMoveSpeed(velocity.x);
+        velocity.x = ClampMoveSpeed(velocity.x);
         rBody.velocity = velocity;
 
-        // jump
-        if (actions.JumpPressed) {
-            return JUMP_STATE;
-        }
         // fall through platforms
         if (actions.DownPressed && groundCheck.isTouchingPlatform()) {
             return FALL_THROUGH_PLATFORM_STATE;
@@ -211,16 +201,6 @@ public class PlayerController : MonoBehaviour {
         } else {
             rBody.drag = 0;
         }
-        // wall jump
-        if (actions.JumpPressed) {
-            if (WallJumpCheck(-1)) {
-                WallJump(1);
-                return JUMP_STATE;
-            } else if (WallJumpCheck(1)) {
-                WallJump(-1);
-                return JUMP_STATE;
-            }
-        }
         return FALL_STATE;
     }
 
@@ -229,10 +209,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int HookPullUpdate() {
-        if (actions.DownPressed || actions.JumpPressed) {
-            ropeSystem.ResetRope();
-            return FALL_STATE;
-        }
         // autorappel
         var hookVelocity = (hookPosition - (Vector2)transform.position).normalized * PULL_SPEED;
         rBody.velocity = hookVelocity;
@@ -250,23 +226,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int HookEndUpdate() {
-        if (actions.DownPressed) {
-            ropeSystem.ResetRope();
-            return FALL_STATE;
-        }
-
-        if (actions.JumpPressed) {
-            ropeSystem.ResetRope();
-            if (WallJumpCheck(-1)) {
-                WallJump(1);
-            } else if (WallJumpCheck(1)) {
-                WallJump(-1);
-            } else {
-                ropeSystem.ResetRope();
-                return FALL_STATE;
-            }
-            return JUMP_STATE;
-        }
         return HOOK_END_STATE;
     }
 
@@ -276,20 +235,30 @@ public class PlayerController : MonoBehaviour {
         rBody.velocity = velocity;
     }
 
-    public bool WallJumpCheck(int dir) {
+    private bool WallJumpCheck(int dir) {
         if (dir == -1) return leftWallCheck.Touching;
         else if (dir == 1) return rightWallCheck.Touching;
         else return false;
     }
 
-    public void WallJump(int dir) {
+    private int CheckDoWallJump() {
+        if (WallJumpCheck(-1)) {
+            WallJump(1);
+            return JUMP_STATE;
+        } else if (WallJumpCheck(1)) {
+            WallJump(-1);
+            return JUMP_STATE;
+        }
+        return FALL_STATE;
+    }
+
+    private void WallJump(int dir) {
         forceMoveX = dir;
         forceMoveXTimer = WALL_JUMP_FORCE_TIME;
         var vel = rBody.velocity;
         vel.x = WALL_JUMP_H_SPEED * dir;
         rBody.velocity = vel;
         Facing = dir;
-        // todo: maybe do jump logic here
     }
 
     public void Airborne() {
@@ -297,7 +266,7 @@ public class PlayerController : MonoBehaviour {
         if (forceMoveXTimer <= 0 && moveX != 0) {
             // Horizontal air movement
             velocity.x += moveX * MOVEMENT_ACCELERATION;
-            velocity.x = clampMoveSpeed(velocity.x);
+            velocity.x = ClampMoveSpeed(velocity.x);
         } else if (velocity.x != 0) {
             var airDrag = Mathf.Min(Mathf.Abs(velocity.x), AIR_DRAG);
             velocity.x -= velocity.x > 0 ? airDrag : -airDrag;
@@ -329,8 +298,51 @@ public class PlayerController : MonoBehaviour {
         crosshair.transform.position = crossHairPosition;
     }
 
-    private float clampMoveSpeed(float velocityX) {
+    private float ClampMoveSpeed(float velocityX) {
         return (velocityX > 0 ? 1f : -1f) * Mathf.Min(Mathf.Abs(velocityX), MAX_MOVEMENT_SPEED);
     }
 
+    private void OnJump() {
+        var nextState = -1;
+        switch (machine.CurrentState) {
+            case IDLE_STATE:
+            case RUN_STATE:
+                nextState = JUMP_STATE;
+                break;
+            case FALL_STATE:
+                nextState = CheckDoWallJump();
+                break;
+            case HOOK_PULL_STATE:
+                ropeSystem.ResetRope();
+                nextState = FALL_STATE;
+                break;
+            case HOOK_END_STATE:
+                // wall jump
+                ropeSystem.ResetRope();
+                nextState = CheckDoWallJump();
+                break;
+            default:
+                nextState = machine.CurrentState;
+                break;
+        }
+        machine.CurrentState = nextState;
+    }
+
+    private void OnArrowShoot() {
+        if (nextArrowFire < Time.time) {
+            FireArrow();
+            nextArrowFire = Time.time + ARROW_COOLDOWN;
+        }
+    }
+
+    private void OnHookShoot() {
+        ropeSystem.AttemptShootHook();
+    }
+
+    private void OnMeleeAttack() {
+        if (Time.time > nextSwingTime) {
+            nextSwingTime = Time.time + SWING_COOLDOWN;
+            melee.Attack();
+        }
+    }
 }
