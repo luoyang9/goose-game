@@ -23,33 +23,33 @@
                 },
                 {
                     "name": "ArrowShoot",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "cc30d1b3-9d15-470b-8ed3-c6721bd23060",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
                 {
                     "name": "Jump",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "4fef0345-328e-4bbe-a3c1-9410b81e469e",
-                    "expectedControlType": "Axis",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
                 {
                     "name": "HookShoot",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "f9c20e73-e3bd-4d98-b2cd-1e395249a9a6",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
                 {
                     "name": "Melee",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "d9821733-29e8-4d94-8fc4-aaec6678f42e",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
@@ -352,7 +352,7 @@
                 {
                     "name": "",
                     "id": "04258bc9-7e82-4a9d-9eaa-697415e0c8ef",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
