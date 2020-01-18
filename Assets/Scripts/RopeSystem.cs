@@ -8,7 +8,6 @@ public class RopeSystem : MonoBehaviour {
     private StateMachine machine;
     private float nextFire = 0;
     private bool ropeAttached;
-    private List<Vector2> ropePositions = new List<Vector2>();
 
     public DistanceJoint2D ropeJoint;
     public LineRenderer ropeRenderer;

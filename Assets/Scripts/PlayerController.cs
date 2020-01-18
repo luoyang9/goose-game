@@ -29,6 +29,11 @@ public class PlayerController : MonoBehaviour {
     public Arrow arrowPrefab;
     // melee
     private float nextSwingTime = 0;
+    // force field
+    public GameObject forceField;
+    private float forceFieldTimer = MAX_FORCE_FIELD_DURATION;
+    private float lagTimer;
+    private bool InLag { get { return lagTimer > 0; } }
 
     // CONSTANTS
     // Movement
@@ -50,6 +55,8 @@ public class PlayerController : MonoBehaviour {
     // Melee
     public const float SWING_COOLDOWN = 0.5f;
     public const float SWING_TIME = 0.1f;
+    // force field
+    public const float MAX_FORCE_FIELD_DURATION = 2;
     // states
     public const int IDLE_STATE = 0;
     public const int RUN_STATE = 1;
@@ -58,6 +65,7 @@ public class PlayerController : MonoBehaviour {
     public const int HOOK_PULL_STATE = 4;
     public const int HOOK_END_STATE = 5;
     public const int FALL_THROUGH_PLATFORM_STATE = 6;
+    public const int FORCE_FIELD_STATE = 7;
 
     // EVENTS
     public delegate void PlayerDeathHandler(int tag);
@@ -72,6 +80,8 @@ public class PlayerController : MonoBehaviour {
         machine.RegisterState(HOOK_PULL_STATE, HookPullUpdate, null, null);
         machine.RegisterState(HOOK_END_STATE, HookEndUpdate, null, null);
         machine.RegisterState(FALL_THROUGH_PLATFORM_STATE, FallThroughUpdate, null, null);
+        machine.RegisterState(FORCE_FIELD_STATE, ForceFieldUpdate, null, null);
+
         forceMoveX = 0;
         forceMoveXTimer = 0;
     }
@@ -100,6 +110,10 @@ public class PlayerController : MonoBehaviour {
         if (forceMoveXTimer > 0) {
             forceMoveXTimer -= Time.deltaTime;
             moveX = forceMoveX;
+        }
+
+        if (InLag) {
+            lagTimer -= Time.deltaTime;
         }
 
         UpdateAnimator();
@@ -143,6 +157,10 @@ public class PlayerController : MonoBehaviour {
         if (moveX != 0) {
             return RUN_STATE;
         }
+        // force field
+        if (!InLag && actions.ForceFieldPressed) {
+            return FORCE_FIELD_STATE;
+        }
 
         return IDLE_STATE;
     }
@@ -153,10 +171,13 @@ public class PlayerController : MonoBehaviour {
         velocity.x += moveX * MOVEMENT_ACCELERATION;
         velocity.x = ClampMoveSpeed(velocity.x);
         rBody.velocity = velocity;
-
         // fall through platforms
         if (actions.DownPressed && groundCheck.isTouchingPlatform()) {
             return FALL_THROUGH_PLATFORM_STATE;
+        }
+        // force field
+        if (!InLag && actions.ForceFieldPressed) {
+            return FORCE_FIELD_STATE;
         }
         // falling
         if (rBody.velocity.y < -0.001) {
@@ -227,6 +248,22 @@ public class PlayerController : MonoBehaviour {
 
     private int HookEndUpdate() {
         return HOOK_END_STATE;
+    }
+
+    private int ForceFieldUpdate() {
+        // if pressed, start timer for lag
+        if (actions.ForceFieldPressed && forceFieldTimer > 0) {
+            forceField.SetActive(true);
+            // holding
+            forceFieldTimer -= Time.deltaTime; // todo: don't subtract time on the first press
+
+            return FORCE_FIELD_STATE;
+        }
+        // let go/ run out
+        forceField.SetActive(false);
+        forceFieldTimer = MAX_FORCE_FIELD_DURATION;
+        lagTimer = 0.4f;
+        return IDLE_STATE;
     }
 
     private void JumpBegin() {
@@ -303,6 +340,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void OnJump() {
+        if (InLag) return;
+
         var nextState = -1;
         switch (machine.CurrentState) {
             case IDLE_STATE:
@@ -329,20 +368,44 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void OnArrowShoot() {
-        if (nextArrowFire < Time.time) {
-            FireArrow();
-            nextArrowFire = Time.time + ARROW_COOLDOWN;
+        if (InLag) return;
+        
+        switch (machine.CurrentState) {
+            case FORCE_FIELD_STATE:
+                break;
+            default:
+                if (nextArrowFire < Time.time) {
+                    FireArrow();
+                    nextArrowFire = Time.time + ARROW_COOLDOWN;
+                }
+                break;
         }
     }
 
     private void OnHookShoot() {
-        ropeSystem.AttemptShootHook();
+        if (InLag) return;
+
+        switch (machine.CurrentState) {
+            case FORCE_FIELD_STATE:
+                break;
+            default:
+                ropeSystem.AttemptShootHook();
+                break;
+        }
     }
 
     private void OnMeleeAttack() {
-        if (Time.time > nextSwingTime) {
-            nextSwingTime = Time.time + SWING_COOLDOWN;
-            melee.Attack();
+        if (InLag) return;
+
+        switch (machine.CurrentState) {
+            case FORCE_FIELD_STATE:
+                break;
+            default:
+                if (Time.time > nextSwingTime) {
+                    nextSwingTime = Time.time + SWING_COOLDOWN;
+                    melee.Attack();
+                }
+                break;
         }
     }
 }

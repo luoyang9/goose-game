@@ -14,6 +14,7 @@ public class InputActionMapper: MonoBehaviour {
     private InputAction hookShoot;
     private InputAction melee;
     private InputAction aim;
+    private InputAction forceField;
 
     public event Action Jump;
     public event Action ArrowShoot;
@@ -30,6 +31,7 @@ public class InputActionMapper: MonoBehaviour {
         hookShoot = actions["HookShoot"];
         melee = actions["Melee"];
         aim = actions["Aim"];
+        forceField = actions["ForceField"];
     }
 
     private void OnEnable() {
@@ -116,5 +118,9 @@ public class InputActionMapper: MonoBehaviour {
             }
             return direction;
         }
+    }
+
+    public bool ForceFieldPressed {
+        get { return forceField.ReadValue<float>() > 0.5f; }
     }
 }
