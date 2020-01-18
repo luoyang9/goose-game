@@ -64,6 +64,7 @@ public class RopeSystem : MonoBehaviour {
 
     private void ShootHook(Vector2 aimDirection) {
         if (grapplingHookTransform != null) return;
+        playerController.hookShootAudioSource.Play();
         // TODO: rotate according to angle
         var hookRotation = Quaternion.identity;
         var grapplingHookScript = Instantiate(grapplingHookPrefab, transform.position, hookRotation);
@@ -75,6 +76,7 @@ public class RopeSystem : MonoBehaviour {
     }
 
     public void LatchHook(Vector2 hookPoint) {
+        playerController.hookLandAudioSource.Play();
         ropeAttached = true;
         ropeJoint.distance = Vector2.Distance(transform.position, hookPoint);
         ropeJoint.connectedAnchor = hookPoint;
