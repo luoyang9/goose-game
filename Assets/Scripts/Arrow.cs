@@ -42,6 +42,7 @@ public class Arrow : MonoBehaviour
             PlayerController player = collider.gameObject.GetComponent<PlayerController>();
             if (player == null) return;
             if (state == IN_AIR) {
+                player.hurtAudioSource.Play();
                 player.Kill();
             } else {
                 // pick up

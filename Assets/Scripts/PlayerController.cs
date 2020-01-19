@@ -17,6 +17,13 @@ public class PlayerController : MonoBehaviour {
     public WallCheck rightWallCheck;
     public GroundCheck groundCheck;
     public PlayerMapping PlayerChoice { get; set; }
+    public AudioSource jumpAudioSource;
+    public AudioSource arrowShootAudioSource;
+    public AudioSource hookShootAudioSource;
+    public AudioSource meleeAudioSource;
+    public AudioSource hurtAudioSource;
+    public AudioSource hookLandAudioSource;
+
     // movement
     public int moveX = 0;
     private int forceMoveX;
@@ -322,6 +329,7 @@ public class PlayerController : MonoBehaviour {
         if (numArrows == 0) {
             return;
         }
+        arrowShootAudioSource.Play();
         Vector2 aimDirection = actions.Aim;
         var arrowStartPos = (Vector2)transform.position + aimDirection * ARROW_START_DIST;
         Arrow arrow = Instantiate(arrowPrefab, arrowStartPos, Quaternion.identity);
@@ -346,17 +354,21 @@ public class PlayerController : MonoBehaviour {
         switch (machine.CurrentState) {
             case IDLE_STATE:
             case RUN_STATE:
+                jumpAudioSource.Play();
                 nextState = JUMP_STATE;
                 break;
             case FALL_STATE:
+                jumpAudioSource.Play();
                 nextState = CheckDoWallJump();
                 break;
             case HOOK_PULL_STATE:
+                jumpAudioSource.Play();
                 ropeSystem.ResetRope();
                 nextState = FALL_STATE;
                 break;
             case HOOK_END_STATE:
                 // wall jump
+                jumpAudioSource.Play();
                 ropeSystem.ResetRope();
                 nextState = CheckDoWallJump();
                 break;
@@ -369,7 +381,7 @@ public class PlayerController : MonoBehaviour {
 
     private void OnArrowShoot() {
         if (InLag) return;
-        
+
         switch (machine.CurrentState) {
             case FORCE_FIELD_STATE:
                 break;
@@ -403,6 +415,7 @@ public class PlayerController : MonoBehaviour {
             default:
                 if (Time.time > nextSwingTime) {
                     nextSwingTime = Time.time + SWING_COOLDOWN;
+                    meleeAudioSource.Play();
                     melee.Attack();
                 }
                 break;
