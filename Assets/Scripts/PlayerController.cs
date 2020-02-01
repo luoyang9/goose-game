@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using TMPro;
 
 public class PlayerController : MonoBehaviour {
     // VARIABLES
@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour {
     public AudioSource meleeAudioSource;
     public AudioSource hurtAudioSource;
     public AudioSource hookLandAudioSource;
+    public TMP_Text arrowCount;
+    public TMP_Text playerLabel;
 
     // movement
     public int moveX = 0;
@@ -91,6 +93,7 @@ public class PlayerController : MonoBehaviour {
 
         forceMoveX = 0;
         forceMoveXTimer = 0;
+        playerLabel.text = "Player " + (PlayerChoice.PlayerTag + 1).ToString();
     }
 
     private void OnEnable() {
@@ -118,6 +121,8 @@ public class PlayerController : MonoBehaviour {
             forceMoveXTimer -= Time.deltaTime;
             moveX = forceMoveX;
         }
+
+        arrowCount.text = "Arrows: " + numArrows.ToString();
 
         if (InLag) {
             lagTimer -= Time.deltaTime;
