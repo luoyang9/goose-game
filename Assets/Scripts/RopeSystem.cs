@@ -8,7 +8,6 @@ public class RopeSystem : MonoBehaviour {
     private StateMachine machine;
     private float nextFire = 0;
     private bool ropeAttached;
-    private List<Vector2> ropePositions = new List<Vector2>();
 
     public DistanceJoint2D ropeJoint;
     public LineRenderer ropeRenderer;
@@ -33,24 +32,27 @@ public class RopeSystem : MonoBehaviour {
 
     void Update() {
         UpdateRope();
-        HandleShootHook();
     }
 
     void FixedUpdate() {
         HandleRopeLength();
     }
 
-    private void HandleShootHook() {
-        if (actions.HookShootPressed) {
-            if (Time.time <= nextFire) return;
-            nextFire = Time.time + FIRE_DELAY;
-            if (grapplingHookTransform != null) {
-                if (!ropeAttached) return; // wait for hook to return
-                ResetRope();
-            }
-            var aimDirection = actions.Aim;
-            ShootHook(aimDirection);
+    private void OnDestroy() {
+        if (grapplingHookTransform != null) {
+            Destroy(grapplingHookTransform.gameObject);
         }
+    }
+
+    public void AttemptShootHook() {
+        if (Time.time <= nextFire) return;
+        nextFire = Time.time + FIRE_DELAY;
+        if (grapplingHookTransform != null) {
+            if (!ropeAttached) return; // wait for hook to return
+            ResetRope();
+        }
+        var aimDirection = actions.Aim;
+        ShootHook(aimDirection);
     }
 
     private void UpdateRope() {
@@ -62,6 +64,7 @@ public class RopeSystem : MonoBehaviour {
 
     private void ShootHook(Vector2 aimDirection) {
         if (grapplingHookTransform != null) return;
+        playerController.hookShootAudioSource.Play();
         // TODO: rotate according to angle
         var hookRotation = Quaternion.identity;
         var grapplingHookScript = Instantiate(grapplingHookPrefab, transform.position, hookRotation);
@@ -73,6 +76,7 @@ public class RopeSystem : MonoBehaviour {
     }
 
     public void LatchHook(Vector2 hookPoint) {
+        playerController.hookLandAudioSource.Play();
         ropeAttached = true;
         ropeJoint.distance = Vector2.Distance(transform.position, hookPoint);
         ropeJoint.connectedAnchor = hookPoint;

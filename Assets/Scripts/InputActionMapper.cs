@@ -1,10 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInput))]
 public class InputActionMapper: MonoBehaviour {
     public PlayerInput playerInput;
 
+    private Vector2 lastAimDirection;
     private InputActionAsset actions;
     private InputAction jump;
     private InputAction move;
@@ -12,9 +14,16 @@ public class InputActionMapper: MonoBehaviour {
     private InputAction hookShoot;
     private InputAction melee;
     private InputAction aim;
+    private InputAction forceField;
+
+    public event Action Jump;
+    public event Action ArrowShoot;
+    public event Action HookShoot;
+    public event Action Melee;
 
     private void Awake()
     {
+        lastAimDirection = new Vector2(0, 1);
         actions = playerInput.actions;
         jump = actions["Jump"];
         move = actions["Move"];
@@ -22,10 +31,37 @@ public class InputActionMapper: MonoBehaviour {
         hookShoot = actions["HookShoot"];
         melee = actions["Melee"];
         aim = actions["Aim"];
+        forceField = actions["ForceField"];
     }
-    
-    public bool JumpPressed {
-        get { return jump.ReadValue<float>() > 0.5f; }
+
+    private void OnEnable() {
+        jump.performed += OnJump;
+        arrowShoot.performed += OnArrowShoot;
+        hookShoot.performed += OnHookShoot;
+        melee.performed += OnMelee;
+    }
+
+    private void OnDisable() {
+        jump.performed -= OnJump;
+        arrowShoot.performed -= OnArrowShoot;
+        hookShoot.performed -= OnHookShoot;
+        melee.performed -= OnMelee;
+    }
+
+    private void OnJump(InputAction.CallbackContext c) {
+        Jump?.Invoke();
+    }
+
+    private void OnArrowShoot(InputAction.CallbackContext c) {
+        ArrowShoot?.Invoke();
+    }
+
+    private void OnHookShoot(InputAction.CallbackContext c) {
+        HookShoot?.Invoke();
+    }
+
+    private void OnMelee(InputAction.CallbackContext c) {
+        Melee?.Invoke();
     }
 
     /**
@@ -37,20 +73,12 @@ public class InputActionMapper: MonoBehaviour {
             var direction = move.ReadValue<Vector2>();
             int ret;
 
-            if (direction.x > 0) ret = 1;
-            else if (direction.x < 0) ret = -1;
+            if (direction.x > 0.5f) ret = 1;
+            else if (direction.x < -0.5f) ret = -1;
             else ret = 0;
 
             return ret;
         }
-    }
-
-    public bool HookShootPressed {
-        get { return hookShoot.ReadValue<float>() > 0.5f; }
-    }
-
-    public bool ArrowShootPressed {
-        get { return arrowShoot.ReadValue<float>() > 0.5f; }
     }
 
     public bool DownPressed {
@@ -59,10 +87,6 @@ public class InputActionMapper: MonoBehaviour {
             var direction = move.ReadValue<Vector2>();
             return direction.y < -0.5f;
         }
-    }
-
-    public bool MeleePressed {
-        get { return melee.ReadValue<float>() > 0.5f; }
     }
 
     /**
@@ -83,11 +107,20 @@ public class InputActionMapper: MonoBehaviour {
                     direction = ((Vector2)worldMousePosition - (Vector2)transform.position).normalized;
                     break;
                 default:
-                    var stickDirection = aim.ReadValue<Vector2>();
-                    direction = stickDirection == Vector2.zero ? new Vector2(0, 1) : stickDirection;
+                    var aimDirection = aim.ReadValue<Vector2>();
+                    var moveDirection = move.ReadValue<Vector2>();
+                    direction = aimDirection == Vector2.zero 
+                        ? (moveDirection == Vector2.zero ? lastAimDirection : moveDirection)
+                        : aimDirection;
+                    direction = direction.normalized;
+                    lastAimDirection = direction;
                     break;
             }
             return direction;
         }
+    }
+
+    public bool ForceFieldPressed {
+        get { return forceField.ReadValue<float>() > 0.5f; }
     }
 }

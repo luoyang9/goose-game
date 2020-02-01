@@ -28,6 +28,7 @@ public class Arrow : MonoBehaviour
     }
 
     void FixedUpdate() {
+        UpdateScale();
         UpdateAngle();
     }
 
@@ -41,6 +42,7 @@ public class Arrow : MonoBehaviour
             PlayerController player = collider.gameObject.GetComponent<PlayerController>();
             if (player == null) return;
             if (state == IN_AIR) {
+                player.hurtAudioSource.Play();
                 player.Kill();
             } else {
                 // pick up
@@ -51,7 +53,7 @@ public class Arrow : MonoBehaviour
     }
 
     private void UpdateScale() {
-        if (direction.x < 0) {
+        if (direction.x * transform.localScale.x < 0) {
             var scale = transform.localScale;
             scale.x = -transform.localScale.x;
             transform.localScale = scale;
