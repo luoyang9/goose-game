@@ -13,8 +13,8 @@ public class PlayerController : MonoBehaviour {
     public Melee melee;
     public SpriteRenderer sprite;
     public StateMachine machine;
-    public WallCheck leftWallCheck;
-    public WallCheck rightWallCheck;
+    public WallCheck backWallCheck;
+    public WallCheck frontWallCheck;
     public GroundCheck groundCheck;
     public PlayerMapping PlayerChoice { get; set; }
     public AudioSource jumpAudioSource;
@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour {
     private float forceMoveXTimer;
     public Rigidbody2D rBody;
     public int Facing { get; private set; } = 1; // either -1 or 1
+    private WallCheck LeftWallCheck { get { return (Facing < 0) ? frontWallCheck : backWallCheck; } }
+    private WallCheck RightWallCheck { get { return (Facing > 0) ? frontWallCheck : backWallCheck; } }
     // arrows
     public int numArrows = START_ARROWS;
     public float nextArrowFire = 0f;
@@ -147,7 +149,9 @@ public class PlayerController : MonoBehaviour {
         if (moveX != 0) {
             Facing = moveX;
         }
-        sprite.flipX = Facing < 0;
+        Vector3 scale = transform.localScale;
+        scale.x = Facing * scale.x < 1 ? -scale.x : scale.x;
+        transform.localScale = scale;
     }
 
     private int IdleUpdate() {
@@ -228,7 +232,7 @@ public class PlayerController : MonoBehaviour {
         }
         Airborne();
         // wall slide
-        if (moveX == -1 && leftWallCheck.Touching || moveX == 1 && rightWallCheck.Touching) {
+        if (moveX == -1 && LeftWallCheck.Touching || moveX == 1 && RightWallCheck.Touching) {
             // decelerate up to a max sliding velocity
             rBody.drag = WALL_SLIDE_DRAG;
         } else {
@@ -284,18 +288,12 @@ public class PlayerController : MonoBehaviour {
         rBody.velocity = velocity;
     }
 
-    private bool WallJumpCheck(int dir) {
-        if (dir == -1) return leftWallCheck.Touching;
-        else if (dir == 1) return rightWallCheck.Touching;
-        else return false;
-    }
-
     private int CheckDoWallJump() {
-        if (WallJumpCheck(-1)) {
-            WallJump(1);
+        if (backWallCheck.Touching) {
+            WallJump(Facing);
             return JUMP_STATE;
-        } else if (WallJumpCheck(1)) {
-            WallJump(-1);
+        } else if (frontWallCheck.Touching) {
+            WallJump(-Facing);
             return JUMP_STATE;
         }
         return FALL_STATE;
