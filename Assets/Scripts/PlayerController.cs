@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour {
     private float forceMoveXTimer;
     public Rigidbody2D rBody;
     public int Facing { get; private set; } = 1; // either -1 or 1
+    private WallCheck LeftWallCheck { get { return (Facing < 0) ? frontWallCheck : backWallCheck; } }
+    private WallCheck RightWallCheck { get { return (Facing > 0) ? frontWallCheck : backWallCheck; } }
     // arrows
     public int numArrows = START_ARROWS;
     public float nextArrowFire = 0f;
@@ -225,7 +227,7 @@ public class PlayerController : MonoBehaviour {
         }
         Airborne();
         // wall slide
-        if (moveX == -1 && backWallCheck.Touching || moveX == 1 && frontWallCheck.Touching) {
+        if (moveX == -1 && LeftWallCheck.Touching || moveX == 1 && RightWallCheck.Touching) {
             // decelerate up to a max sliding velocity
             rBody.drag = WALL_SLIDE_DRAG;
         } else {
@@ -281,20 +283,12 @@ public class PlayerController : MonoBehaviour {
         rBody.velocity = velocity;
     }
 
-    private bool WallJumpCheck(int dir) {
-        bool leftTouching = frontWallCheck.Touching && Facing < 0 || backWallCheck.Touching && Facing > 0;
-        bool rightTouching = frontWallCheck.Touching && Facing > 0 || backWallCheck.Touching && Facing < 0;
-        if (dir == -1) return leftTouching;
-        else if (dir == 1) return rightTouching;
-        else return false;
-    }
-
     private int CheckDoWallJump() {
-        if (WallJumpCheck(-1)) {
-            WallJump(1);
+        if (backWallCheck.Touching) {
+            WallJump(Facing);
             return JUMP_STATE;
-        } else if (WallJumpCheck(1)) {
-            WallJump(-1);
+        } else if (frontWallCheck.Touching) {
+            WallJump(-Facing);
             return JUMP_STATE;
         }
         return FALL_STATE;
