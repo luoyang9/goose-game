@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2726607943822493693}
   - component: {fileID: 3655592673597224966}
   m_Layer: 8
-  m_Name: RightWallCheck
+  m_Name: FrontWallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 528019652683895447}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.875, y: 0, z: 0}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4443951294556298768}
@@ -794,8 +794,8 @@ MonoBehaviour:
   melee: {fileID: 2907988911900256694}
   sprite: {fileID: 4443951294556298773}
   machine: {fileID: -2980204640073275049}
-  leftWallCheck: {fileID: 7708910355634086536}
-  rightWallCheck: {fileID: 2726607943822493693}
+  backWallCheck: {fileID: 7708910355634086536}
+  frontWallCheck: {fileID: 2726607943822493693}
   groundCheck: {fileID: 4814266332498745331}
   jumpAudioSource: {fileID: 1033995479475839403}
   arrowShootAudioSource: {fileID: 2677733887607415222}
@@ -1594,7 +1594,7 @@ GameObject:
   - component: {fileID: 7708910355634086536}
   - component: {fileID: 1457102786574659028}
   m_Layer: 8
-  m_Name: LeftWallCheck
+  m_Name: BackWallCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

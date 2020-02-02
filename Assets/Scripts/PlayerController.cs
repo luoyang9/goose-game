@@ -13,8 +13,8 @@ public class PlayerController : MonoBehaviour {
     public Melee melee;
     public SpriteRenderer sprite;
     public StateMachine machine;
-    public WallCheck leftWallCheck;
-    public WallCheck rightWallCheck;
+    public WallCheck backWallCheck;
+    public WallCheck frontWallCheck;
     public GroundCheck groundCheck;
     public PlayerMapping PlayerChoice { get; set; }
     public AudioSource jumpAudioSource;
@@ -142,7 +142,9 @@ public class PlayerController : MonoBehaviour {
         if (moveX != 0) {
             Facing = moveX;
         }
-        sprite.flipX = Facing < 0;
+        Vector3 scale = transform.localScale;
+        scale.x = Facing * scale.x < 1 ? -scale.x : scale.x;
+        transform.localScale = scale;
     }
 
     private int IdleUpdate() {
@@ -223,7 +225,7 @@ public class PlayerController : MonoBehaviour {
         }
         Airborne();
         // wall slide
-        if (moveX == -1 && leftWallCheck.Touching || moveX == 1 && rightWallCheck.Touching) {
+        if (moveX == -1 && backWallCheck.Touching || moveX == 1 && frontWallCheck.Touching) {
             // decelerate up to a max sliding velocity
             rBody.drag = WALL_SLIDE_DRAG;
         } else {
@@ -280,8 +282,10 @@ public class PlayerController : MonoBehaviour {
     }
 
     private bool WallJumpCheck(int dir) {
-        if (dir == -1) return leftWallCheck.Touching;
-        else if (dir == 1) return rightWallCheck.Touching;
+        bool leftTouching = frontWallCheck.Touching && Facing < 0 || backWallCheck.Touching && Facing > 0;
+        bool rightTouching = frontWallCheck.Touching && Facing > 0 || backWallCheck.Touching && Facing < 0;
+        if (dir == -1) return leftTouching;
+        else if (dir == 1) return rightTouching;
         else return false;
     }
 
