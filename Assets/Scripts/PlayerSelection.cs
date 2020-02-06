@@ -2,22 +2,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
-public class PlayerSelection : MonoBehaviour
-{
-    public delegate void StatusChangedAction(bool active);
-    public event StatusChangedAction OnSelectionStatusChange;
-    public delegate void CharacterChangedAction(GameObject character);
-    public event CharacterChangedAction OnCharacterChanged;
+// todo: separate UI and logic
+public class PlayerSelection: MonoBehaviour {
+    public const int INACTIVE_STATE = 0;
+    public const int PENDING_STATE = 1;
+    public const int READY_STATE = 2;
 
-    public Button playerTag;
-    public Button leftChange;
-    public Button rightChange;
-    public Image splash;
-    public Image character;
-    public GameObject foreground;
-    public Text controller;
+    private int _state = PENDING_STATE;
+    public int State {
+        get { return _state; }
+        private set {
+            _state = value;
+            StateChanged?.Invoke(_state);
+        }
+    }
+
+    public delegate void StateChangedAction(int s);
+    public event StateChangedAction StateChanged;
+    public delegate void CharacterChangedAction(CharacterSelection character);
+    public event CharacterChangedAction CharacterChanged;
+
+    public PlayerManager Manager { get; set; }
+    public InputDevice[] Controller { get; set; }
+
+    public string PlayerName { get; set; }
     public CharacterSelection[] roster;
 
     private int selectedCharacter;
@@ -25,66 +35,50 @@ public class PlayerSelection : MonoBehaviour
         get { return selectedCharacter; }
         set {
             selectedCharacter = value;
-            OnCharacterChanged?.Invoke(roster[selectedCharacter].prefab);
-            UpdateCharacterSprites(selectedCharacter);
+            CharacterChanged?.Invoke(roster[selectedCharacter]);
         }
     }
 
-    private bool selectionActive;
-
-    private void Awake()
-    {
-        selectionActive = true;
+    private void Start() {
         SelectedCharacter = 0;
     }
 
-    public void OnEnable()
-    {
-        playerTag.onClick.AddListener(OnTagClicked);
-        leftChange.onClick.AddListener(OnLeftChange);
-        rightChange.onClick.AddListener(OnRightChange);
+    public void OnSubmit() {
+        switch (State) {
+            case INACTIVE_STATE:
+                State = PENDING_STATE;
+                break;
+            case PENDING_STATE:
+                State = READY_STATE;
+                break;
+            case READY_STATE:
+                Manager.OnStartFight();
+                break;
+            default:
+                break;
+        }
     }
 
-    public void OnDisable()
-    {
-        playerTag.onClick.RemoveListener(OnTagClicked);
-        leftChange.onClick.RemoveListener(OnLeftChange);
-        rightChange.onClick.RemoveListener(OnRightChange);
+    public void OnCancel() {
+        switch (State) {
+            case PENDING_STATE:
+                State = INACTIVE_STATE;
+                break;
+            case READY_STATE:
+                State = PENDING_STATE;
+                break;
+            default:
+                break;
+        }
     }
 
-    private void OnTagClicked()
-    {
-        selectionActive = !selectionActive;
+    public void ChangeCharacter(int direction) {
+        if (direction != -1 || direction != 1) return;
 
-        foreground.SetActive(selectionActive);
-        splash.enabled = selectionActive;
-        OnSelectionStatusChange?.Invoke(selectionActive);
+        SelectedCharacter = (SelectedCharacter + direction + roster.Length) % roster.Length;
     }
 
-    public void OnLeftChange()
-    {
-        SelectedCharacter = (SelectedCharacter - 1 + roster.Length) % roster.Length;
-    }
-
-    public void OnRightChange()
-    {
-        SelectedCharacter = (SelectedCharacter + 1) % roster.Length;
-    }
-
-    public void SetTagText(string text)
-    {
-        var tagText = playerTag.GetComponentInChildren<Text>();
-        tagText.text = text;
-    }
-
-    public void SetControllerText(string text)
-    {
-        controller.text = text;
-    }
-
-    private void UpdateCharacterSprites(int i)
-    {
-        splash.sprite = roster[i].splash;
-        character.sprite = roster[i].splash;
+    public PlayerMapping GetMapping() {
+        return new PlayerMapping(PlayerName, Controller, roster[SelectedCharacter].prefab);
     }
 }

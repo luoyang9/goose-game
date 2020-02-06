@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2854233066694896765}
   - component: {fileID: 7605518071071815002}
-  - component: {fileID: 2035027779737674478}
-  - component: {fileID: 5205966020759154696}
+  - component: {fileID: 1710993576339984409}
+  - component: {fileID: 2119644671199105947}
   m_Layer: 0
   m_Name: GameLobbyPlayer
   m_TagString: Untagged
@@ -52,8 +52,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: d80d7c671c79a4663a165a0a38e5cb17,
     type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 5205966020759154696}
+  m_NotificationBehavior: 3
+  m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -63,6 +63,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.InputSystem.PlayerInput+DeviceRegainedEvent, Unity.InputSystem,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.InputSystem.PlayerInput+ControlsChangedEvent, Unity.InputSystem,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_ActionEvents:
   - m_PersistentCalls:
@@ -215,12 +220,30 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
     m_ActionId: 4a9b4899-f518-4c9c-8d5b-ddba7e52258d
     m_ActionName: UI/TrackedDeviceSelect
+  - m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.InputSystem.PlayerInput+ActionEvent, Unity.InputSystem,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_ActionId: 4fef0345-328e-4bbe-a3c1-9410b81e469e
+    m_ActionName: Player/Jump[/Keyboard/w,/XInputControllerWindows/buttonSouth,/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.InputSystem.PlayerInput+ActionEvent, Unity.InputSystem,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_ActionId: f9c20e73-e3bd-4d98-b2cd-1e395249a9a6
+    m_ActionName: Player/HookShoot[/Mouse/rightButton,/XInputControllerWindows/leftTrigger,/XInputControllerWindows/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.InputSystem.PlayerInput+ActionEvent, Unity.InputSystem,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+    m_ActionId: d9821733-29e8-4d94-8fc4-aaec6678f42e
+    m_ActionName: Player/Melee[/Keyboard/f,/XInputControllerWindows/buttonWest]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: UI
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &2035027779737674478
+--- !u!114 &1710993576339984409
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -229,14 +252,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4485563698593125436}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b16c6f78230fa4964a222622d8aae332, type: 3}
+  m_Script: {fileID: 11500000, guid: 926b21cef57ca8f42a3a3a60b9fc16f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
-  m_DragThreshold: 10
-  m_PlayerRoot: {fileID: 0}
---- !u!114 &5205966020759154696
+  playerInput: {fileID: 7605518071071815002}
+--- !u!114 &2119644671199105947
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -245,32 +265,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4485563698593125436}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Script: {fileID: 11500000, guid: fdeb8bbe21140482192cd90d047d2755, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RepeatDelay: 0.5
-  m_RepeatRate: 0.1
-  m_ActionsAsset: {fileID: -944628639613478452, guid: d80d7c671c79a4663a165a0a38e5cb17,
-    type: 3}
-  m_PointAction: {fileID: 1054132383583890850, guid: d80d7c671c79a4663a165a0a38e5cb17,
-    type: 3}
-  m_MoveAction: {fileID: 3710738434707379630, guid: d80d7c671c79a4663a165a0a38e5cb17,
-    type: 3}
-  m_SubmitAction: {fileID: 2064916234097673511, guid: d80d7c671c79a4663a165a0a38e5cb17,
-    type: 3}
-  m_CancelAction: {fileID: -1967631576421560919, guid: d80d7c671c79a4663a165a0a38e5cb17,
-    type: 3}
-  m_LeftClickAction: {fileID: 8056856818456041789, guid: d80d7c671c79a4663a165a0a38e5cb17,
-    type: 3}
-  m_MiddleClickAction: {fileID: 3279352641294131588, guid: d80d7c671c79a4663a165a0a38e5cb17,
-    type: 3}
-  m_RightClickAction: {fileID: 3837173908680883260, guid: d80d7c671c79a4663a165a0a38e5cb17,
-    type: 3}
-  m_ScrollWheelAction: {fileID: 4502412055082496612, guid: d80d7c671c79a4663a165a0a38e5cb17,
-    type: 3}
-  m_TrackedDevicePositionAction: {fileID: 4754684134866288074, guid: d80d7c671c79a4663a165a0a38e5cb17,
-    type: 3}
-  m_TrackedDeviceOrientationAction: {fileID: 1025543830046995696, guid: d80d7c671c79a4663a165a0a38e5cb17,
-    type: 3}
-  m_TrackedDeviceSelectAction: {fileID: 2559092417903258184, guid: d80d7c671c79a4663a165a0a38e5cb17,
-    type: 3}
+  roster:
+  - name: MSCharacter
+    splash: {fileID: 21300000, guid: 1320dc8371bbf2945be4deb014b700d7, type: 3}
+    prefab: {fileID: 4443951294556298772, guid: d9addbae1f6fdcc4db01e20bc2751da9,
+      type: 3}

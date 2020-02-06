@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void OnPlayerDeath(int id)
+    void OnPlayerDeath(string id)
     {
         numPlayers -= 1;
 
