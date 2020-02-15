@@ -8,7 +8,7 @@ using UnityEngine.InputSystem.UI;
 
 public class PlayerManager : MonoBehaviour
 {
-    public const int MIN_PLAYERS = 2;
+    public const int MIN_PLAYERS = 1;
     public const int MAX_PLAYERS = 4;
 
     public PlayerSelectionUI[] playerSelectionUis;

@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour {
     public const float AIR_DRAG = 1f;
     // Arrows
     public const float ARROW_COOLDOWN = 0.5f;
-    public const float ARROW_START_DIST = 1f;
+    public const float ARROW_START_DIST = 1.5f;
     public const int START_ARROWS = 5;
     // Melee
     public const float SWING_COOLDOWN = 0.5f;

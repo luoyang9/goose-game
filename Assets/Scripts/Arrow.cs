@@ -38,7 +38,13 @@ public class Arrow : MonoBehaviour
             state = GROUNDED;
             rbody.velocity = Vector2.zero;
             rbody.gravityScale = 0;
-        } else if (collider.gameObject.layer == playerLayer) {
+            // Places arrow body on the close side of the collider to the shooter
+            // such that it is barely sticking into the wall
+            Vector2 newPosition = rbody.transform.position;
+            newPosition = collider.ClosestPoint(newPosition);
+            rbody.transform.position = newPosition;
+        }
+        else if (collider.gameObject.layer == playerLayer) {
             PlayerController player = collider.gameObject.GetComponent<PlayerController>();
             if (player == null) return;
             if (state == IN_AIR) {
