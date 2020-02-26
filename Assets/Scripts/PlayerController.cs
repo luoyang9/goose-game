@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour {
     public const float FRICTION = 0.2f;
     public const float PULL_SPEED = 30f;
     public const float JUMP_VELOCITY = 30f;
-    public const float MOVEMENT_ACCELERATION = 6f;
+    public const float MOVEMENT_ACCELERATION = 2f;
     public const float MAX_MOVEMENT_SPEED = 18f;
     private const float WALL_JUMP_H_SPEED = 8f;
     private const float WALL_JUMP_FORCE_TIME = 0.1f;
