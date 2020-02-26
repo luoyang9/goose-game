@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour {
     public const float ARROW_START_DIST = 0f;
     public const int START_ARROWS = 5;
     // Melee
-    public const float SWING_COOLDOWN = 0.5f;
+    public const float SWING_COOLDOWN = 0.3f;
     public const float SWING_TIME = 0.1f;
     // force field
     public const float MAX_FORCE_FIELD_DURATION = 2;

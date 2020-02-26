@@ -27,7 +27,7 @@ public class Melee : MonoBehaviour {
         }
     }
 
-    public const float ATTACK_DURATION = 0.2f; // seconds
+    public const float ATTACK_DURATION = 0.1f; // seconds
 
     private AttackParams UP_ATTACK;
     private AttackParams DOWN_ATTACK;
@@ -70,14 +70,13 @@ public class Melee : MonoBehaviour {
     }
 
     void Update() {
-        if (attackTimer <= 0) {
-            AttackDisable();
-        }
     }
 
     void FixedUpdate() {
         if (attackTimer > 0) {
             attackTimer -= Time.deltaTime;
+        } else {
+            AttackDisable();
         }
     }
 
