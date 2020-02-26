@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour {
     // force field
     public GameObject forceField;
     private float forceFieldTimer = MAX_FORCE_FIELD_DURATION;
+    private float fallThroughTimer = FALL_THROUGH_PLATFORM_DURATION;
     private float lagTimer;
     private bool InLag { get { return lagTimer > 0; } }
 
@@ -57,17 +58,18 @@ public class PlayerController : MonoBehaviour {
     private const float WALL_JUMP_FORCE_TIME = 0.1f;
     private const float WALL_SLIDE_DRAG = 20f;
     public const float MAX_FALL = 18f;
-    public const float FALL_THROUGH_SPEED = 0.5f;
     public const float AIR_DRAG = 1f;
     // Arrows
     public const float ARROW_COOLDOWN = 0.5f;
-    public const float ARROW_START_DIST = 1f;
+    public const float ARROW_START_DIST = 0f;
     public const int START_ARROWS = 5;
     // Melee
     public const float SWING_COOLDOWN = 0.5f;
     public const float SWING_TIME = 0.1f;
     // force field
     public const float MAX_FORCE_FIELD_DURATION = 2;
+    // fall through polatform duration
+    public const float FALL_THROUGH_PLATFORM_DURATION = 0.15f;
     // states
     public const int IDLE_STATE = 0;
     public const int RUN_STATE = 1;
@@ -208,12 +210,13 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int FallThroughUpdate() {
-        if (!groundCheck.isTouchingPlatform()) {
+        if (fallThroughTimer <= 0) {
+            rBody.gameObject.layer = 8;
+            fallThroughTimer = FALL_THROUGH_PLATFORM_DURATION;
             return FALL_STATE;
         }
-        Vector2 position = rBody.position;
-        position.y -= FALL_THROUGH_SPEED;
-        rBody.position = position;
+        rBody.gameObject.layer = 13;
+        fallThroughTimer -= Time.deltaTime;
         return FALL_THROUGH_PLATFORM_STATE;
     }
 
@@ -336,6 +339,7 @@ public class PlayerController : MonoBehaviour {
         Vector2 aimDirection = actions.Aim;
         var arrowStartPos = (Vector2)transform.position + aimDirection * ARROW_START_DIST;
         Arrow arrow = Instantiate(arrowPrefab, arrowStartPos, Quaternion.identity);
+        arrow.firingPlayer = this;
         arrow.direction = aimDirection;
         numArrows--;
     }
