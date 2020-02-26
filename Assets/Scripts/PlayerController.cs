@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour {
     private int forceMoveX;
     private float forceMoveXTimer;
     public Rigidbody2D rBody;
+    private int forceFacing;
+    private float forceFacingTimer;
     public int Facing { get; private set; } = 1; // either -1 or 1
     private WallCheck LeftWallCheck { get { return (Facing < 0) ? frontWallCheck : backWallCheck; } }
     private WallCheck RightWallCheck { get { return (Facing > 0) ? frontWallCheck : backWallCheck; } }
@@ -38,8 +40,10 @@ public class PlayerController : MonoBehaviour {
     public int numArrows = START_ARROWS;
     public float nextArrowFire = 0f;
     public Arrow arrowPrefab;
+    private bool CanShoot { get { return Time.time > nextArrowFire; } }
     // melee
     private float nextSwingTime = 0;
+    private bool CanAttack { get { return Time.time > nextSwingTime; } }
     // force field
     public GameObject forceField;
     private float forceFieldTimer = MAX_FORCE_FIELD_DURATION;
@@ -125,6 +129,10 @@ public class PlayerController : MonoBehaviour {
             forceMoveXTimer -= Time.deltaTime;
             moveX = forceMoveX;
         }
+        if (forceFacingTimer > 0) {
+            forceFacingTimer -= Time.deltaTime;
+            Facing = forceFacing;
+        }
 
         arrowCount.text = "Arrows: " + numArrows.ToString();
 
@@ -148,7 +156,7 @@ public class PlayerController : MonoBehaviour {
 
     private void HandleDirection() {
         moveX = actions.HorizontalDirection;
-        if (moveX != 0) {
+        if (moveX != 0 && forceFacingTimer <= 0) {
             Facing = moveX;
         }
         Vector3 scale = transform.localScale;
@@ -163,7 +171,7 @@ public class PlayerController : MonoBehaviour {
             velocity.x -= FRICTION * velocity.x;
         }
         rBody.velocity = velocity;
-        // fall through platformsF
+        // fall through platforms
         if (actions.DownPressed && groundCheck.isTouchingPlatform()) {
             return FALL_THROUGH_PLATFORM_STATE;
         }
@@ -393,7 +401,7 @@ public class PlayerController : MonoBehaviour {
             case FORCE_FIELD_STATE:
                 break;
             default:
-                if (nextArrowFire < Time.time) {
+                if (CanShoot) {
                     FireArrow();
                     nextArrowFire = Time.time + ARROW_COOLDOWN;
                 }
@@ -414,16 +422,27 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void OnMeleeAttack() {
-        if (InLag) return;
+        if (InLag || !CanAttack) return;
 
         switch (machine.CurrentState) {
             case FORCE_FIELD_STATE:
                 break;
             default:
-                if (Time.time > nextSwingTime) {
-                    nextSwingTime = Time.time + SWING_COOLDOWN;
-                    meleeAudioSource.Play();
-                    melee.Attack();
+                // attack
+                nextSwingTime = Time.time + SWING_COOLDOWN;
+                forceFacing = Facing;
+                forceFacingTimer = Melee.ATTACK_DURATION;
+                meleeAudioSource.Play();
+
+                if (actions.VerticalDirection > 0) {
+                    // up
+                    melee.Attack(Melee.AttackDirection.UP);
+                } else if (actions.VerticalDirection < 0) {
+                    // down
+                    melee.Attack(Melee.AttackDirection.DOWN);
+                } else {
+                    // forward
+                    melee.Attack(Melee.AttackDirection.FORWARD);
                 }
                 break;
         }

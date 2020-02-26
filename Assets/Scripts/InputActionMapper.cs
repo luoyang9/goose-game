@@ -68,8 +68,7 @@ public class InputActionMapper: MonoBehaviour {
      * Returns -1 if left pressed, 1 if right pressed, else 0
      */
     public int HorizontalDirection {
-        get
-        {
+        get {
             var direction = move.ReadValue<Vector2>();
             int ret;
 
@@ -81,13 +80,20 @@ public class InputActionMapper: MonoBehaviour {
         }
     }
 
-    public bool DownPressed {
-        get
-        {
+    public int VerticalDirection {
+        get {
             var direction = move.ReadValue<Vector2>();
-            return direction.y < -0.5f;
+            int ret;
+
+            if (direction.y > 0.5f) ret = 1;
+            else if (direction.y < -0.5f) ret = -1;
+            else ret = 0;
+
+            return ret;
         }
     }
+
+    public bool DownPressed { get { return VerticalDirection < 0; } }
 
     /**
      * returns unit vector of aimed direction from player
