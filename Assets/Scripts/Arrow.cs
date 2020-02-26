@@ -10,12 +10,14 @@ public class Arrow : MonoBehaviour
     public const int GROUNDED = 1;
     public const int STOPPED = 2;
 
+    private float timer = 0.3f;
     private int wallLayer;
     private int platformLayer;
     private int playerLayer;
 
     public Vector2 direction;
     public Rigidbody2D rbody;
+    public PlayerController firingPlayer;
     private int state = IN_AIR;
 
     void Start() {
@@ -28,6 +30,9 @@ public class Arrow : MonoBehaviour
     }
 
     void FixedUpdate() {
+        if (timer > 0) {
+            timer -= Time.deltaTime;
+        }
         UpdateScale();
         UpdateAngle();
     }
@@ -40,6 +45,9 @@ public class Arrow : MonoBehaviour
             rbody.gravityScale = 0;
         } else if (collider.gameObject.layer == playerLayer) {
             PlayerController player = collider.gameObject.GetComponent<PlayerController>();
+            if (player == firingPlayer && timer > 0) {
+                return;
+            }
             if (player == null) return;
             if (state == IN_AIR) {
                 player.hurtAudioSource.Play();
