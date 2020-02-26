@@ -69,15 +69,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public int GetWinnerId() {
+    public string GetWinnerId() {
         // Assumes only one player left at this point
         for (int i = 0; i < players.Length; i++) {
             if (players[i].alive) {
-                return i;
+                return players[i].playerLabel.text;
             }
         }
         // Shouldn't ever get here
         Debug.LogError("No alive players found at the end of the game!");
-        return -1;
+        return null;
     }
 }
