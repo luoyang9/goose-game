@@ -301,6 +301,7 @@ public class PlayerController : MonoBehaviour {
         Vector2 velocity = rBody.velocity;
         velocity.y = JUMP_VELOCITY;
         rBody.velocity = velocity;
+        jumpAudioSource.Play();
     }
 
     private int CheckDoWallJump() {
@@ -373,21 +374,17 @@ public class PlayerController : MonoBehaviour {
         switch (machine.CurrentState) {
             case IDLE_STATE:
             case RUN_STATE:
-                jumpAudioSource.Play();
                 nextState = JUMP_STATE;
                 break;
             case FALL_STATE:
-                jumpAudioSource.Play();
                 nextState = CheckDoWallJump();
                 break;
             case HOOK_PULL_STATE:
-                jumpAudioSource.Play();
                 ropeSystem.ResetRope();
                 nextState = FALL_STATE;
                 break;
             case HOOK_END_STATE:
                 // wall jump
-                jumpAudioSource.Play();
                 ropeSystem.ResetRope();
                 nextState = CheckDoWallJump();
                 break;
