@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour {
         machine.RegisterState(HOOK_PULL_STATE, HookPullUpdate, null, null);
         machine.RegisterState(HOOK_END_STATE, HookEndUpdate, null, null);
         machine.RegisterState(FALL_THROUGH_PLATFORM_STATE, FallThroughUpdate, null, null);
-        machine.RegisterState(FORCE_FIELD_STATE, ForceFieldUpdate, null, null);
+        machine.RegisterState(FORCE_FIELD_STATE, ForceFieldUpdate, ForceFieldBegin, null);
 
         forceMoveX = 0;
         forceMoveXTimer = 0;
@@ -275,6 +275,10 @@ public class PlayerController : MonoBehaviour {
 
     private int HookEndUpdate() {
         return HOOK_END_STATE;
+    }
+
+    private void ForceFieldBegin() {
+        rBody.velocity = Vector2.zero;
     }
 
     private int ForceFieldUpdate() {
