@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
 
         if (numPlayers <= 1)
         {
-            Cursor.visible = true;
             SceneManager.LoadScene("EndGame");
         }
     }
