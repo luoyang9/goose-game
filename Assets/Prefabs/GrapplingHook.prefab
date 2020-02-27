@@ -134,7 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hooked: 0
   rbody: {fileID: 3155290924371631456}
-  HOOK_SPEED: 40
+  HOOK_SPEED: 60
   MAX_ROPE_DISTANCE: 10
   direction: {x: 0, y: 0}
   ropeSystem: {fileID: 0}
