@@ -54,7 +54,6 @@ public class PlayerManager : MonoBehaviour
             playerInputManager.onPlayerJoined -= OnPlayerJoined;
             activeMappings = GetPlayerMappings();
             DontDestroyOnLoad(gameObject);
-            Cursor.visible = false;
             SceneManager.LoadScene("Main");
         } else {
             Debug.Log("can't start game with fewer than 2 players");
