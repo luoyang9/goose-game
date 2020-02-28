@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour {
         machine.RegisterState(FALL_STATE, FallUpdate, null, FallEnd);
         machine.RegisterState(HOOK_PULL_STATE, HookPullUpdate, null, null);
         machine.RegisterState(HOOK_END_STATE, HookEndUpdate, null, null);
-        machine.RegisterState(FALL_THROUGH_PLATFORM_STATE, FallThroughUpdate, null, null);
+        machine.RegisterState(FALL_THROUGH_PLATFORM_STATE, FallThroughUpdate, null, FallThroughEnd);
         machine.RegisterState(FORCE_FIELD_STATE, ForceFieldUpdate, ForceFieldBegin, null);
 
         forceMoveX = 0;
@@ -219,13 +219,16 @@ public class PlayerController : MonoBehaviour {
 
     private int FallThroughUpdate() {
         if (fallThroughTimer <= 0) {
-            rBody.gameObject.layer = 8;
-            fallThroughTimer = FALL_THROUGH_PLATFORM_DURATION;
             return FALL_STATE;
         }
-        rBody.gameObject.layer = 13;
+        gameObject.layer = LayerMask.NameToLayer("PlayerDropping");
         fallThroughTimer -= Time.deltaTime;
         return FALL_THROUGH_PLATFORM_STATE;
+    }
+
+    public void FallThroughEnd() {
+        gameObject.layer = LayerMask.NameToLayer("Player");
+        fallThroughTimer = FALL_THROUGH_PLATFORM_DURATION;
     }
 
     private int JumpUpdate() {
