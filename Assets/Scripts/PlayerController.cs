@@ -160,7 +160,7 @@ public class PlayerController : MonoBehaviour {
             Facing = moveX;
         }
         Vector3 scale = transform.localScale;
-        scale.x = Facing * scale.x < 1 ? -scale.x : scale.x;
+        scale.x = Facing;
         transform.localScale = scale;
     }
 
