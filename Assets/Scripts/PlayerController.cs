@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour {
     public AudioSource hookLandAudioSource;
     public TMP_Text arrowCount;
     public TMP_Text playerLabel;
+    public Transform playerUI;
 
     // movement
     public int moveX = 0;
@@ -154,14 +155,22 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    private void HandleFacingScale() {
+        Vector3 scale = transform.localScale;
+        scale.x = Facing;
+        transform.localScale = scale;
+        // don't want ui to flip
+        Vector3 uiScale = playerUI.localScale;
+        uiScale.x = Facing;
+        playerUI.localScale = uiScale;
+    }
+
     private void HandleDirection() {
         moveX = actions.HorizontalDirection;
         if (moveX != 0 && forceFacingTimer <= 0) {
             Facing = moveX;
         }
-        Vector3 scale = transform.localScale;
-        scale.x = Facing;
-        transform.localScale = scale;
+        HandleFacingScale();
     }
 
     private int IdleUpdate() {

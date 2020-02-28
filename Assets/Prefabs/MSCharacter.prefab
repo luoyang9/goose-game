@@ -809,6 +809,7 @@ MonoBehaviour:
   hookLandAudioSource: {fileID: 2896694687955851134}
   arrowCount: {fileID: 9093695666500934933}
   playerLabel: {fileID: 3080945296296043680}
+  playerUI: {fileID: 7704046322810770719}
   moveX: 0
   rBody: {fileID: 4443951294556298770}
   numArrows: 5
