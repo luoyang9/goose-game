@@ -809,12 +809,14 @@ MonoBehaviour:
   hookLandAudioSource: {fileID: 2896694687955851134}
   arrowCount: {fileID: 9093695666500934933}
   playerLabel: {fileID: 3080945296296043680}
+  playerIndex: 0
   moveX: 0
   rBody: {fileID: 4443951294556298770}
   numArrows: 5
   nextArrowFire: 0
   arrowPrefab: {fileID: 476587864798531743, guid: e84ae2baf269c91499dca64938458578,
     type: 3}
+  meleePrefab: {fileID: 3125025566164943013}
   forceField: {fileID: 4688342881605913894}
 --- !u!61 &8693690227528506847
 BoxCollider2D:

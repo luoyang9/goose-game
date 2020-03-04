@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour {
     // VARIABLES
@@ -8,6 +9,7 @@ public class PlayerController : MonoBehaviour {
     public Vector2 hookPosition;
     public RopeSystem ropeSystem;
     public Transform crosshair;
+    public Vector3 respawnPoint;
     public Animator animator;
     public bool alive = true;
     public Melee melee;
@@ -26,6 +28,12 @@ public class PlayerController : MonoBehaviour {
     public TMP_Text arrowCount;
     public TMP_Text playerLabel;
 
+    // game manager variable
+    public int playerIndex = 0;
+
+    // lives
+    public int lives = 5;
+
     // movement
     public int moveX = 0;
     private int forceMoveX;
@@ -42,6 +50,7 @@ public class PlayerController : MonoBehaviour {
     public Arrow arrowPrefab;
     private bool CanShoot { get { return Time.time > nextArrowFire; } }
     // melee
+    public GameObject meleePrefab;
     private float nextSwingTime = 0;
     private bool CanAttack { get { return Time.time > nextSwingTime; } }
     // force field
@@ -85,7 +94,7 @@ public class PlayerController : MonoBehaviour {
     public const int FORCE_FIELD_STATE = 7;
 
     // EVENTS
-    public delegate void PlayerDeathHandler(string tag);
+    public delegate void PlayerDeathHandler(PlayerController player);
     public static event PlayerDeathHandler OnPlayerDeath;
 
     void Start() {
@@ -104,7 +113,7 @@ public class PlayerController : MonoBehaviour {
         playerLabel.text = PlayerChoice.PlayerTag;
     }
 
-    private void OnEnable() {
+        private void OnEnable() {
         actions.Jump += OnJump;
         actions.ArrowShoot += OnArrowShoot;
         actions.HookShoot += OnHookShoot;
@@ -338,9 +347,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void Kill() {
-        Destroy(gameObject);
-        alive = false;
-        OnPlayerDeath?.Invoke(PlayerChoice.PlayerTag);
+        OnPlayerDeath?.Invoke(this);
     }
 
     private void FireArrow() {
@@ -433,6 +440,7 @@ public class PlayerController : MonoBehaviour {
                 break;
             default:
                 // attack
+                meleePrefab.SetActive(true);
                 nextSwingTime = Time.time + SWING_COOLDOWN;
                 forceFacing = Facing;
                 forceFacingTimer = Melee.ATTACK_DURATION;
