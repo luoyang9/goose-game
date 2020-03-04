@@ -22,8 +22,10 @@ public class GroundCheck : MonoBehaviour {
 
     void OnTriggerExit2D(Collider2D collision) {
         int layer = collision.gameObject.layer;
-        if (layer == wallLayer || layer == platformLayer) {
-            TouchingLayer = noLayer;
+        if (layer == TouchingLayer) {
+            if (layer == wallLayer || layer == platformLayer) {
+                TouchingLayer = noLayer;
+            }
         }
     }
 

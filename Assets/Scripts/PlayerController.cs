@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour {
         machine.RegisterState(FALL_STATE, FallUpdate, null, FallEnd);
         machine.RegisterState(HOOK_PULL_STATE, HookPullUpdate, null, null);
         machine.RegisterState(HOOK_END_STATE, HookEndUpdate, null, null);
-        machine.RegisterState(FALL_THROUGH_PLATFORM_STATE, FallThroughUpdate, null, FallThroughEnd);
+        machine.RegisterState(FALL_THROUGH_PLATFORM_STATE, FallThroughUpdate, FallThroughBegin, FallThroughEnd);
         machine.RegisterState(FORCE_FIELD_STATE, ForceFieldUpdate, ForceFieldBegin, null);
 
         forceMoveX = 0;
@@ -180,10 +180,6 @@ public class PlayerController : MonoBehaviour {
             velocity.x -= FRICTION * velocity.x;
         }
         rBody.velocity = velocity;
-        // fall through platforms
-        if (actions.DownPressed && groundCheck.isTouchingPlatform()) {
-            return FALL_THROUGH_PLATFORM_STATE;
-        }
         // falling
         if (rBody.velocity.y < -0.001) {
             return FALL_STATE;
@@ -206,10 +202,6 @@ public class PlayerController : MonoBehaviour {
         velocity.x += moveX * MOVEMENT_ACCELERATION;
         velocity.x = ClampMoveSpeed(velocity.x);
         rBody.velocity = velocity;
-        // fall through platforms
-        if (actions.DownPressed && groundCheck.isTouchingPlatform()) {
-            return FALL_THROUGH_PLATFORM_STATE;
-        }
         // force field
         if (!InLag && actions.ForceFieldPressed) {
             return FORCE_FIELD_STATE;
@@ -226,6 +218,13 @@ public class PlayerController : MonoBehaviour {
         return RUN_STATE;
     }
 
+    private void FallThroughBegin() {
+        Vector2 velocity = rBody.velocity;
+        velocity.y = -MAX_FALL/2;
+        rBody.velocity = velocity;
+        Debug.Log(rBody.velocity.y);
+    }
+
     private int FallThroughUpdate() {
         if (fallThroughTimer <= 0) {
             return FALL_STATE;
@@ -234,6 +233,7 @@ public class PlayerController : MonoBehaviour {
         fallThroughTimer -= Time.deltaTime;
         return FALL_THROUGH_PLATFORM_STATE;
     }
+
 
     public void FallThroughEnd() {
         gameObject.layer = LayerMask.NameToLayer("Player");
@@ -386,7 +386,12 @@ public class PlayerController : MonoBehaviour {
         switch (machine.CurrentState) {
             case IDLE_STATE:
             case RUN_STATE:
-                nextState = JUMP_STATE;
+                // fall through platforms
+                if (actions.DownPressed && groundCheck.isTouchingPlatform()) {
+                    nextState = FALL_THROUGH_PLATFORM_STATE;
+                } else {
+                    nextState = JUMP_STATE;
+                }
                 break;
             case FALL_STATE:
                 nextState = CheckDoWallJump();
