@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 using System.Collections;
 
 public class GameLobbyPlayer : MonoBehaviour {
@@ -14,6 +15,8 @@ public class GameLobbyPlayer : MonoBehaviour {
     public PlayerSelection Selection { get; set; }
     private PlayerManager playerManager;
 
+    private Coroutine backProgress;
+
     private void Awake() {
         playerManager = GameObject.Find("PlayerManager").GetComponent<PlayerManager>();
 
@@ -26,6 +29,8 @@ public class GameLobbyPlayer : MonoBehaviour {
 
     private void OnEnable() {
         cancel.performed += OnCancel;
+        longCancel.started += OnBeginLongCancel;
+        longCancel.canceled += OnCancelLongCancel;
         longCancel.performed += OnLongCancel;
         submit.performed += OnSubmit;
         navigate.performed += OnNavigate;
@@ -33,6 +38,8 @@ public class GameLobbyPlayer : MonoBehaviour {
 
     private void OnDisable() {
         cancel.performed -= OnCancel;
+        longCancel.started -= OnBeginLongCancel;
+        longCancel.canceled -= OnCancelLongCancel;
         longCancel.performed -= OnLongCancel;
         submit.performed -= OnSubmit;
         navigate.performed -= OnNavigate;
@@ -42,9 +49,31 @@ public class GameLobbyPlayer : MonoBehaviour {
         Selection.OnCancel();
     }
 
-    // todo: move callback methods to playerSelection
+    private void OnBeginLongCancel(InputAction.CallbackContext c) {
+        var start = (float) c.startTime;
+        var interaction = (HoldInteraction) c.interaction;
+        var totalCancelTime = Mathf.Max(interaction.duration, InputSystem.settings.defaultHoldTime);
+        backProgress = StartCoroutine(UpdateBackProgress(start, totalCancelTime));
+    }
+
+    IEnumerator UpdateBackProgress(float start, float totalTime) {
+        while (true) {
+            var elapsed = Time.realtimeSinceStartup - start;
+            if (elapsed > totalTime) break;
+
+            var pct = elapsed / totalTime;
+            playerManager.UpdateBackProgress(pct);
+            yield return new WaitForSeconds(.05f);
+        }
+    }
+
+    private void OnCancelLongCancel(InputAction.CallbackContext c) {
+        StopCoroutine(backProgress);
+        playerManager.UpdateBackProgress(0);
+    }
+
     public void OnLongCancel(InputAction.CallbackContext c) {
-        playerManager.OnPressBack();
+        playerManager.NavigateBack();
     }
 
     public void OnSubmit(InputAction.CallbackContext c) {

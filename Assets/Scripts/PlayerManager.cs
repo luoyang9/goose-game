@@ -13,8 +13,24 @@ public class PlayerManager : MonoBehaviour
 
     public PlayerSelectionUI[] playerSelectionUis;
     public PlayerInputManager playerInputManager;
+    public GameObject startGamePrompt;
+    public RectTransform backNavProgress;
+    const float MAX_PROGRESS_WIDTH = 100f;
 
     private PlayerSelection[] playerSelections;
+    private bool CanFight {
+        get {
+            var numPlayersReady = playerSelections.Count(
+                selection => selection != null && selection.State == PlayerSelection.READY_STATE
+            );
+            var allReady = !playerSelections.Any(
+                selection =>
+                    selection != null
+                    && selection.State == PlayerSelection.PENDING_STATE
+            );
+            return numPlayersReady >= MIN_PLAYERS && allReady;
+        }
+    }
     private int playerAddIdx;
 
     private List<PlayerMapping> activeMappings;
@@ -34,22 +50,30 @@ public class PlayerManager : MonoBehaviour
         playerInputManager.onPlayerJoined -= OnPlayerJoined;
         SceneManager.activeSceneChanged -= OnSceneChange;
     }
-        
-    public void OnPressBack()
+    
+    public void UpdateBackProgress(float pct) {
+        // might cancel cancel action after cancel action performed
+        if (backNavProgress == null) return;
+
+        pct = Mathf.Clamp(pct, 0, 1);
+
+        backNavProgress.SetSizeWithCurrentAnchors(
+            RectTransform.Axis.Horizontal, 
+            pct * MAX_PROGRESS_WIDTH
+        );
+    }
+
+    public void OnStartBack()
     {
         SceneManager.LoadScene("MainMenu");
     }
 
+    public void NavigateBack() {
+        SceneManager.LoadScene("MainMenu");
+    }
+
     public void OnStartFight() {
-        var numPlayersReady = playerSelections.Count(
-            selection => selection != null && selection.State == PlayerSelection.READY_STATE
-        );
-        var allReady = !playerSelections.Any(
-            selection => 
-                selection != null
-                && selection.State == PlayerSelection.PENDING_STATE
-        );
-        if (numPlayersReady >= MIN_PLAYERS && allReady) {
+        if (CanFight) {
             // good
             playerInputManager.onPlayerJoined -= OnPlayerJoined;
             activeMappings = GetPlayerMappings();
@@ -85,6 +109,7 @@ public class PlayerManager : MonoBehaviour
         selection.Manager = this;
         selection.PlayerName = $"P{playerAddIdx + 1}";
         selection.Controller = devices;
+        selection.StateChanged += OnPlayerStateChange;
         playerSelections[playerAddIdx] = selection;
         // update UI
         var selectionUI = playerSelectionUis[playerAddIdx];
@@ -95,6 +120,14 @@ public class PlayerManager : MonoBehaviour
         lobbyPlayer.Selection = selection;
 
         playerAddIdx += 1;
+    }
+
+    private void OnPlayerStateChange(int s) {
+        HandleFightPrompt();
+    }
+
+    private void HandleFightPrompt() {
+        startGamePrompt.SetActive(CanFight);
     }
 
     private List<PlayerMapping> GetPlayerMappings() {
