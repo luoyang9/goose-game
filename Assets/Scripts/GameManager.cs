@@ -6,11 +6,27 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public const float DEATH_SHAKE_DURATION = 0.3f;
     public Camera camera;
     public Transform[] spawns;
     private PlayerController[] players;
+
+    private float shakeDurationLeft = 0f;
+    private Vector3 initialCameraLocation;
+
     private int numPlayers;
 
+    private void FixedUpdate() {
+        if (shakeDurationLeft > 0) {
+            shakeDurationLeft -= Time.deltaTime;
+            if (shakeDurationLeft <= 0) {
+                shakeDurationLeft = 0;
+                camera.transform.position = initialCameraLocation;
+            } else {
+                camera.transform.localPosition = initialCameraLocation + UnityEngine.Random.insideUnitSphere;
+            }
+        }
+    }
     protected void OnEnable()
     {
         PlayerController.OnPlayerDeath += OnPlayerDeath;
@@ -41,10 +57,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void OnPlayerDeath(string id)
-    {
+    void OnPlayerDeath(string id) {
         numPlayers -= 1;
-
+        initialCameraLocation = camera.transform.position;
+        shakeDurationLeft = DEATH_SHAKE_DURATION;
         if (numPlayers <= 1)
         {
             SceneManager.LoadScene("EndGame");
