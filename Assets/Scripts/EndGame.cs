@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class EndGame : MonoBehaviour {
+    public TMPro.TextMeshProUGUI text;
     public void Start() {
         GameManager manager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        TMPro.TextMeshProUGUI text = GameObject.Find("Winner").GetComponent<TMPro.TextMeshProUGUI>();
         text.SetText(manager.GetWinnerId() + " won");
         Destroy(manager.gameObject);
     }
