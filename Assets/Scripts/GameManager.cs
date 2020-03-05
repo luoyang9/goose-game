@@ -63,7 +63,21 @@ public class GameManager : MonoBehaviour
         shakeDurationLeft = DEATH_SHAKE_DURATION;
         if (numPlayers <= 1)
         {
+            Cursor.visible = true;
+            DontDestroyOnLoad(gameObject);
             SceneManager.LoadScene("EndGame");
         }
+    }
+
+    public string GetWinnerId() {
+        // Assumes only one player left at this point
+        for (int i = 0; i < players.Length; i++) {
+            if (players[i].alive) {
+                return players[i].playerLabel.text;
+            }
+        }
+        // Shouldn't ever get here
+        Debug.LogError("No alive players found at the end of the game!");
+        return null;
     }
 }
