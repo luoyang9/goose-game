@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
 
     void OnPlayerDeath(string id) {
         numPlayers -= 1;
-        initialCameraLocation = camera.transform.localPosition;
+        initialCameraLocation = camera.transform.position;
         shakeDurationLeft = DEATH_SHAKE_DURATION;
         if (numPlayers <= 1)
         {
