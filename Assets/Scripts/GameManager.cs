@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class GameManager : MonoBehaviour
     public Camera camera;
     public Transform[] spawns;
     private PlayerController[] players;
+    private List<PlayerMapping> playerMappings;
+    private PlayerController dyingPlayer;
 
     private float shakeDurationLeft = 0f;
     private Vector3 initialCameraLocation;
@@ -40,6 +43,7 @@ public class GameManager : MonoBehaviour
     public void SpawnPlayers(List<PlayerMapping> mappings)
     {
         numPlayers = mappings.Count;
+        playerMappings = mappings;
         Debug.Assert(numPlayers <= PlayerManager.MAX_PLAYERS, "unsupported number of players");
 
         players = new PlayerController[numPlayers];
@@ -51,22 +55,35 @@ public class GameManager : MonoBehaviour
             var input = PlayerInput.Instantiate(mapping.Character, pairWithDevices: devices);
             input.transform.position = spawns[i].position;
             var player = input.GetComponent<PlayerController>();
+            player.playerIndex = i;
             player.PlayerChoice = mapping;
             player.gameCamera = camera;
             players[i] = player;
         }
     }
 
-    void OnPlayerDeath(string id) {
-        numPlayers -= 1;
+    void OnPlayerDeath(PlayerController player) {
+        dyingPlayer = player;
+        StartCoroutine(RespawnCoroutine());
         initialCameraLocation = camera.transform.position;
-        shakeDurationLeft = DEATH_SHAKE_DURATION;
-        if (numPlayers <= 1)
-        {
-            Cursor.visible = true;
-            DontDestroyOnLoad(gameObject);
-            SceneManager.LoadScene("EndGame");
+        if (player.lives == 0) {
+            numPlayers -= 1;
+            if (numPlayers == 1) {
+                SceneManager.LoadScene("EndGame");
+            }
         }
+    }
+
+    public IEnumerator RespawnCoroutine() {
+        dyingPlayer.gameObject.SetActive(false);
+        int randomRespawn = UnityEngine.Random.Range(0, spawns.Length);
+        Vector3 newPosition = dyingPlayer.transform.position;
+        newPosition.y += 0.3f;
+        Instantiate(dyingPlayer.effect, newPosition, Quaternion.identity);
+        dyingPlayer.transform.position = spawns[randomRespawn].position;
+        dyingPlayer.lives -= 1;
+        yield return new WaitForSeconds(1f);
+        dyingPlayer.gameObject.SetActive(true);
     }
 
     public string GetWinnerId() {

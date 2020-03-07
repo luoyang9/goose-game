@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour {
     public WallCheck backWallCheck;
     public WallCheck frontWallCheck;
     public GroundCheck groundCheck;
+    public GameObject effect;
     public PlayerMapping PlayerChoice { get; set; }
     public AudioSource jumpAudioSource;
     public AudioSource arrowShootAudioSource;
@@ -26,6 +27,12 @@ public class PlayerController : MonoBehaviour {
     public TMP_Text arrowCount;
     public TMP_Text playerLabel;
     public Transform playerUI;
+
+    // game manager variable
+    public int playerIndex = 0;
+
+    // lives
+    public int lives = 5;
 
     // movement
     public int moveX = 0;
@@ -86,7 +93,7 @@ public class PlayerController : MonoBehaviour {
     public const int FORCE_FIELD_STATE = 7;
 
     // EVENTS
-    public delegate void PlayerDeathHandler(string tag);
+    public delegate void PlayerDeathHandler(PlayerController player);
     public static event PlayerDeathHandler OnPlayerDeath;
 
     void Start() {
@@ -351,9 +358,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void Kill() {
-        Destroy(gameObject);
-        alive = false;
-        OnPlayerDeath?.Invoke(PlayerChoice.PlayerTag);
+        OnPlayerDeath?.Invoke(this);
     }
 
     private void FireArrow() {
