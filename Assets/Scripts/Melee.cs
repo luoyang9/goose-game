@@ -37,15 +37,15 @@ public class Melee : MonoBehaviour {
         playerLayer = LayerMask.NameToLayer("Player");
 
         UP_ATTACK = new AttackParams(
-            new Vector2(0, 2.5f),
+            new Vector2(0, 1.6f),
             90
         );
         DOWN_ATTACK = new AttackParams(
-            new Vector2(0, -2.5f),
+            new Vector2(0, -1.6f),
             -90
         );
         FORWARD_ATTACK = new AttackParams(
-            new Vector2(2.5f, 0),
+            new Vector2(1.6f, 0),
             0
         );
     }
