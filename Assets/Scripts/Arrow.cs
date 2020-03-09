@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
+    public const float ROTATION_SPEED = 20f;
     public const float ARROW_SPEED = 40f;
     // States
     public const int IN_AIR = 0;
@@ -70,11 +71,7 @@ public class Arrow : MonoBehaviour
 
     private void UpdateAngle() {
         if (state == IN_AIR) {
-            var zeroAngle = direction.x < 0 ? Vector2.left : Vector2.right;
-            var angle = Vector2.SignedAngle(zeroAngle, rbody.velocity);
-            Quaternion rotation = transform.rotation;
-            rotation.eulerAngles = new Vector3(rotation.x, rotation.y, angle);
-            transform.rotation = rotation;
+            transform.Rotate(0, 0, ROTATION_SPEED);
         }
     }
 
