@@ -7,23 +7,14 @@ public class Melee : MonoBehaviour {
 
     private struct AttackParams {
         public Vector2 position;
-        public Vector2 hitboxSize;
-        public Vector2 hitboxOffset;
-        public Sprite sprite;
-        public bool spriteFlipY;
+        public float rotation;
 
         public AttackParams(
             Vector2 pos,
-            Vector2 hbSize,
-            Vector2 hbOffset,
-            Sprite s,
-            bool flipY
+            float rot
         ) {
             position = pos;
-            hitboxSize = hbSize;
-            hitboxOffset = hbOffset;
-            sprite = s;
-            spriteFlipY = flipY;
+            rotation = rot;
         }
     }
 
@@ -33,8 +24,7 @@ public class Melee : MonoBehaviour {
     private AttackParams DOWN_ATTACK;
     private AttackParams FORWARD_ATTACK;
 
-    public Sprite upAttackSprite;
-    public Sprite forwardAttackSprite;
+    public Animator animator;
 
     public PlayerController player;
     public SpriteRenderer weaponSpriteRenderer;
@@ -47,29 +37,17 @@ public class Melee : MonoBehaviour {
         playerLayer = LayerMask.NameToLayer("Player");
 
         UP_ATTACK = new AttackParams(
-            new Vector2(0, 1.2f),
-            new Vector2(0.7f, 1.1f),
-            new Vector2(0, 0.4f),
-            upAttackSprite,
-            false
+            new Vector2(0, 1.6f),
+            90
         );
         DOWN_ATTACK = new AttackParams(
-            new Vector2(0, -1.2f),
-            new Vector2(0.7f, 1.1f),
-            new Vector2(0, -0.4f),
-            upAttackSprite,
-            true
+            new Vector2(0, -1.6f),
+            -90
         );
         FORWARD_ATTACK = new AttackParams(
-            new Vector2(1.2f, 0),
-            new Vector2(1.1f, 0.7f),
-            new Vector2(0.4f, 0),
-            forwardAttackSprite,
-            false
+            new Vector2(1.6f, 0),
+            0
         );
-    }
-
-    void Update() {
     }
 
     void FixedUpdate() {
@@ -94,15 +72,13 @@ public class Melee : MonoBehaviour {
                 ApplyAttackParams(FORWARD_ATTACK);
                 break;
         }
+        animator.SetTrigger("Attack");
         AttackEnable();
     }
 
     private void ApplyAttackParams(AttackParams attack) {
-        weaponSpriteRenderer.sprite = attack.sprite;
-        weaponSpriteRenderer.flipY = attack.spriteFlipY;
         transform.localPosition = attack.position;
-        weaponCollider.size = attack.hitboxSize;
-        weaponCollider.offset = attack.hitboxOffset;
+        transform.localEulerAngles = new Vector3(0, 0, attack.rotation);
     }
 
     private void AttackReset() {
@@ -111,13 +87,11 @@ public class Melee : MonoBehaviour {
 
     private void AttackEnable() {
         weaponCollider.enabled = true;
-        weaponSpriteRenderer.enabled = true;
     }
 
     private void AttackDisable() {
         if (!weaponCollider.enabled) return;
         weaponCollider.enabled = false;
-        weaponSpriteRenderer.enabled = false;
     }
 
     void OnTriggerEnter2D(Collider2D collider) {
