@@ -90,8 +90,8 @@ public class GameManager : MonoBehaviour
     public string GetWinnerId() {
         // Assumes only one player left at this point
         for (int i = 0; i < players.Length; i++) {
-            if (players[i].alive) {
-                return players[i].playerLabel.text;
+            if (players[i].Alive) {
+                return players[i].PlayerChoice.PlayerTag;
             }
         }
         // Shouldn't ever get here
