@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
         if (player.lives == 0) {
             numPlayers -= 1;
             if (numPlayers == 1) {
+                DontDestroyOnLoad(this);
                 SceneManager.LoadScene("EndGame");
             }
         }
