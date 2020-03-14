@@ -73,7 +73,7 @@ public class PlayerSelection: MonoBehaviour {
     }
 
     public void ChangeCharacter(int direction) {
-        if (direction != -1 || direction != 1) return;
+        if (direction != -1 && direction != 1) return;
 
         SelectedCharacter = (SelectedCharacter + direction + roster.Length) % roster.Length;
     }

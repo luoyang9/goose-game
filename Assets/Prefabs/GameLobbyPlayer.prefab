@@ -269,7 +269,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roster:
-  - name: MSCharacter
-    splash: {fileID: 21300000, guid: 1320dc8371bbf2945be4deb014b700d7, type: 3}
+  - name: OGCharacter
+    splash: {fileID: 21300000, guid: f84ec40d566f8354992ed4424e016065, type: 3}
     prefab: {fileID: 4443951294556298772, guid: d9addbae1f6fdcc4db01e20bc2751da9,
       type: 3}
+  - name: Red
+    splash: {fileID: 21300000, guid: fd450ffb45ca2d642b1d9aaa0ef47a43, type: 3}
+    prefab: {fileID: 786385951660966763, guid: c3f59437076b016409fa86d69df0d375, type: 3}
