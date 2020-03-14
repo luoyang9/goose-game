@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour {
     public RopeSystem ropeSystem;
     public Transform crosshair;
     public Animator animator;
-    public bool alive = true;
     public Melee melee;
     public SpriteRenderer sprite;
     public StateMachine machine;
@@ -33,6 +32,7 @@ public class PlayerController : MonoBehaviour {
 
     // lives
     public int lives = 5;
+    public bool Alive { get { return lives > 0; } }
 
     // movement
     public int moveX = 0;
