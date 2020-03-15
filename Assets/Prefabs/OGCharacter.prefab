@@ -812,7 +812,6 @@ MonoBehaviour:
   ropeSystem: {fileID: 4443951294556298769}
   crosshair: {fileID: 8099013692215979369}
   animator: {fileID: 6885775752252314838}
-  alive: 1
   melee: {fileID: 2907988911900256694}
   sprite: {fileID: 4443951294556298773}
   machine: {fileID: -2980204640073275049}
@@ -2087,7 +2086,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.3734125, y: -0.023437262}
+  m_Offset: {x: 0.3, y: -0.023437262}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -2098,7 +2097,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.109624505, y: 1.0645345}
+  m_Size: {x: 0.24, y: 1.0645345}
   m_EdgeRadius: 0
 --- !u!1 &9186750111127493010
 GameObject:
