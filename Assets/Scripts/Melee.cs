@@ -8,13 +8,16 @@ public class Melee : MonoBehaviour {
     private struct AttackParams {
         public Vector2 position;
         public float rotation;
+        public bool flip;
 
         public AttackParams(
             Vector2 pos,
-            float rot
+            float rot,
+            bool fl = false
         ) {
             position = pos;
             rotation = rot;
+            flip = fl;
         }
     }
 
@@ -42,7 +45,8 @@ public class Melee : MonoBehaviour {
         );
         DOWN_ATTACK = new AttackParams(
             new Vector2(0, -1.6f),
-            -90
+            -90,
+            true
         );
         FORWARD_ATTACK = new AttackParams(
             new Vector2(1.6f, 0),
@@ -79,6 +83,7 @@ public class Melee : MonoBehaviour {
     private void ApplyAttackParams(AttackParams attack) {
         transform.localPosition = attack.position;
         transform.localEulerAngles = new Vector3(0, 0, attack.rotation);
+        weaponSpriteRenderer.flipY = attack.flip;
     }
 
     private void AttackReset() {

@@ -462,6 +462,7 @@ public class PlayerController : MonoBehaviour {
                     melee.Attack(Melee.AttackDirection.UP);
                 } else if (actions.VerticalDirection < 0) {
                     // down
+                    animator.SetTrigger("DownAttack");
                     melee.Attack(Melee.AttackDirection.DOWN);
                 } else {
                     // forward
