@@ -1,13 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class EndGame : MonoBehaviour {
-    public TMPro.TextMeshProUGUI text;
+    public Text text;
     public void Start() {
         GameManager manager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        text.SetText(manager.GetWinnerId() + " won");
+        text.text = manager.GetWinnerId() + " won";
         Destroy(manager.gameObject);
     }
     public void OpenMenu() {
