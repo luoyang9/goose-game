@@ -456,15 +456,17 @@ public class PlayerController : MonoBehaviour {
                 forceFacing = Facing;
                 forceFacingTimer = Melee.ATTACK_DURATION;
                 meleeAudioSource.Play();
-                animator.SetTrigger("Attack");
                 if (actions.VerticalDirection > 0) {
                     // up
+                    animator.SetTrigger("UpAttack");
                     melee.Attack(Melee.AttackDirection.UP);
                 } else if (actions.VerticalDirection < 0) {
                     // down
+                    animator.SetTrigger("DownAttack");
                     melee.Attack(Melee.AttackDirection.DOWN);
                 } else {
                     // forward
+                    animator.SetTrigger("Attack");
                     melee.Attack(Melee.AttackDirection.FORWARD);
                 }
                 break;
