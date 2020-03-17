@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
+using System;
 
 public class PlayerController : MonoBehaviour {
     // VARIABLES
@@ -404,6 +405,22 @@ public class PlayerController : MonoBehaviour {
         arrow.firingPlayer = this;
         arrow.direction = aimDirection;
         numArrows--;
+        Facing = aimDirection.x > 0 ? 1: -1;
+        ShootArrowAnimation(aimDirection);
+    }
+
+    private void ShootArrowAnimation(Vector2 aim) {
+        // animation
+        string trigger;
+        var horizontal = aim.x != 0 && Math.Abs(aim.y / aim.x) <= 1;
+        if (horizontal) {
+            trigger = "Attack";
+        } else if (aim.y > 0) {
+            trigger = "UpAttack";
+        } else {
+            trigger = "DownAttack";
+        }
+        animator.SetTrigger(trigger);
     }
 
     private void HandleCrosshair() {
