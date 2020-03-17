@@ -44,6 +44,12 @@ public class PlayerController : MonoBehaviour {
     public int Facing { get; private set; } = 1; // either -1 or 1
     private WallCheck LeftWallCheck { get { return (Facing < 0) ? frontWallCheck : backWallCheck; } }
     private WallCheck RightWallCheck { get { return (Facing > 0) ? frontWallCheck : backWallCheck; } }
+    private bool MoveIntoWall {
+        get {
+            return moveX == -1 && LeftWallCheck.Touching
+                || moveX == 1 && RightWallCheck.Touching;
+        }
+    }
     // arrows
     public int numArrows = START_ARROWS;
     public float nextArrowFire = 0f;
@@ -91,6 +97,7 @@ public class PlayerController : MonoBehaviour {
     public const int HOOK_END_STATE = 5;
     public const int FALL_THROUGH_PLATFORM_STATE = 6;
     public const int FORCE_FIELD_STATE = 7;
+    public const int WALL_SLIDE_STATE = 8;
 
     // EVENTS
     public delegate void PlayerDeathHandler(PlayerController player);
@@ -101,9 +108,10 @@ public class PlayerController : MonoBehaviour {
         machine.RegisterState(IDLE_STATE, IdleUpdate, null, null);
         machine.RegisterState(RUN_STATE, RunUpdate, null, null);
         machine.RegisterState(JUMP_STATE, JumpUpdate, JumpBegin, null);
-        machine.RegisterState(FALL_STATE, FallUpdate, null, FallEnd);
+        machine.RegisterState(FALL_STATE, FallUpdate, null, null);
+        machine.RegisterState(WALL_SLIDE_STATE, WallSlideUpdate, WallSlideBegin, WallSlideEnd);
         machine.RegisterState(HOOK_PULL_STATE, HookPullUpdate, null, null);
-        machine.RegisterState(HOOK_END_STATE, HookEndUpdate, null, null);
+        machine.RegisterState(HOOK_END_STATE, HookEndUpdate, HookEndBegin, null);
         machine.RegisterState(FALL_THROUGH_PLATFORM_STATE, FallThroughUpdate, FallThroughBegin, FallThroughEnd);
         machine.RegisterState(FORCE_FIELD_STATE, ForceFieldUpdate, ForceFieldBegin, null);
 
@@ -241,10 +249,16 @@ public class PlayerController : MonoBehaviour {
         return FALL_THROUGH_PLATFORM_STATE;
     }
 
-
     public void FallThroughEnd() {
         gameObject.layer = LayerMask.NameToLayer("Player");
         fallThroughTimer = FALL_THROUGH_PLATFORM_DURATION;
+    }
+
+    private void JumpBegin() {
+        Vector2 velocity = rBody.velocity;
+        velocity.y = JUMP_VELOCITY;
+        rBody.velocity = velocity;
+        jumpAudioSource.Play();
     }
 
     private int JumpUpdate() {
@@ -262,16 +276,27 @@ public class PlayerController : MonoBehaviour {
         }
         Airborne();
         // wall slide
-        if (moveX == -1 && LeftWallCheck.Touching || moveX == 1 && RightWallCheck.Touching) {
-            // decelerate up to a max sliding velocity
-            rBody.drag = WALL_SLIDE_DRAG;
-        } else {
-            rBody.drag = 0;
+        if (MoveIntoWall) {
+            return WALL_SLIDE_STATE;
         }
         return FALL_STATE;
     }
 
-    private void FallEnd() {
+    private void WallSlideBegin() {
+        // decelerate up to a max sliding velocity
+        rBody.drag = WALL_SLIDE_DRAG;
+        forceFacing = -moveX;
+    }
+
+    private int WallSlideUpdate() {
+        if (!MoveIntoWall) return FALL_STATE;
+
+        Airborne();
+        forceFacingTimer = 0.1f; // should be long enough to cover till next frame
+        return WALL_SLIDE_STATE;
+    }
+
+    private void WallSlideEnd() {
         rBody.drag = 0;
     }
 
@@ -292,7 +317,20 @@ public class PlayerController : MonoBehaviour {
         return HOOK_PULL_STATE;
     }
 
+    private void HookEndBegin() {
+        if (LeftWallCheck.Touching) {
+            forceFacing = 1;
+        } else if (RightWallCheck.Touching) {
+            forceFacing = -1;
+        } else {
+            forceFacing = 0;
+        }
+    }
+
     private int HookEndUpdate() {
+        if (forceFacing != 0) {
+            forceFacingTimer = 0.1f;
+        }
         return HOOK_END_STATE;
     }
 
@@ -316,13 +354,6 @@ public class PlayerController : MonoBehaviour {
         return IDLE_STATE;
     }
 
-    private void JumpBegin() {
-        Vector2 velocity = rBody.velocity;
-        velocity.y = JUMP_VELOCITY;
-        rBody.velocity = velocity;
-        jumpAudioSource.Play();
-    }
-
     private int CheckDoWallJump() {
         if (backWallCheck.Touching) {
             WallJump(Facing);
@@ -340,7 +371,8 @@ public class PlayerController : MonoBehaviour {
         var vel = rBody.velocity;
         vel.x = WALL_JUMP_H_SPEED * dir;
         rBody.velocity = vel;
-        Facing = dir;
+        forceFacing = dir;
+        forceFacingTimer = WALL_JUMP_FORCE_TIME;
     }
 
     public void Airborne() {
@@ -399,6 +431,7 @@ public class PlayerController : MonoBehaviour {
                 }
                 break;
             case FALL_STATE:
+            case WALL_SLIDE_STATE:
                 nextState = CheckDoWallJump();
                 break;
             case HOOK_PULL_STATE:
