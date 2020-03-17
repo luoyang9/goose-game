@@ -280,3 +280,7 @@ MonoBehaviour:
     splash: {fileID: 21300000, guid: db6bbe000192b0a42a2aaf001dadf552, type: 3}
     prefab: {fileID: 5253204816180735979, guid: 97f16e72dafa90d4a8e55a5e210a2885,
       type: 3}
+  - name: Black
+    splash: {fileID: 21300000, guid: 16b02f1c8fd347746886496533985d2b, type: 3}
+    prefab: {fileID: 7909444040614737466, guid: e1086797de239644797e50cfb97715cc,
+      type: 3}
