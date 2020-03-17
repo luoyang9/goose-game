@@ -1,10 +1,7 @@
 fileFormatVersion: 2
-guid: 0535fe436dd651a4eaec341ed3d03ea1
+guid: a2f562a45e10c3e4b934609bc2937b87
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -5061526302879590448
-    second: stand1_0_0
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -83,56 +80,13 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
-    buildTarget: Windows Store Apps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-  - serializedVersion: 2
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: stand1_0_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 39
-        height: 66
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f01a46482756caa4b9bf7eca4483147b
-      internalID: -5061526302879590448
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: ad4b26cfb0b377e40a26448d170cd28e
+    spriteID: fcc57c54a35cf2d4b90998774b0703a5
     internalID: 0
     vertices: []
     indices: 

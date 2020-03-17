@@ -33,7 +33,7 @@ public class GameLobbyPlayer : MonoBehaviour {
         longCancel.canceled += OnCancelLongCancel;
         longCancel.performed += OnLongCancel;
         submit.performed += OnSubmit;
-        navigate.performed += OnNavigate;
+        navigate.started += OnNavigate;
     }
 
     private void OnDisable() {
@@ -42,7 +42,7 @@ public class GameLobbyPlayer : MonoBehaviour {
         longCancel.canceled -= OnCancelLongCancel;
         longCancel.performed -= OnLongCancel;
         submit.performed -= OnSubmit;
-        navigate.performed -= OnNavigate;
+        navigate.started -= OnNavigate;
     }
     
     public void OnCancel(InputAction.CallbackContext c) {
