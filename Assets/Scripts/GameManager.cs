@@ -12,12 +12,16 @@ public class GameManager : MonoBehaviour
     public Transform[] spawns;
     private PlayerController[] players;
     private List<PlayerMapping> playerMappings;
-    private PlayerController dyingPlayer;
+    private Queue<PlayerController> dyingPlayers;
 
     private float shakeDurationLeft = 0f;
     private Vector3 initialCameraLocation;
 
     private int numPlayers;
+
+    private void Start() {
+        dyingPlayers = new Queue<PlayerController>();
+    }
 
     private void FixedUpdate() {
         if (shakeDurationLeft > 0) {
@@ -63,7 +67,7 @@ public class GameManager : MonoBehaviour
     }
 
     void OnPlayerDeath(PlayerController player) {
-        dyingPlayer = player;
+        dyingPlayers.Enqueue(player);
         StartCoroutine(RespawnCoroutine());
         initialCameraLocation = camera.transform.position;
         if (player.lives == 0) {
@@ -76,6 +80,7 @@ public class GameManager : MonoBehaviour
     }
 
     public IEnumerator RespawnCoroutine() {
+        PlayerController dyingPlayer = dyingPlayers.Dequeue();
         dyingPlayer.gameObject.SetActive(false);
         int randomRespawn = UnityEngine.Random.Range(0, spawns.Length);
         Vector3 newPosition = dyingPlayer.transform.position;
