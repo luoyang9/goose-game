@@ -4,7 +4,6 @@ using System;
 
 public class PlayerController : MonoBehaviour {
     // VARIABLES
-    public Camera gameCamera { get; set; }
     public InputActionMapper actions;
     public Vector2 hookPosition;
     public RopeSystem ropeSystem;
@@ -27,7 +26,9 @@ public class PlayerController : MonoBehaviour {
     public TMP_Text arrowCount;
     public TMP_Text playerLabel;
     public Transform playerUI;
+    public GameObject runDust;
 
+    private Camera gameCamera;
     // game manager variable
     public int playerIndex = 0;
 
@@ -104,10 +105,15 @@ public class PlayerController : MonoBehaviour {
     public delegate void PlayerDeathHandler(PlayerController player);
     public static event PlayerDeathHandler OnPlayerDeath;
 
+    // ANIMATION
+    private Vector3 RUN_DUST_OFFSET = new Vector3(-1.3f, 0.45f);
+
     void Start() {
+        gameCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+
         machine = gameObject.GetComponent<StateMachine>();
         machine.RegisterState(IDLE_STATE, IdleUpdate, null, null);
-        machine.RegisterState(RUN_STATE, RunUpdate, null, null);
+        machine.RegisterState(RUN_STATE, RunUpdate, RunBegin, null);
         machine.RegisterState(JUMP_STATE, JumpUpdate, JumpBegin, null);
         machine.RegisterState(FALL_STATE, FallUpdate, null, null);
         machine.RegisterState(WALL_SLIDE_STATE, WallSlideUpdate, WallSlideBegin, WallSlideEnd);
@@ -210,6 +216,10 @@ public class PlayerController : MonoBehaviour {
         }
 
         return IDLE_STATE;
+    }
+
+    private void RunBegin() {
+        MakeRunDust();
     }
 
     private int RunUpdate() {
@@ -353,6 +363,19 @@ public class PlayerController : MonoBehaviour {
         forceFieldTimer = MAX_FORCE_FIELD_DURATION;
         lagTimer = 0.4f;
         return IDLE_STATE;
+    }
+
+    private void MakeRunDust() {
+        var scale = transform.localScale;
+        var offset = RUN_DUST_OFFSET;
+        offset.x *= scale.x;
+        var pos = transform.position + offset;
+        var dust = Instantiate(
+            runDust,
+            pos,
+            Quaternion.identity
+        );
+        dust.transform.localScale = scale;
     }
 
     private int CheckDoWallJump() {

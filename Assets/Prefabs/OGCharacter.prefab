@@ -828,6 +828,7 @@ MonoBehaviour:
   arrowCount: {fileID: 9093695666500934933}
   playerLabel: {fileID: 3080945296296043680}
   playerUI: {fileID: 7704046322810770719}
+  runDust: {fileID: 1253879796816490893, guid: e83c5135de9b1bf40b1849f5713ada96, type: 3}
   playerIndex: 0
   lives: 5
   moveX: 0
