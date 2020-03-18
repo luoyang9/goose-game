@@ -7,6 +7,8 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
+    public const float START_GAME_DELAY = 2f;
+    public const float FINAL_DEATH_DELAY = 2f;
     public const float DEATH_SHAKE_DURATION = 0.3f;
     public Camera camera;
     public Transform[] spawns;
@@ -34,6 +36,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
     protected void OnEnable()
     {
         PlayerController.OnPlayerDeath += OnPlayerDeath;
@@ -42,6 +45,20 @@ public class GameManager : MonoBehaviour
     protected void OnDisable()
     {
         PlayerController.OnPlayerDeath -= OnPlayerDeath;
+    }
+
+    private IEnumerator FreezePlayersCoroutine()
+    {
+        // Initially disables all controllers
+        for (int i = 0; i < numPlayers; i++)
+        {
+            players[i].DisableControls();
+        }
+        yield return new WaitForSeconds(START_GAME_DELAY);
+        for (int i = 0; i < numPlayers; i++)
+        {
+            players[i].EnableControls();
+        }
     }
 
     public void SpawnPlayers(List<PlayerMapping> mappings)
@@ -64,6 +81,7 @@ public class GameManager : MonoBehaviour
             player.gameCamera = camera;
             players[i] = player;
         }
+        StartCoroutine(FreezePlayersCoroutine());
     }
 
     void OnPlayerDeath(PlayerController player) {
@@ -73,10 +91,15 @@ public class GameManager : MonoBehaviour
         if (player.lives == 0) {
             numPlayers -= 1;
             if (numPlayers == 1) {
-                DontDestroyOnLoad(this);
-                SceneManager.LoadScene("EndGame");
+                StartCoroutine(EndGameCoroutine());
             }
         }
+    }
+
+    private IEnumerator EndGameCoroutine() {
+        yield return new WaitForSeconds(FINAL_DEATH_DELAY);
+        DontDestroyOnLoad(this);
+        SceneManager.LoadScene("EndGame");
     }
 
     public IEnumerator RespawnCoroutine() {
