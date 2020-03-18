@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using System;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour {
     // VARIABLES
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour {
     public TMP_Text playerLabel;
     public Transform playerUI;
     public GameObject runDust;
+    public GameObject wallSlideDust;
 
     private Camera gameCamera;
     // game manager variable
@@ -106,7 +108,10 @@ public class PlayerController : MonoBehaviour {
     public static event PlayerDeathHandler OnPlayerDeath;
 
     // ANIMATION
-    private Vector3 RUN_DUST_OFFSET = new Vector3(-1.3f, 0.45f);
+    private Vector2 RUN_DUST_OFFSET = new Vector2(-1.3f, 0.45f);
+    private Vector2 WALL_DUST_OFFSET = new Vector2(-0.3f, 0);
+
+    private IEnumerator wallDustCoro;
 
     void Start() {
         gameCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
@@ -219,7 +224,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void RunBegin() {
-        MakeRunDust();
+        MakeDust(runDust, RUN_DUST_OFFSET);
     }
 
     private int RunUpdate() {
@@ -297,6 +302,8 @@ public class PlayerController : MonoBehaviour {
         // decelerate up to a max sliding velocity
         rBody.drag = WALL_SLIDE_DRAG;
         forceFacing = -moveX;
+        wallDustCoro = MakeWallSlideDust();
+        StartCoroutine(wallDustCoro);
     }
 
     private int WallSlideUpdate() {
@@ -309,6 +316,7 @@ public class PlayerController : MonoBehaviour {
 
     private void WallSlideEnd() {
         rBody.drag = 0;
+        StopCoroutine(wallDustCoro);
     }
 
     private int HookPullUpdate() {
@@ -365,13 +373,19 @@ public class PlayerController : MonoBehaviour {
         return IDLE_STATE;
     }
 
-    private void MakeRunDust() {
+    IEnumerator MakeWallSlideDust() {
+        while (true) {
+            yield return new WaitForSeconds(0.2f);
+            MakeDust(wallSlideDust, WALL_DUST_OFFSET);
+        }
+    }
+
+    private void MakeDust(GameObject dustPrefab, Vector2 offset) {
         var scale = transform.localScale;
-        var offset = RUN_DUST_OFFSET;
         offset.x *= scale.x;
-        var pos = transform.position + offset;
+        var pos = transform.position + (Vector3) offset;
         var dust = Instantiate(
-            runDust,
+            dustPrefab,
             pos,
             Quaternion.identity
         );

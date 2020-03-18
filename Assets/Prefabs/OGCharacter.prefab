@@ -829,6 +829,8 @@ MonoBehaviour:
   playerLabel: {fileID: 3080945296296043680}
   playerUI: {fileID: 7704046322810770719}
   runDust: {fileID: 1253879796816490893, guid: e83c5135de9b1bf40b1849f5713ada96, type: 3}
+  wallSlideDust: {fileID: 3455211964532467771, guid: 9787ca392921d65489026a9627fe10f9,
+    type: 3}
   playerIndex: 0
   lives: 5
   moveX: 0
