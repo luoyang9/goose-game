@@ -65,6 +65,11 @@
                     "name": "Menu",
                     "type": "Button",
                     "id": "cbd27a85-ca31-43bc-a5e2-27aa27de3f02",
+                },
+                {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "96c64678-0593-42b5-a2c1-c1b3bfe3b1d7",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
@@ -348,23 +353,23 @@
                 },
                 {
                     "name": "",
-                    "id": "5cbd45d1-6313-4191-bedd-6730e5dc5f97",
-                    "path": "<Keyboard>/q",
+                    "id": "950a4730-ce77-4d29-9613-78bd551d79fa",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "ForceField",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "04258bc9-7e82-4a9d-9eaa-697415e0c8ef",
+                    "id": "66fb3d37-7365-4897-8707-54d2e010f0e3",
                     "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
-                    "action": "ForceField",
+                    "groups": "",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

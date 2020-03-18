@@ -2,6 +2,7 @@
 using TMPro;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour {
     // VARIABLES
@@ -42,6 +43,7 @@ public class PlayerController : MonoBehaviour {
     // movement
     public int moveX = 0;
     private bool enableMovement = false;
+    private float dashTimeLeft = 0.0f;
     private int forceMoveX;
     private float forceMoveXTimer;
     public Rigidbody2D rBody;
@@ -62,6 +64,7 @@ public class PlayerController : MonoBehaviour {
             HandleFacingScale();
         }
     } // either -1 or 1
+    private Queue<GameObject> availableObjects = new Queue<GameObject>();
     private WallCheck LeftWallCheck { get { return (Facing < 0) ? frontWallCheck : backWallCheck; } }
     private WallCheck RightWallCheck { get { return (Facing > 0) ? frontWallCheck : backWallCheck; } }
     private bool MoveIntoWall {
@@ -84,6 +87,9 @@ public class PlayerController : MonoBehaviour {
     private float fallThroughTimer = FALL_THROUGH_PLATFORM_DURATION;
     private float lagTimer;
     private bool InLag { get { return lagTimer > 0; } }
+    // dash
+    private float dashLagTimer;
+    private bool InDashLag { get { return dashLagTimer > 0; } }
 
     // CONSTANTS
     // Movement
@@ -97,6 +103,9 @@ public class PlayerController : MonoBehaviour {
     private const float WALL_SLIDE_DRAG = 20f;
     public const float MAX_FALL = 18f;
     public const float AIR_DRAG = 1f;
+    public const float DASH_VELOCITY = 36f;
+    public const float DASH_TIME = 0.05f;
+    public const float DASH_COOLDOWN = 0.5f;
     // Arrows
     public const float ARROW_COOLDOWN = 0.5f;
     public const float ARROW_START_DIST = 0f;
@@ -118,6 +127,7 @@ public class PlayerController : MonoBehaviour {
     public const int FALL_THROUGH_PLATFORM_STATE = 6;
     public const int FORCE_FIELD_STATE = 7;
     public const int WALL_SLIDE_STATE = 8;
+    public const int DASH_STATE = 9;
 
     // EVENTS
     public delegate void PlayerDeathHandler(PlayerController player);
@@ -143,6 +153,7 @@ public class PlayerController : MonoBehaviour {
         machine.RegisterState(HOOK_END_STATE, HookEndUpdate, null, HookEndEnd);
         machine.RegisterState(FALL_THROUGH_PLATFORM_STATE, FallThroughUpdate, FallThroughBegin, FallThroughEnd);
         machine.RegisterState(FORCE_FIELD_STATE, ForceFieldUpdate, ForceFieldBegin, null);
+        machine.RegisterState(DASH_STATE, DashUpdate, DashBegin, DashEnd);
 
         forceMoveX = 0;
         forceMoveXTimer = 0;
@@ -166,6 +177,7 @@ public class PlayerController : MonoBehaviour {
         actions.HookShoot += OnHookShoot;
         actions.Melee += OnMeleeAttack;
         enableMovement = true;
+        actions.Dash += OnDash;
     }
 
     public void DisableControls()
@@ -175,6 +187,7 @@ public class PlayerController : MonoBehaviour {
         actions.HookShoot -= OnHookShoot;
         actions.Melee -= OnMeleeAttack;
         enableMovement = false;
+        actions.Dash -= OnDash;
     }
 
     void Update() {
@@ -199,6 +212,10 @@ public class PlayerController : MonoBehaviour {
         }
 
         arrowCount.text = numArrows.ToString() + " <sprite=\"star weapon\" index=0>";
+        if (InDashLag) {
+            dashLagTimer -= Time.deltaTime;
+        }
+
         UpdateAnimator();
     }
 
@@ -419,6 +436,41 @@ public class PlayerController : MonoBehaviour {
             Quaternion.identity
         );
         dust.transform.localScale = scale;
+    private void DashEnd() {
+        rBody.gravityScale = 10f;
+    }
+
+
+
+    private int DashUpdate() {
+        dashTimeLeft -= Time.deltaTime;
+        if (dashTimeLeft > 0.01 && dashTimeLeft < (DASH_TIME - 0.01)) {
+            gameObject.layer = LayerMask.NameToLayer("PlayerDashing");
+        } else {
+            gameObject.layer = LayerMask.NameToLayer("Player");
+        }
+
+        if (rBody.velocity.y < -0.001) {
+            return FALL_STATE;
+        }
+
+        if (dashTimeLeft <= 0) {
+            return IDLE_STATE;
+        }
+
+        return DASH_STATE;
+    }
+
+    private void DashBegin() {
+        Vector2 velocity = rBody.velocity;
+        velocity.x = Facing * DASH_VELOCITY;
+        velocity.y = 0f;
+        rBody.gravityScale = 0f;
+        rBody.velocity = velocity;
+        jumpAudioSource.Play();
+        dashTimeLeft = DASH_TIME;
+        dashLagTimer = DASH_TIME + DASH_COOLDOWN;
+        return;
     }
 
     private int CheckDoWallJump() {
@@ -539,6 +591,22 @@ public class PlayerController : MonoBehaviour {
         machine.CurrentState = nextState;
     }
 
+    private void OnDash() {
+        if (InLag || InDashLag) return;
+
+        var nextState = -1;
+        switch (machine.CurrentState) {
+            case IDLE_STATE:
+            case RUN_STATE:
+                nextState = DASH_STATE;
+                break;
+            default:
+                nextState = machine.CurrentState;
+                break;
+        }
+        machine.CurrentState = nextState;
+    }
+
     private void OnArrowShoot() {
         if (InLag) return;
 
@@ -558,6 +626,7 @@ public class PlayerController : MonoBehaviour {
         if (InLag) return;
 
         switch (machine.CurrentState) {
+            case DASH_STATE:
             case FORCE_FIELD_STATE:
                 break;
             default:
@@ -570,6 +639,7 @@ public class PlayerController : MonoBehaviour {
         if (InLag || !CanAttack) return;
 
         switch (machine.CurrentState) {
+            case DASH_STATE:
             case FORCE_FIELD_STATE:
                 break;
             default:
