@@ -391,6 +391,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void Kill() {
+        ropeSystem.ResetRope();
         OnPlayerDeath?.Invoke(this);
     }
 
