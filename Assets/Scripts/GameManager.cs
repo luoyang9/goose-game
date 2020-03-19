@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public const float START_GAME_DELAY = 2f;
     public const float FINAL_DEATH_DELAY = 2f;
     public const float DEATH_SHAKE_DURATION = 0.3f;
     public Camera camera;
     public Transform[] spawns;
+    public Text countdown;
     private PlayerController[] players;
     private List<PlayerMapping> playerMappings;
     private Queue<PlayerController> dyingPlayers;
@@ -47,18 +48,28 @@ public class GameManager : MonoBehaviour
         PlayerController.OnPlayerDeath -= OnPlayerDeath;
     }
 
-    private IEnumerator FreezePlayersCoroutine()
+    private IEnumerator CountdownCoroutine()
     {
         // Initially disables all controllers
         for (int i = 0; i < numPlayers; i++)
         {
             players[i].DisableControls();
         }
-        yield return new WaitForSeconds(START_GAME_DELAY);
+        countdown.text = "3";
+        yield return new WaitForSeconds(1);
+        countdown.text = "2";
+        yield return new WaitForSeconds(1);
+        countdown.text = "1";
+        yield return new WaitForSeconds(1);
+        countdown.text = "FIGHT!";
+
         for (int i = 0; i < numPlayers; i++)
         {
             players[i].EnableControls();
         }
+
+        yield return new WaitForSeconds(1);
+        countdown.text = "";
     }
 
     public void SpawnPlayers(List<PlayerMapping> mappings)
@@ -81,7 +92,7 @@ public class GameManager : MonoBehaviour
             player.gameCamera = camera;
             players[i] = player;
         }
-        StartCoroutine(FreezePlayersCoroutine());
+        StartCoroutine(CountdownCoroutine());
     }
 
     void OnPlayerDeath(PlayerController player) {
