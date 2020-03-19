@@ -6,8 +6,8 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WallSlideDust
+  m_Name: LandDust
   m_Controller: {fileID: 9100000, guid: b164414f5ec3d1143a3f15a8737eaf5c, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: 7400000, guid: 749048a199944394c8c0af38c6eccfe8, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 86ba2fa57fecc0b4db91cac755b6c2bb, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: a0d3da285800fa343a0cd328143d12c8, type: 2}

@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour {
     public Transform playerUI;
     public GameObject runDust;
     public GameObject wallSlideDust;
+    public GameObject landDust;
 
     private Camera gameCamera;
     // game manager variable
@@ -110,6 +111,7 @@ public class PlayerController : MonoBehaviour {
     // ANIMATION
     private Vector2 RUN_DUST_OFFSET = new Vector2(-1.3f, 0.45f);
     private Vector2 WALL_DUST_OFFSET = new Vector2(-0.3f, 0);
+    private Vector2 LAND_DUST_OFFSET = Vector2.zero;
 
     private IEnumerator wallDustCoro;
 
@@ -288,6 +290,7 @@ public class PlayerController : MonoBehaviour {
 
     private int FallUpdate() {
         if (Mathf.Abs(rBody.velocity.y) < 0.001) {
+            MakeDust(landDust, LAND_DUST_OFFSET);
             return IDLE_STATE;
         }
         Airborne();
