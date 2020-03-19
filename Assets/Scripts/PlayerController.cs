@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour {
     public GameObject runDust;
     public GameObject wallSlideDust;
     public GameObject landDust;
+    public GameObject wallLandDust;
 
     private Camera gameCamera;
     // game manager variable
@@ -140,7 +141,7 @@ public class PlayerController : MonoBehaviour {
         machine.RegisterState(FALL_STATE, FallUpdate, null, null);
         machine.RegisterState(WALL_SLIDE_STATE, WallSlideUpdate, WallSlideBegin, WallSlideEnd);
         machine.RegisterState(HOOK_PULL_STATE, HookPullUpdate, null, null);
-        machine.RegisterState(HOOK_END_STATE, HookEndUpdate, null, HookEndEnd);
+        machine.RegisterState(HOOK_END_STATE, HookEndUpdate, HookEndBegin, HookEndEnd);
         machine.RegisterState(FALL_THROUGH_PLATFORM_STATE, FallThroughUpdate, FallThroughBegin, FallThroughEnd);
         machine.RegisterState(FORCE_FIELD_STATE, ForceFieldUpdate, ForceFieldBegin, null);
 
@@ -363,6 +364,14 @@ public class PlayerController : MonoBehaviour {
             return HOOK_END_STATE;
         }
         return HOOK_PULL_STATE;
+    }
+
+    private void HookEndBegin() {
+        if (LeftWallCheck.Touching || RightWallCheck.Touching) {
+            MakeDust(wallLandDust, Vector2.zero);
+        } else if (groundCheck.TouchingGround) {
+            MakeDust(landDust, Vector2.zero);
+        }
     }
 
     private int HookEndUpdate() {
