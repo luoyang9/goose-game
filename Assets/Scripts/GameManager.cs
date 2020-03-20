@@ -12,7 +12,9 @@ public class GameManager : MonoBehaviour
     public const float DEATH_SHAKE_DURATION = 0.3f;
     public Camera camera;
     public Transform[] spawns;
+    public GameObject banner;
     public Text countdown;
+
     private PlayerController[] players;
     private List<PlayerMapping> playerMappings;
 
@@ -45,6 +47,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator CountdownCoroutine()
     {
+        banner.SetActive(true);
         // Initially disables all controllers
         for (int i = 0; i < numPlayers; i++)
         {
@@ -64,7 +67,7 @@ public class GameManager : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1);
-        countdown.text = "";
+        banner.SetActive(false);
     }
 
     public void SpawnPlayers(List<PlayerMapping> mappings)
