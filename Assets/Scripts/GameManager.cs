@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public const float FINAL_DEATH_DELAY = 2f;
     public const float DEATH_SHAKE_DURATION = 0.3f;
     public Camera camera;
     public Transform[] spawns;
+    public Text countdown;
     private PlayerController[] players;
     private List<PlayerMapping> playerMappings;
     private Queue<PlayerController> dyingPlayers;
@@ -34,6 +37,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
     protected void OnEnable()
     {
         PlayerController.OnPlayerDeath += OnPlayerDeath;
@@ -42,6 +46,30 @@ public class GameManager : MonoBehaviour
     protected void OnDisable()
     {
         PlayerController.OnPlayerDeath -= OnPlayerDeath;
+    }
+
+    private IEnumerator CountdownCoroutine()
+    {
+        // Initially disables all controllers
+        for (int i = 0; i < numPlayers; i++)
+        {
+            players[i].DisableControls();
+        }
+        countdown.text = "3";
+        yield return new WaitForSeconds(1);
+        countdown.text = "2";
+        yield return new WaitForSeconds(1);
+        countdown.text = "1";
+        yield return new WaitForSeconds(1);
+        countdown.text = "FIGHT!";
+
+        for (int i = 0; i < numPlayers; i++)
+        {
+            players[i].EnableControls();
+        }
+
+        yield return new WaitForSeconds(1);
+        countdown.text = "";
     }
 
     public void SpawnPlayers(List<PlayerMapping> mappings)
@@ -63,6 +91,7 @@ public class GameManager : MonoBehaviour
             player.PlayerChoice = mapping;
             players[i] = player;
         }
+        StartCoroutine(CountdownCoroutine());
     }
 
     void OnPlayerDeath(PlayerController player) {
@@ -72,10 +101,15 @@ public class GameManager : MonoBehaviour
         if (player.lives == 0) {
             numPlayers -= 1;
             if (numPlayers == 1) {
-                DontDestroyOnLoad(this);
-                SceneManager.LoadScene("EndGame");
+                StartCoroutine(EndGameCoroutine());
             }
         }
+    }
+
+    private IEnumerator EndGameCoroutine() {
+        yield return new WaitForSeconds(FINAL_DEATH_DELAY);
+        DontDestroyOnLoad(this);
+        SceneManager.LoadScene("EndGame");
     }
 
     public IEnumerator RespawnCoroutine() {

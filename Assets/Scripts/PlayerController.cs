@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour {
 
     // movement
     public int moveX = 0;
+    private bool enableMovement = false;
     private int forceMoveX;
     private float forceMoveXTimer;
     public Rigidbody2D rBody;
@@ -135,23 +136,38 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void OnEnable() {
+        EnableControls();
+    }
+
+    private void OnDisable() {
+        DisableControls();
+    }
+
+    public void EnableControls()
+    {
         actions.Jump += OnJump;
         actions.ArrowShoot += OnArrowShoot;
         actions.HookShoot += OnHookShoot;
         actions.Melee += OnMeleeAttack;
+        enableMovement = true;
     }
 
-    private void OnDisable() {
+    public void DisableControls()
+    {
         actions.Jump -= OnJump;
         actions.ArrowShoot -= OnArrowShoot;
         actions.HookShoot -= OnHookShoot;
         actions.Melee -= OnMeleeAttack;
+        enableMovement = false;
     }
 
     void Update() {
         // actions that are always possible
         CheckIfOffScreen();
-        HandleDirection();
+        if (enableMovement)
+        {
+            HandleDirection();
+        }
         HandleCrosshair();
 
         // force moving direction

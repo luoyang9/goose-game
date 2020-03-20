@@ -120,6 +120,7 @@ public class PlayerManager : MonoBehaviour
         lobbyPlayer.Selection = selection;
 
         playerAddIdx += 1;
+        playerSelections[playerAddIdx] = selection;
     }
 
     private void OnPlayerStateChange(int s) {
