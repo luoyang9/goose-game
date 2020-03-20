@@ -9,7 +9,8 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public const float FINAL_DEATH_DELAY = 2f;
-    public const float DEATH_SHAKE_DURATION = 0.3f;
+    public const float DEATH_SHAKE_DURATION = 0.2f;
+    public const float FINAL_DEATH_TIMESCALE = 0.5F;
     public Camera camera;
     public Transform[] spawns;
     public Text countdown;
@@ -21,7 +22,11 @@ public class GameManager : MonoBehaviour
 
     private int numPlayers;
 
-    private void FixedUpdate() {
+    private void Start() {
+        initialCameraLocation = camera.transform.position;
+    }
+
+    private void Update() {
         if (shakeDurationLeft > 0) {
             shakeDurationLeft -= Time.deltaTime;
             if (shakeDurationLeft <= 0) {
@@ -92,6 +97,7 @@ public class GameManager : MonoBehaviour
     void OnPlayerDeath(PlayerController player) {
         player.gameObject.SetActive(false);
         MakeBlood(player);
+        shakeDurationLeft = DEATH_SHAKE_DURATION;
         if (player.lives > 0) {
             StartCoroutine(RespawnCoroutine(player));
         } else {
@@ -109,7 +115,9 @@ public class GameManager : MonoBehaviour
     }
 
     private IEnumerator EndGameCoroutine() {
+        Time.timeScale = FINAL_DEATH_TIMESCALE;
         yield return new WaitForSeconds(FINAL_DEATH_DELAY);
+        Time.timeScale = 1;
         DontDestroyOnLoad(this);
         SceneManager.LoadScene("EndGame");
     }
