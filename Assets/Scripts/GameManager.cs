@@ -15,16 +15,11 @@ public class GameManager : MonoBehaviour
     public Text countdown;
     private PlayerController[] players;
     private List<PlayerMapping> playerMappings;
-    private Queue<PlayerController> dyingPlayers;
 
     private float shakeDurationLeft = 0f;
     private Vector3 initialCameraLocation;
 
     private int numPlayers;
-
-    private void Start() {
-        dyingPlayers = new Queue<PlayerController>();
-    }
 
     private void FixedUpdate() {
         if (shakeDurationLeft > 0) {
@@ -95,15 +90,22 @@ public class GameManager : MonoBehaviour
     }
 
     void OnPlayerDeath(PlayerController player) {
-        dyingPlayers.Enqueue(player);
-        StartCoroutine(RespawnCoroutine());
-        initialCameraLocation = camera.transform.position;
-        if (player.lives == 0) {
+        player.gameObject.SetActive(false);
+        MakeBlood(player);
+        if (player.lives > 0) {
+            StartCoroutine(RespawnCoroutine(player));
+        } else {
             numPlayers -= 1;
             if (numPlayers == 1) {
                 StartCoroutine(EndGameCoroutine());
             }
         }
+    }
+
+    private void MakeBlood(PlayerController dyingPlayer) {
+        Vector3 newPosition = dyingPlayer.transform.position;
+        newPosition.y += 0.3f;
+        Instantiate(dyingPlayer.effect, newPosition, Quaternion.identity);
     }
 
     private IEnumerator EndGameCoroutine() {
@@ -112,15 +114,9 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("EndGame");
     }
 
-    public IEnumerator RespawnCoroutine() {
-        PlayerController dyingPlayer = dyingPlayers.Dequeue();
-        dyingPlayer.gameObject.SetActive(false);
+    public IEnumerator RespawnCoroutine(PlayerController dyingPlayer) {
         int randomRespawn = UnityEngine.Random.Range(0, spawns.Length);
-        Vector3 newPosition = dyingPlayer.transform.position;
-        newPosition.y += 0.3f;
-        Instantiate(dyingPlayer.effect, newPosition, Quaternion.identity);
         dyingPlayer.transform.position = spawns[randomRespawn].position;
-        dyingPlayer.lives -= 1;
         yield return new WaitForSeconds(1f);
         dyingPlayer.gameObject.SetActive(true);
     }
