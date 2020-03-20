@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using TMPro;
 using System;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour {
     // VARIABLES
-    public Camera gameCamera { get; set; }
     public InputActionMapper actions;
     public Vector2 hookPosition;
     public RopeSystem ropeSystem;
@@ -27,7 +27,11 @@ public class PlayerController : MonoBehaviour {
     public TMP_Text arrowCount;
     public TMP_Text playerLabel;
     public Transform playerUI;
+    public GameObject runDust;
+    public GameObject wallSlideDust;
+    public GameObject landDust;
 
+    private Camera gameCamera;
     // game manager variable
     public int playerIndex = 0;
 
@@ -104,10 +108,19 @@ public class PlayerController : MonoBehaviour {
     public delegate void PlayerDeathHandler(PlayerController player);
     public static event PlayerDeathHandler OnPlayerDeath;
 
+    // ANIMATION
+    private Vector2 RUN_DUST_OFFSET = new Vector2(-1.3f, 0.45f);
+    private Vector2 WALL_DUST_OFFSET = new Vector2(-0.3f, 0);
+    private Vector2 LAND_DUST_OFFSET = Vector2.zero;
+
+    private IEnumerator wallDustCoro;
+
     void Start() {
+        gameCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
+
         machine = gameObject.GetComponent<StateMachine>();
         machine.RegisterState(IDLE_STATE, IdleUpdate, null, null);
-        machine.RegisterState(RUN_STATE, RunUpdate, null, null);
+        machine.RegisterState(RUN_STATE, RunUpdate, RunBegin, null);
         machine.RegisterState(JUMP_STATE, JumpUpdate, JumpBegin, null);
         machine.RegisterState(FALL_STATE, FallUpdate, null, null);
         machine.RegisterState(WALL_SLIDE_STATE, WallSlideUpdate, WallSlideBegin, WallSlideEnd);
@@ -212,6 +225,10 @@ public class PlayerController : MonoBehaviour {
         return IDLE_STATE;
     }
 
+    private void RunBegin() {
+        MakeDust(runDust, RUN_DUST_OFFSET);
+    }
+
     private int RunUpdate() {
         // move
         Vector2 velocity = rBody.velocity;
@@ -273,6 +290,7 @@ public class PlayerController : MonoBehaviour {
 
     private int FallUpdate() {
         if (Mathf.Abs(rBody.velocity.y) < 0.001) {
+            MakeDust(landDust, LAND_DUST_OFFSET);
             return IDLE_STATE;
         }
         Airborne();
@@ -287,6 +305,8 @@ public class PlayerController : MonoBehaviour {
         // decelerate up to a max sliding velocity
         rBody.drag = WALL_SLIDE_DRAG;
         forceFacing = -moveX;
+        wallDustCoro = MakeWallSlideDust();
+        StartCoroutine(wallDustCoro);
     }
 
     private int WallSlideUpdate() {
@@ -299,6 +319,7 @@ public class PlayerController : MonoBehaviour {
 
     private void WallSlideEnd() {
         rBody.drag = 0;
+        StopCoroutine(wallDustCoro);
     }
 
     private int HookPullUpdate() {
@@ -353,6 +374,25 @@ public class PlayerController : MonoBehaviour {
         forceFieldTimer = MAX_FORCE_FIELD_DURATION;
         lagTimer = 0.4f;
         return IDLE_STATE;
+    }
+
+    IEnumerator MakeWallSlideDust() {
+        while (true) {
+            yield return new WaitForSeconds(0.2f);
+            MakeDust(wallSlideDust, WALL_DUST_OFFSET);
+        }
+    }
+
+    private void MakeDust(GameObject dustPrefab, Vector2 offset) {
+        var scale = transform.localScale;
+        offset.x *= scale.x;
+        var pos = transform.position + (Vector3) offset;
+        var dust = Instantiate(
+            dustPrefab,
+            pos,
+            Quaternion.identity
+        );
+        dust.transform.localScale = scale;
     }
 
     private int CheckDoWallJump() {

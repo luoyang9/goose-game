@@ -61,7 +61,6 @@ public class GameManager : MonoBehaviour
             var player = input.GetComponent<PlayerController>();
             player.playerIndex = i;
             player.PlayerChoice = mapping;
-            player.gameCamera = camera;
             players[i] = player;
         }
     }
