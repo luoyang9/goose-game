@@ -1,35 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GroundCheck : MonoBehaviour {
-    // Layer of the ground the player is on; -1 if not on the ground
-    private int TouchingLayer { get; set; }
-    private int noLayer, wallLayer, platformLayer;
+    private int platformLayer;
+    private ISet<int> touchingLayers;
+
+    public bool TouchingGround { get { return touchingLayers.Count > 0; } }
 
     void Awake() {
-        TouchingLayer = -1;
-        noLayer = -1;
-        wallLayer = LayerMask.NameToLayer("Wall");
         platformLayer = LayerMask.NameToLayer("Platform");
+
+        touchingLayers = new HashSet<int>();
     }
 
     void OnTriggerEnter2D(Collider2D collision) {
-        int layer = collision.gameObject.layer;
-        if (layer == wallLayer || layer == platformLayer) {
-            TouchingLayer = layer;
-        }
+        touchingLayers.Add(collision.gameObject.layer);
     }
 
     void OnTriggerExit2D(Collider2D collision) {
-        int layer = collision.gameObject.layer;
-        if (layer == TouchingLayer) {
-            if (layer == wallLayer || layer == platformLayer) {
-                TouchingLayer = noLayer;
-            }
-        }
+        touchingLayers.Remove(collision.gameObject.layer);
     }
 
     public bool isTouchingPlatform() {
-        return TouchingLayer == platformLayer;
+        return touchingLayers.Contains(platformLayer);
     }
 }

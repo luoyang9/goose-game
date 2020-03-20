@@ -289,7 +289,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int FallUpdate() {
-        if (Mathf.Abs(rBody.velocity.y) < 0.001) {
+        if (Mathf.Abs(rBody.velocity.y) < 0.001 && groundCheck.TouchingGround) {
             MakeDust(landDust, LAND_DUST_OFFSET);
             return IDLE_STATE;
         }
