@@ -24,7 +24,7 @@ public class GrapplingHook : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D collider) {
         // if it's environment, latch on
-        if (collider.gameObject.layer == LAYER_PLATFORM || collider.gameObject.layer == LAYER_WALL) {
+        if (currentState == ST_SHOOT && (collider.gameObject.layer == LAYER_PLATFORM || collider.gameObject.layer == LAYER_WALL)) {
             currentState = ST_HOOKED;
             direction = Vector2.zero;
             ropeSystem.LatchHook(transform.position);
