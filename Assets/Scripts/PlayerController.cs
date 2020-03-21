@@ -168,7 +168,7 @@ public class PlayerController : MonoBehaviour {
         enableMovement = false;
     }
 
-    private void FixedUpdate() {
+    void Update() {
         CheckIfOffScreen();
         if (enableMovement) {
             HandleDirection();
@@ -189,9 +189,7 @@ public class PlayerController : MonoBehaviour {
         if (InLag) {
             lagTimer -= Time.deltaTime;
         }
-    }
 
-    void Update() {
         arrowCount.text = "Arrows: " + numArrows.ToString();
         UpdateAnimator();
     }
