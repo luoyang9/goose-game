@@ -263,7 +263,7 @@ PrefabInstance:
     - target: {fileID: 1087543996695230831, guid: f31b797619fa44491a973671808b7827,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1087543996695230831, guid: f31b797619fa44491a973671808b7827,
         type: 3}
@@ -735,7 +735,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 803634678}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -758,10 +758,10 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 1087543996695230831}
+  - {fileID: 2040084393}
   - {fileID: 370470009}
   - {fileID: 1188719866}
   - {fileID: 2071942763}
-  - {fileID: 2040084393}
   - {fileID: 83681254}
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -942,7 +942,7 @@ PrefabInstance:
     - target: {fileID: 1087543996695230831, guid: f31b797619fa44491a973671808b7827,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1087543996695230831, guid: f31b797619fa44491a973671808b7827,
         type: 3}
@@ -1261,7 +1261,7 @@ RectTransform:
   m_Children:
   - {fileID: 899377805}
   m_Father: {fileID: 949760585}
-  m_RootOrder: 4
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1360,7 +1360,7 @@ PrefabInstance:
     - target: {fileID: 1087543996695230831, guid: f31b797619fa44491a973671808b7827,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1087543996695230831, guid: f31b797619fa44491a973671808b7827,
         type: 3}
@@ -1652,17 +1652,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 1439589432676775010, guid: f31b797619fa44491a973671808b7827,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 0535fe436dd651a4eaec341ed3d03ea1,
-        type: 3}
-    - target: {fileID: 1439589432676775010, guid: f31b797619fa44491a973671808b7827,
-        type: 3}
-      propertyPath: m_PreserveAspect
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5638639307825699207, guid: f31b797619fa44491a973671808b7827,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1742,5 +1731,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 12800000, guid: 39881e2fc0f79574dbc5019764297196,
         type: 3}
+    - target: {fileID: 1439589432676775010, guid: f31b797619fa44491a973671808b7827,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0535fe436dd651a4eaec341ed3d03ea1,
+        type: 3}
+    - target: {fileID: 1439589432676775010, guid: f31b797619fa44491a973671808b7827,
+        type: 3}
+      propertyPath: m_PreserveAspect
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f31b797619fa44491a973671808b7827, type: 3}
