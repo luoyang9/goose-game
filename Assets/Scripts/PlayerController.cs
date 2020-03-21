@@ -46,6 +46,13 @@ public class PlayerController : MonoBehaviour {
     private float forceMoveXTimer;
     public Rigidbody2D rBody;
     private int forceFacing;
+    private int ForceFacing {
+        get { return forceFacing; }
+        set {
+            forceFacing = value;
+            Facing = value;
+        }
+    }
     private float forceFacingTimer;
     public int Facing { get; private set; } = 1; // either -1 or 1
     private WallCheck LeftWallCheck { get { return (Facing < 0) ? frontWallCheck : backWallCheck; } }
@@ -126,7 +133,7 @@ public class PlayerController : MonoBehaviour {
         machine.RegisterState(FALL_STATE, FallUpdate, null, null);
         machine.RegisterState(WALL_SLIDE_STATE, WallSlideUpdate, WallSlideBegin, WallSlideEnd);
         machine.RegisterState(HOOK_PULL_STATE, HookPullUpdate, null, null);
-        machine.RegisterState(HOOK_END_STATE, HookEndUpdate, HookEndBegin, null);
+        machine.RegisterState(HOOK_END_STATE, HookEndUpdate, null, null);
         machine.RegisterState(FALL_THROUGH_PLATFORM_STATE, FallThroughUpdate, FallThroughBegin, FallThroughEnd);
         machine.RegisterState(FORCE_FIELD_STATE, ForceFieldUpdate, ForceFieldBegin, null);
 
@@ -177,7 +184,7 @@ public class PlayerController : MonoBehaviour {
         }
         if (forceFacingTimer > 0) {
             forceFacingTimer -= Time.deltaTime;
-            Facing = forceFacing;
+            Facing = ForceFacing;
         }
 
         arrowCount.text = "Arrows: " + numArrows.ToString();
@@ -271,7 +278,6 @@ public class PlayerController : MonoBehaviour {
         Vector2 velocity = rBody.velocity;
         velocity.y = -MAX_FALL/2;
         rBody.velocity = velocity;
-        Debug.Log(rBody.velocity.y);
     }
 
     private int FallThroughUpdate() {
@@ -320,7 +326,7 @@ public class PlayerController : MonoBehaviour {
     private void WallSlideBegin() {
         // decelerate up to a max sliding velocity
         rBody.drag = WALL_SLIDE_DRAG;
-        forceFacing = -moveX;
+        ForceFacing = -moveX;
         wallDustCoro = MakeWallSlideDust();
         StartCoroutine(wallDustCoro);
     }
@@ -355,18 +361,12 @@ public class PlayerController : MonoBehaviour {
         return HOOK_PULL_STATE;
     }
 
-    private void HookEndBegin() {
-        if (LeftWallCheck.Touching) {
-            forceFacing = 1;
-        } else if (RightWallCheck.Touching) {
-            forceFacing = -1;
-        } else {
-            forceFacing = 0;
-        }
-    }
-
     private int HookEndUpdate() {
-        if (forceFacing != 0) {
+        if (LeftWallCheck.Touching) {
+            ForceFacing = 1;
+            forceFacingTimer = 0.1f;
+        } else if (RightWallCheck.Touching) {
+            ForceFacing = -1;
             forceFacingTimer = 0.1f;
         }
         return HOOK_END_STATE;
@@ -428,7 +428,7 @@ public class PlayerController : MonoBehaviour {
         var vel = rBody.velocity;
         vel.x = WALL_JUMP_H_SPEED * dir;
         rBody.velocity = vel;
-        forceFacing = dir;
+        ForceFacing = dir;
         forceFacingTimer = WALL_JUMP_FORCE_TIME;
     }
 
@@ -561,7 +561,7 @@ public class PlayerController : MonoBehaviour {
             default:
                 // attack
                 nextSwingTime = Time.time + SWING_COOLDOWN;
-                forceFacing = Facing;
+                ForceFacing = Facing;
                 forceFacingTimer = Melee.ATTACK_DURATION;
                 meleeAudioSource.Play();
                 if (actions.VerticalDirection > 0) {
