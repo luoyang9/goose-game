@@ -25,7 +25,7 @@ public class StateMachine : MonoBehaviour {
         }
     }
 
-    private void Update() {
+    private void FixedUpdate() {
         CurrentState = updateMap[CurrentState]();
     }
 

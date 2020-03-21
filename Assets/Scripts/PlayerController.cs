@@ -168,13 +168,12 @@ public class PlayerController : MonoBehaviour {
         enableMovement = false;
     }
 
-    void Update() {
-        // actions that are always possible
+    private void FixedUpdate() {
         CheckIfOffScreen();
-        if (enableMovement)
-        {
+        if (enableMovement) {
             HandleDirection();
         }
+        HandleFacingScale();
         HandleCrosshair();
 
         // force moving direction
@@ -187,12 +186,13 @@ public class PlayerController : MonoBehaviour {
             Facing = ForceFacing;
         }
 
-        arrowCount.text = "Arrows: " + numArrows.ToString();
-
         if (InLag) {
             lagTimer -= Time.deltaTime;
         }
+    }
 
+    void Update() {
+        arrowCount.text = "Arrows: " + numArrows.ToString();
         UpdateAnimator();
     }
 
@@ -222,7 +222,6 @@ public class PlayerController : MonoBehaviour {
         if (moveX != 0 && forceFacingTimer <= 0) {
             Facing = moveX;
         }
-        HandleFacingScale();
     }
 
     private int IdleUpdate() {
@@ -369,6 +368,7 @@ public class PlayerController : MonoBehaviour {
             ForceFacing = -1;
             forceFacingTimer = 0.1f;
         }
+        HandleFacingScale();
         return HOOK_END_STATE;
     }
 
