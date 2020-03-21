@@ -190,7 +190,7 @@ public class PlayerController : MonoBehaviour {
             lagTimer -= Time.deltaTime;
         }
 
-        arrowCount.text = "Arrows: " + numArrows.ToString();
+        arrowCount.text = numArrows.ToString() + " <sprite=\"star weapon\" index=0>";
         UpdateAnimator();
     }
 
