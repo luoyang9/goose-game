@@ -63,11 +63,6 @@ public class PlayerManager : MonoBehaviour
         );
     }
 
-    public void OnStartBack()
-    {
-        SceneManager.LoadScene("MainMenu");
-    }
-
     public void NavigateBack() {
         SceneManager.LoadScene("MainMenu");
     }

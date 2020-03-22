@@ -139,7 +139,9 @@ public class PlayerController : MonoBehaviour {
 
         forceMoveX = 0;
         forceMoveXTimer = 0;
-        playerLabel.text = PlayerChoice.PlayerTag;
+        if (PlayerChoice != null) {
+            playerLabel.text = PlayerChoice.PlayerTag;
+        }
     }
 
     private void OnEnable() {
