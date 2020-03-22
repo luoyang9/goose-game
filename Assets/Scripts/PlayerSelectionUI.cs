@@ -10,12 +10,13 @@ public class PlayerSelectionUI : MonoBehaviour {
     private Color TAG_INACTIVE = new Color(0.755f, 0.755f, 0.755f);
 
     public Image playerTag;
-    public Image splash;
     public Image characterFg;
     public GameObject foreground;
     public GameObject banner;
     public GameObject idle;
     public GameObject selectionUI;
+    public GameObject changeLeft;
+    public GameObject changeRight;
     public Text controller;
 
     private PlayerSelection _selection;
@@ -40,6 +41,8 @@ public class PlayerSelectionUI : MonoBehaviour {
 
         var selectionActive = state != PlayerSelection.INACTIVE_STATE;
         SetActivate(selectionActive);
+        changeLeft.SetActive(state == PlayerSelection.PENDING_STATE);
+        changeRight.SetActive(state == PlayerSelection.PENDING_STATE);
         banner.SetActive(state == PlayerSelection.READY_STATE);
     }
 
@@ -56,7 +59,6 @@ public class PlayerSelectionUI : MonoBehaviour {
 
     private void UpdateCharacterSprites(CharacterSelection selection)
     {
-        splash.sprite = selection.splash;
         characterFg.sprite = selection.splash;
     }
 
@@ -64,6 +66,5 @@ public class PlayerSelectionUI : MonoBehaviour {
         var tagColor = active ? TAG_ACTIVE : TAG_INACTIVE;
         playerTag.color = tagColor;
         foreground.SetActive(active);
-        splash.enabled = active;
     }
 }
