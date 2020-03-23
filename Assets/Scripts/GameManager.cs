@@ -88,10 +88,10 @@ public class GameManager : MonoBehaviour
             var mapping = mappings[i];
             var devices = mapping.Controller;
             var input = PlayerInput.Instantiate(mapping.Character, pairWithDevices: devices);
-            input.transform.position = spawns[i].position;
             var player = input.GetComponent<PlayerController>();
             player.playerIndex = i;
             player.PlayerChoice = mapping;
+            player.Spawn(spawns[i].position);
             players[i] = player;
         }
         StartCoroutine(CountdownCoroutine());
@@ -126,9 +126,9 @@ public class GameManager : MonoBehaviour
     }
 
     public IEnumerator RespawnCoroutine(PlayerController dyingPlayer) {
-        int randomRespawn = UnityEngine.Random.Range(0, spawns.Length);
-        dyingPlayer.transform.position = spawns[randomRespawn].position;
         yield return new WaitForSeconds(1f);
+        int randomRespawn = UnityEngine.Random.Range(0, spawns.Length);
+        dyingPlayer.Spawn(spawns[randomRespawn].position);
         dyingPlayer.gameObject.SetActive(true);
     }
 

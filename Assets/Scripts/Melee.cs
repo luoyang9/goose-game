@@ -62,6 +62,10 @@ public class Melee : MonoBehaviour {
         }
     }
 
+    public void ClearSprite() {
+        weaponSpriteRenderer.sprite = null;
+    }
+
     public void Attack(AttackDirection dir) {
         AttackReset();
         // change hitbox and sprites

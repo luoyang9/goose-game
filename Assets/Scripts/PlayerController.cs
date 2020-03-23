@@ -452,6 +452,11 @@ public class PlayerController : MonoBehaviour {
         OnPlayerDeath?.Invoke(this);
     }
 
+    public void Spawn(Vector3 pos) {
+        transform.position = pos;
+        melee.ClearSprite();
+    }
+
     private void FireArrow() {
         if (numArrows == 0) {
             return;
