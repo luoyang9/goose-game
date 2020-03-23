@@ -54,7 +54,14 @@ public class PlayerController : MonoBehaviour {
         }
     }
     private float forceFacingTimer;
-    public int Facing { get; private set; } = 1; // either -1 or 1
+    private int facing = 1;
+    public int Facing {
+        get { return facing; }
+        private set {
+            facing = value;
+            HandleFacingScale();
+        }
+    } // either -1 or 1
     private WallCheck LeftWallCheck { get { return (Facing < 0) ? frontWallCheck : backWallCheck; } }
     private WallCheck RightWallCheck { get { return (Facing > 0) ? frontWallCheck : backWallCheck; } }
     private bool MoveIntoWall {
@@ -175,7 +182,6 @@ public class PlayerController : MonoBehaviour {
         if (enableMovement) {
             HandleDirection();
         }
-        HandleFacingScale();
         HandleCrosshair();
 
         // force moving direction
