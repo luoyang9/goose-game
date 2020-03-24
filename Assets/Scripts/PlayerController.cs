@@ -354,9 +354,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     private int WallSlideUpdate() {
+        Airborne();
         if (!MoveIntoWall) return FALL_STATE;
 
-        Airborne();
         forceFacingTimer = 0.1f; // should be long enough to cover till next frame
         return WALL_SLIDE_STATE;
     }
