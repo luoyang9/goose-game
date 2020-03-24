@@ -73,11 +73,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 0903b5f9deee2314f82a46795ea80b66,
         type: 3}
+    - target: {fileID: 4443951294556298780, guid: d9addbae1f6fdcc4db01e20bc2751da9,
+        type: 3}
+      propertyPath: afterImagePrefab
+      value: 
+      objectReference: {fileID: 9211926869856400522, guid: fd95db5c0e917764b9b5ed1b50713231,
+        type: 3}
     - target: {fileID: 6885775752252314838, guid: d9addbae1f6fdcc4db01e20bc2751da9,
         type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 22100000, guid: 56946a7bee0823b42937878cc31846f4,
         type: 2}
+    - target: {fileID: 7410978487009481317, guid: d9addbae1f6fdcc4db01e20bc2751da9,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9addbae1f6fdcc4db01e20bc2751da9, type: 3}
