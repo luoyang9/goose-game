@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public Transform[] spawns;
     public GameObject banner;
     public Text countdown;
+    public LivesHUD[] livesUIs;
 
     private PlayerController[] players;
     private List<PlayerMapping> playerMappings;
@@ -75,6 +76,15 @@ public class GameManager : MonoBehaviour
         banner.SetActive(false);
     }
 
+    public void StartGame(List<PlayerMapping> mappings) {
+        SpawnPlayers(mappings);
+        // hook up players to HUD
+        for (int i = 0; i < numPlayers; i++) {
+            livesUIs[i].SetPlayer(players[i]);
+        }
+        StartCoroutine(CountdownCoroutine());
+    }
+
     public void SpawnPlayers(List<PlayerMapping> mappings)
     {
         numPlayers = mappings.Count;
@@ -94,14 +104,13 @@ public class GameManager : MonoBehaviour
             player.Spawn(spawns[i].position);
             players[i] = player;
         }
-        StartCoroutine(CountdownCoroutine());
     }
 
     void OnPlayerDeath(PlayerController player) {
         player.gameObject.SetActive(false);
         MakeBlood(player);
         shakeDurationLeft = DEATH_SHAKE_DURATION;
-        if (player.lives > 0) {
+        if (player.Lives > 0) {
             StartCoroutine(RespawnCoroutine(player));
         } else {
             numPlayers -= 1;
