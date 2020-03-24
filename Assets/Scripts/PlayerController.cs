@@ -33,13 +33,12 @@ public class PlayerController : MonoBehaviour {
     public GameObject landDust;
 
     private Camera gameCamera;
-    private TMP_Text livesCount;
     // game manager variable
     public int playerIndex = 0;
 
     // lives
-    public int lives = 5;
-    public bool Alive { get { return lives > 0; } }
+    public int Lives { get; private set; } = 5;
+    public bool Alive { get { return Lives > 0; } }
 
     // movement
     public int moveX = 0;
@@ -143,7 +142,6 @@ public class PlayerController : MonoBehaviour {
 
     void Start() {
         gameCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
-        livesCount = GameObject.Find(PlayerChoice.PlayerTag + " Lives").GetComponent<TMP_Text>();
 
         machine = gameObject.GetComponent<StateMachine>();
         machine.RegisterState(IDLE_STATE, IdleUpdate, null, null);
@@ -214,11 +212,6 @@ public class PlayerController : MonoBehaviour {
         }
 
         arrowCount.text = numArrows.ToString() + " <sprite=\"star weapon\" index=0>";
-        String[] hearts = new String[lives];
-        for (int i = 0; i < hearts.Length; i++) {
-            hearts[i] = "<sprite=\"heart\" index=0>";
-        }
-        livesCount.text = PlayerChoice.PlayerTag + ": " + String.Join(" ", hearts);
         if (InDashLag) {
             dashLagTimer -= Time.deltaTime;
         }
@@ -516,12 +509,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void Kill() {
-        lives -= 1;
-        String[] hearts = new String[lives];
-        for (int i = 0; i < hearts.Length; i++) {
-            hearts[i] = "<sprite=\"heart\" index=0>";
-        }
-        livesCount.text = PlayerChoice.PlayerTag + ": " + String.Join(" ", hearts);
+        Lives -= 1;
         ropeSystem.ResetRope();
         OnPlayerDeath?.Invoke(this);
     }

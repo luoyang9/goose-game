@@ -87,7 +87,7 @@ public class PlayerManager : MonoBehaviour
         {
             // some gameobjects are destroyed by now
             var gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-            gameManager.SpawnPlayers(activeMappings);
+            gameManager.StartGame(activeMappings);
         }
         Destroy(gameObject);
     }
