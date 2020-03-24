@@ -15,11 +15,13 @@ public class InputActionMapper: MonoBehaviour {
     private InputAction melee;
     private InputAction aim;
     private InputAction forceField;
+    private InputAction dash;
 
     public event Action Jump;
     public event Action ArrowShoot;
     public event Action HookShoot;
     public event Action Melee;
+    public event Action Dash;
 
     private void Awake()
     {
@@ -32,6 +34,7 @@ public class InputActionMapper: MonoBehaviour {
         melee = actions["Melee"];
         aim = actions["Aim"];
         forceField = actions["ForceField"];
+        dash = actions["Dash"];
     }
 
     private void OnEnable() {
@@ -39,6 +42,7 @@ public class InputActionMapper: MonoBehaviour {
         arrowShoot.performed += OnArrowShoot;
         hookShoot.performed += OnHookShoot;
         melee.performed += OnMelee;
+        dash.performed += OnDash;
     }
 
     private void OnDisable() {
@@ -46,6 +50,7 @@ public class InputActionMapper: MonoBehaviour {
         arrowShoot.performed -= OnArrowShoot;
         hookShoot.performed -= OnHookShoot;
         melee.performed -= OnMelee;
+        dash.performed -= OnDash;
     }
 
     private void OnJump(InputAction.CallbackContext c) {
@@ -62,6 +67,10 @@ public class InputActionMapper: MonoBehaviour {
 
     private void OnMelee(InputAction.CallbackContext c) {
         Melee?.Invoke();
+    }
+
+    private void OnDash(InputAction.CallbackContext c) {
+        Dash?.Invoke();
     }
 
     /**
