@@ -65,6 +65,19 @@
                     "name": "Menu",
                     "type": "Button",
                     "id": "cbd27a85-ca31-43bc-a5e2-27aa27de3f02",
+                },
+                {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "96c64678-0593-42b5-a2c1-c1b3bfe3b1d7",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "3e7fef5d-1167-49e3-aaf8-99e2083c25f7",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
@@ -356,23 +369,23 @@
                 },
                 {
                     "name": "",
-                    "id": "5cbd45d1-6313-4191-bedd-6730e5dc5f97",
-                    "path": "<Keyboard>/q",
+                    "id": "950a4730-ce77-4d29-9613-78bd551d79fa",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "ForceField",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "04258bc9-7e82-4a9d-9eaa-697415e0c8ef",
+                    "id": "66fb3d37-7365-4897-8707-54d2e010f0e3",
                     "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
-                    "action": "ForceField",
+                    "groups": "",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -400,7 +413,7 @@
                 },
                 {
                     "name": "",
-                    "id": "3beaa313-5e60-4a50-88b9-c0dcdf956c2a",
+                    "id": "3d0ce92a-3754-4001-b247-5c7dbc3b1c04",
                     "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
@@ -411,7 +424,7 @@
                 },
                 {
                     "name": "",
-                    "id": "000932bd-29f5-474e-878c-d7ae43adadcc",
+                    "id": "75fe6ed6-4a3f-4968-8791-80e529863ddb",
                     "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
