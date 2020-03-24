@@ -429,18 +429,18 @@ public class PlayerController : MonoBehaviour {
     private void MakeDust(GameObject dustPrefab, Vector2 offset) {
         var scale = transform.localScale;
         offset.x *= scale.x;
-        var pos = transform.position + (Vector3) offset;
+        var pos = transform.position + (Vector3)offset;
         var dust = Instantiate(
             dustPrefab,
             pos,
             Quaternion.identity
         );
         dust.transform.localScale = scale;
+    }
+
     private void DashEnd() {
         rBody.gravityScale = 10f;
     }
-
-
 
     private int DashUpdate() {
         dashTimeLeft -= Time.deltaTime;
