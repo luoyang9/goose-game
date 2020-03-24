@@ -427,6 +427,22 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "Hold"
+                },
+                {
+                    "name": "Point",
+                    "type": "Value",
+                    "id": "ea571fac-5b63-4dc7-a214-1d1853d0130f",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "e5f7e3aa-2048-4af9-a809-05638d6f07f4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -724,6 +740,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "LongCancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3a4037d2-a518-4657-a99b-c6f4a8b1bc03",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Point",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5b2f8ab6-d143-4d27-97d0-947a0e7f4a14",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
