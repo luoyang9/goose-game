@@ -833,10 +833,12 @@ MonoBehaviour:
     type: 3}
   landDust: {fileID: 3455211964532467771, guid: fca985d9917df96428ec6a88026d8108,
     type: 3}
+  afterImagePrefab: {fileID: 0}
   playerIndex: 0
   lives: 5
   moveX: 0
   rBody: {fileID: 4443951294556298770}
+  distanceBetweenImages: 0.1
   numArrows: 5
   nextArrowFire: 0
   arrowPrefab: {fileID: 476587864798531743, guid: e84ae2baf269c91499dca64938458578,
