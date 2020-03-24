@@ -56,7 +56,7 @@
                 {
                     "name": "ForceField",
                     "type": "Value",
-                    "id": "a5673748-ba91-4fd9-9fe7-289ac17b34a4",
+                    "id": "19d964b6-f624-4e8f-8ab4-e1a268ee8150",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
@@ -225,21 +225,10 @@
                 {
                     "name": "",
                     "id": "05f6913d-c316-48b2-a6bb-e225f14c7960",
-                    "path": "<Mouse>/leftButton",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "ArrowShoot",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "886e731e-7071-4ae4-95c0-e61739dad6fd",
-                    "path": "<Touchscreen>/primaryTouch/tap",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Touch",
                     "action": "ArrowShoot",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -279,7 +268,7 @@
                 },
                 {
                     "name": "",
-                    "id": "8eba0ab1-e1f3-4fbe-8702-43c818eda622",
+                    "id": "e2ec4c8e-aaa8-4306-9fcb-b5f80ddc0fe5",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
@@ -291,7 +280,7 @@
                 {
                     "name": "",
                     "id": "9728bc51-cba3-429a-941e-5424444610b4",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
@@ -312,33 +301,22 @@
                 },
                 {
                     "name": "",
-                    "id": "534a24cd-a2f5-4944-ab64-9f6e7ca7f4aa",
-                    "path": "<Gamepad>/buttonEast",
+                    "id": "f6c7a55a-0444-435a-a870-810c386c2d80",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "HookShoot",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8c51e16f-7609-42b2-a9d6-43ff1f8f3043",
-                    "path": "<Keyboard>/v",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
                     "action": "Melee",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "f6c7a55a-0444-435a-a870-810c386c2d80",
-                    "path": "<Gamepad>/buttonWest",
+                    "id": "888deddd-6521-48c5-ab87-a6f80ec15966",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Gamepad",
+                    "groups": "Keyboard&Mouse",
                     "action": "Melee",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -379,10 +357,10 @@
                 {
                     "name": "",
                     "id": "d39d6193-c666-4908-864f-8e56c0049b45",
-                    "path": "<Gamepad>/rightShoulder",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Gamepad",
                     "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -390,11 +368,22 @@
                 {
                     "name": "",
                     "id": "94828476-b576-46e5-a63f-e78473b40d06",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2c4091d8-0b81-45f2-a6ca-8b78b8e69632",
+                    "path": "",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Dash",
+                    "action": "ForceField",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

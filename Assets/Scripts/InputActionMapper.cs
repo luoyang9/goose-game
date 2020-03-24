@@ -14,7 +14,7 @@ public class InputActionMapper: MonoBehaviour {
     private InputAction hookShoot;
     private InputAction melee;
     private InputAction aim;
-    private InputAction forceField;
+    private InputAction forceField; // disabled for now
     private InputAction dash;
 
     public event Action Jump;

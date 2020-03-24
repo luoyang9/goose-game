@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour {
     private float nextSwingTime = 0;
     private bool CanAttack { get { return Time.time > nextSwingTime; } }
     // force field
-    public GameObject forceField;
+    public GameObject forceField; // disabled for now
     private float forceFieldTimer = MAX_FORCE_FIELD_DURATION;
     private float fallThroughTimer = FALL_THROUGH_PLATFORM_DURATION;
     private float lagTimer;
@@ -152,7 +152,7 @@ public class PlayerController : MonoBehaviour {
         machine.RegisterState(HOOK_PULL_STATE, HookPullUpdate, null, null);
         machine.RegisterState(HOOK_END_STATE, HookEndUpdate, null, HookEndEnd);
         machine.RegisterState(FALL_THROUGH_PLATFORM_STATE, FallThroughUpdate, FallThroughBegin, FallThroughEnd);
-        machine.RegisterState(FORCE_FIELD_STATE, ForceFieldUpdate, ForceFieldBegin, null);
+        //machine.RegisterState(FORCE_FIELD_STATE, ForceFieldUpdate, ForceFieldBegin, null);
         machine.RegisterState(DASH_STATE, DashUpdate, DashBegin, DashEnd);
 
         forceMoveX = 0;
