@@ -3286,11 +3286,13 @@ MonoBehaviour:
 
     - Space to jump
 
-    - Left click to throw shuriken
+    - Shift to dash
 
-    - Right click to shoot grappling hook
+    - E to shoot grappling hook
 
-    - V to melee'
+    - Left click to melee
+
+    - Right click to throw shuriken'
 --- !u!222 &369590201
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3607,11 +3609,13 @@ MonoBehaviour:
 
     - South button to jump
 
-    - Right trigger to throw shuriken
+    - East button to dash
 
     - Left trigger to shoot grappling hook
 
-    - West button to melee'
+    - West button to melee
+
+    - Right trigger to throw shuriken'
 --- !u!222 &1560748648
 CanvasRenderer:
   m_ObjectHideFlags: 0
