@@ -88,6 +88,7 @@ public class PlayerController : MonoBehaviour {
     private float lagTimer;
     private bool InLag { get { return lagTimer > 0; } }
     // dash
+    private float dashInitialVelocityX;
     private float dashLagTimer;
     private bool InDashLag { get { return dashLagTimer > 0; } }
 
@@ -97,14 +98,14 @@ public class PlayerController : MonoBehaviour {
     public const float PULL_SPEED = 30f;
     public const float JUMP_VELOCITY = 30f;
     public const float MOVEMENT_ACCELERATION = 2f;
-    public const float MAX_MOVEMENT_SPEED = 18f;
+    public const float MAX_MOVEMENT_SPEED = 15f;
     private const float WALL_JUMP_H_SPEED = 8f;
     private const float WALL_JUMP_FORCE_TIME = 0.1f;
     private const float WALL_SLIDE_DRAG = 20f;
     public const float MAX_FALL = 18f;
     public const float AIR_DRAG = 1f;
-    public const float DASH_VELOCITY = 36f;
-    public const float DASH_TIME = 0.05f;
+    public const float DASH_VELOCITY = 50f;
+    public const float DASH_TIME = 0.075f;
     public const float DASH_COOLDOWN = 0.5f;
     // Arrows
     public const float ARROW_COOLDOWN = 0.5f;
@@ -439,6 +440,9 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void DashEnd() {
+        Vector2 velocity = rBody.velocity;
+        velocity.x = dashInitialVelocityX;
+        rBody.velocity = velocity;
         rBody.gravityScale = 10f;
     }
 
@@ -455,14 +459,16 @@ public class PlayerController : MonoBehaviour {
         }
 
         if (dashTimeLeft <= 0) {
-            return IDLE_STATE;
+            return dashInitialVelocityX != 0 ? RUN_STATE : IDLE_STATE;
         }
 
         return DASH_STATE;
     }
 
     private void DashBegin() {
+        MakeDust(runDust, RUN_DUST_OFFSET);
         Vector2 velocity = rBody.velocity;
+        dashInitialVelocityX = velocity.x;
         velocity.x = Facing * DASH_VELOCITY;
         velocity.y = 0f;
         rBody.gravityScale = 0f;
@@ -639,7 +645,6 @@ public class PlayerController : MonoBehaviour {
         if (InLag || !CanAttack) return;
 
         switch (machine.CurrentState) {
-            case DASH_STATE:
             case FORCE_FIELD_STATE:
                 break;
             default:
