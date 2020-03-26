@@ -506,13 +506,15 @@ public class PlayerController : MonoBehaviour {
 
     public void Airborne() {
         Vector2 velocity = rBody.velocity;
-        if (forceMoveXTimer <= 0 && moveX != 0) {
-            // Horizontal air movement
-            velocity.x += moveX * MOVEMENT_ACCELERATION;
-            velocity.x = ClampMoveSpeed(velocity.x);
-        } else if (velocity.x != 0) {
-            var airDrag = Mathf.Min(Mathf.Abs(velocity.x), AIR_DRAG);
-            velocity.x -= velocity.x > 0 ? airDrag : -airDrag;
+        if (forceMoveXTimer <= 0) {
+            if (moveX != 0) {
+                // Horizontal air movement
+                velocity.x += moveX * MOVEMENT_ACCELERATION;
+                velocity.x = ClampMoveSpeed(velocity.x);
+            } else if (velocity.x != 0) {
+                var airDrag = Mathf.Min(Mathf.Abs(velocity.x), AIR_DRAG);
+                velocity.x -= velocity.x > 0 ? airDrag : -airDrag;
+            }
         }
         velocity.y = Mathf.Max(-MAX_FALL, velocity.y);
         rBody.velocity = velocity;
