@@ -64,7 +64,6 @@ public class PlayerController : MonoBehaviour {
             HandleFacingScale();
         }
     } // either -1 or 1
-    private Queue<GameObject> availableObjects = new Queue<GameObject>();
     private WallCheck LeftWallCheck { get { return (Facing < 0) ? frontWallCheck : backWallCheck; } }
     private WallCheck RightWallCheck { get { return (Facing > 0) ? frontWallCheck : backWallCheck; } }
     private bool MoveIntoWall {
@@ -191,12 +190,11 @@ public class PlayerController : MonoBehaviour {
         actions.Dash -= OnDash;
     }
 
-    void Update() {
+    private void FixedUpdate() {
         CheckIfOffScreen();
         if (enableMovement) {
             HandleDirection();
         }
-        HandleCrosshair();
 
         // force moving direction
         if (forceMoveXTimer > 0) {
@@ -212,11 +210,15 @@ public class PlayerController : MonoBehaviour {
             lagTimer -= Time.deltaTime;
         }
 
-        arrowCount.text = numArrows.ToString() + " <sprite=\"star weapon\" index=0>";
         if (InDashLag) {
             dashLagTimer -= Time.deltaTime;
         }
+    }
 
+    void Update() {
+        HandleCrosshair();
+
+        arrowCount.text = numArrows.ToString() + " <sprite=\"star weapon\" index=0>";
         UpdateAnimator();
     }
 
@@ -350,6 +352,8 @@ public class PlayerController : MonoBehaviour {
         // decelerate up to a max sliding velocity
         rBody.drag = WALL_SLIDE_DRAG;
         ForceFacing = -moveX;
+        forceFacingTimer = 0.1f; // should be long enough to cover till next frame
+
         wallDustCoro = MakeWallSlideDust();
         StartCoroutine(wallDustCoro);
     }
