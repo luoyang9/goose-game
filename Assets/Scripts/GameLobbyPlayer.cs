@@ -81,7 +81,9 @@ public class GameLobbyPlayer : MonoBehaviour {
     }
 
     public void OnNavigate(InputAction.CallbackContext c) {
-        var nav = navigate.ReadValue<Vector2>();
-        Selection.ChangeCharacter((int)nav.x);
+        if (Selection.State == PlayerSelection.PENDING_STATE) {
+            var nav = navigate.ReadValue<Vector2>();
+            Selection.ChangeCharacter((int)nav.x);
+        }
     }
 }
