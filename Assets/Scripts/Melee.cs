@@ -109,6 +109,10 @@ public class Melee : MonoBehaviour {
             if (enemy != null && player != enemy) {
                 enemy.Kill();
             }
+            var dummy = collider.GetComponent<DummyController>();
+            if (dummy != null) {
+                dummy.Kill();
+            }
         }
     }
 }
