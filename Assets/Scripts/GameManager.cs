@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public GameObject banner;
     public Text countdown;
     public LivesHUD[] livesUIs;
+    public AudioSource startAudio;
 
     private PlayerController[] players;
     private List<PlayerMapping> playerMappings;
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
 
     private void Start() {
         initialCameraLocation = camera.transform.position;
+        startAudio.Play();
     }
 
     private void Update() {
