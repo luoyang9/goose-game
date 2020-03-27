@@ -24,6 +24,7 @@ public class Tutorial : MonoBehaviour {
     }
 
     private void OnMenu(InputAction.CallbackContext c) {
+        MusicPlayer.Instance.PlayMenuMusic();
         SceneManager.LoadScene("MainMenu");
     }
 

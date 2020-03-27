@@ -131,6 +131,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(FINAL_DEATH_DELAY);
         Time.timeScale = 1;
         DontDestroyOnLoad(this);
+        MusicPlayer.Instance.StopMenuMusic();
         SceneManager.LoadScene("EndGame");
     }
 

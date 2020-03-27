@@ -73,6 +73,7 @@ public class PlayerManager : MonoBehaviour
             playerInputManager.onPlayerJoined -= OnPlayerJoined;
             activeMappings = GetPlayerMappings();
             DontDestroyOnLoad(gameObject);
+            MusicPlayer.Instance.StopMenuMusic();
             SceneManager.LoadScene("Main");
         } else {
             Debug.Log("can't start game with fewer than 2 players");
