@@ -45,6 +45,11 @@ public class Arrow : MonoBehaviour
             rbody.velocity = Vector2.zero;
             rbody.gravityScale = 0;
         } else if (collider.gameObject.layer == playerLayer) {
+            DummyController dummy = collider.gameObject.GetComponent<DummyController>();
+            if (dummy) {
+                dummy.Kill();
+                return;
+            }
             PlayerController player = collider.gameObject.GetComponent<PlayerController>();
             if (player == firingPlayer && timer > 0) {
                 return;
