@@ -15,6 +15,8 @@ public class PlayerManager : MonoBehaviour
     public PlayerInputManager playerInputManager;
     public GameObject startGamePrompt;
     public RectTransform backNavProgress;
+    public AudioSource joinSource;
+    public AudioSource leaveSource;
     const float MAX_PROGRESS_WIDTH = 100f;
 
     private PlayerSelection[] playerSelections;
@@ -95,6 +97,7 @@ public class PlayerManager : MonoBehaviour
 
     private void OnPlayerJoined(PlayerInput player)
     {
+        joinSource.Play();
         // update selection logic
         var devices = new InputDevice[player.devices.Count];
         for (int i = 0; i < player.devices.Count; i++)

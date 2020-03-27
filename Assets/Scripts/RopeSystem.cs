@@ -82,6 +82,7 @@ public class RopeSystem : MonoBehaviour {
         ropeJoint.enabled = true;
         playerController.hookPosition = hookPoint;
         machine.CurrentState = PlayerController.HOOK_PULL_STATE;
+        playerController.hookPullAudioSource.Play();
     }
 
     public void ResetRope() {

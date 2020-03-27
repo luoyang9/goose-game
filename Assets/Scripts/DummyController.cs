@@ -19,6 +19,7 @@ public class DummyController : MonoBehaviour {
     public GameObject runDust;
     public GameObject wallSlideDust;
     public GameObject landDust;
+    public AudioClip hurtAudioClip;
 
     private Camera gameCamera;
     // game manager variable
@@ -410,6 +411,7 @@ public class DummyController : MonoBehaviour {
     }
 
     public void Kill() {
+        AudioSource.PlayClipAtPoint(hurtAudioClip, gameCamera.transform.position);
         ropeSystem.ResetRope();
         MakeBlood(transform.position);
         OnDummyDeath?.Invoke();

@@ -19,6 +19,7 @@ public class Arrow : MonoBehaviour
     public Vector2 direction;
     public Rigidbody2D rbody;
     public PlayerController firingPlayer;
+    public AudioSource landAudioSource;
     private int state = IN_AIR;
 
     void Start() {
@@ -44,6 +45,7 @@ public class Arrow : MonoBehaviour
             state = GROUNDED;
             rbody.velocity = Vector2.zero;
             rbody.gravityScale = 0;
+            landAudioSource.Play();
         } else if (collider.gameObject.layer == playerLayer) {
             DummyController dummy = collider.gameObject.GetComponent<DummyController>();
             if (dummy) {
@@ -56,7 +58,6 @@ public class Arrow : MonoBehaviour
             }
             if (player == null) return;
             if (state == IN_AIR) {
-                player.hurtAudioSource.Play();
                 player.Kill();
             } else {
                 // pick up

@@ -46,6 +46,7 @@ public class PlayerSelection: MonoBehaviour {
     public void OnSubmit() {
         switch (State) {
             case INACTIVE_STATE:
+                Manager.joinSource.Play();
                 State = PENDING_STATE;
                 break;
             case PENDING_STATE:
@@ -62,6 +63,7 @@ public class PlayerSelection: MonoBehaviour {
     public void OnCancel() {
         switch (State) {
             case PENDING_STATE:
+                Manager.leaveSource.Play();
                 State = INACTIVE_STATE;
                 break;
             case READY_STATE:

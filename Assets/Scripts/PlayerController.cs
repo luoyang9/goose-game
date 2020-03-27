@@ -23,8 +23,11 @@ public class PlayerController : MonoBehaviour {
     public AudioSource arrowShootAudioSource;
     public AudioSource hookShootAudioSource;
     public AudioSource meleeAudioSource;
-    public AudioSource hurtAudioSource;
     public AudioSource hookLandAudioSource;
+    public AudioSource hookPullAudioSource;
+    public AudioSource runAudioSource;
+    public AudioSource dashAudioSource;
+    public AudioClip hurtAudioClip;
     public TMP_Text arrowCount;
     public TMP_Text playerLabel;
     public Transform playerUI;
@@ -145,7 +148,7 @@ public class PlayerController : MonoBehaviour {
 
         machine = gameObject.GetComponent<StateMachine>();
         machine.RegisterState(IDLE_STATE, IdleUpdate, null, null);
-        machine.RegisterState(RUN_STATE, RunUpdate, RunBegin, null);
+        machine.RegisterState(RUN_STATE, RunUpdate, RunBegin, RunEnd);
         machine.RegisterState(JUMP_STATE, JumpUpdate, JumpBegin, null);
         machine.RegisterState(FALL_STATE, FallUpdate, null, null);
         machine.RegisterState(WALL_SLIDE_STATE, WallSlideUpdate, WallSlideBegin, WallSlideEnd);
@@ -274,7 +277,12 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void RunBegin() {
+        runAudioSource.Play();
         MakeDust(runDust, RUN_DUST_OFFSET);
+    }
+
+    private void RunEnd() {
+        runAudioSource.Stop();
     }
 
     private int RunUpdate() {
@@ -477,7 +485,7 @@ public class PlayerController : MonoBehaviour {
         velocity.y = 0f;
         rBody.gravityScale = 0f;
         rBody.velocity = velocity;
-        jumpAudioSource.Play();
+        dashAudioSource.Play();
         dashTimeLeft = DASH_TIME;
         dashLagTimer = DASH_TIME + DASH_COOLDOWN;
         return;
@@ -521,6 +529,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void Kill() {
+        AudioSource.PlayClipAtPoint(hurtAudioClip, gameCamera.transform.position);
         Lives -= 1;
         ropeSystem.ResetRope();
         OnPlayerDeath?.Invoke(this);
