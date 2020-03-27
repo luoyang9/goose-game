@@ -48,7 +48,7 @@ public class Arrow : MonoBehaviour
             landAudioSource.Play();
         } else if (collider.gameObject.layer == playerLayer) {
             DummyController dummy = collider.gameObject.GetComponent<DummyController>();
-            if (dummy) {
+            if (dummy && state == IN_AIR) {
                 dummy.Kill();
                 return;
             }
