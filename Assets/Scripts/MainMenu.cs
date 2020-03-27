@@ -3,8 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public void Awake() {
-        MusicPlayer.Instance.PlayMenuMusic();    
+    public void Start() {
+        MusicPlayer.Instance.PlayMenuMusic();
     }
 
     public void PlayGame() {
