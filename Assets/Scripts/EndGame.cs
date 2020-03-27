@@ -10,6 +10,7 @@ public class EndGame : MonoBehaviour {
         Destroy(manager.gameObject);
     }
     public void OpenMenu() {
+        MusicPlayer.Instance.PlayMenuMusic();
         SceneManager.LoadScene("PlayerSelection");
     }
 }
